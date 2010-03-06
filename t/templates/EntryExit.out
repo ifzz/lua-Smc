@@ -1,0 +1,12 @@
+State_1:Exit
+State_1:Evt_1
+State_2:Entry
+State_2:Exit
+State_2:Evt_2
+State_2:Entry
+State_2:Evt_3
+State_2:Exit
+State_2:Evt_1
+State_1:Entry
+State_1:Default
+State_1:Default

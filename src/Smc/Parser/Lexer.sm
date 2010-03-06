@@ -1,0 +1,381 @@
+
+%start TokenMap::Start
+%class Lexer
+//%class Smc.Parser.Lexer
+
+%map TokenMap
+%%
+
+Start
+{
+    raw1            push(GuardMap::Start)
+                                        {startToken();}
+    guardDone       nil                 {endToken('SOURCE');
+                                         trimToken();}
+
+    raw2            push(ParamTypeMap::Start)
+                                        {startToken();}
+    paramDone       nil                 {ungetChar();
+                                         endToken('SOURCE');
+                                         trimToken();}
+
+    raw3            RawMode3            {startToken();}
+
+    // Is this the start of a comment?
+    slash           CommentStart        {startToken();
+                                         addToToken();}
+
+    // Multi-character tokens.
+    percent         PercentStart        {startToken();
+                                         addToToken();}
+    alpha           Word                {startToken();
+                                         addToToken();}
+    underscore      Word                {startToken();
+                                         addToToken();}
+//    colon           Colon               {startToken();
+//                                         addToToken();}
+
+    // Single character tokens.
+    colon           nil                 {startToken();
+                                         addToToken();
+                                         endToken('COLON');}
+    left_brace      nil                 {startToken();
+                                         addToToken();
+                                         endToken('LEFT_BRACE');}
+    right_brace     nil                 {startToken();
+                                         addToToken();
+                                         endToken('RIGHT_BRACE');}
+    left_bracket    nil                 {startToken();
+                                         addToToken();
+                                         endToken('LEFT_BRACKET');}
+    left_paren      nil                 {startToken();
+                                         addToToken();
+                                         endToken('LEFT_PAREN');}
+    right_paren     nil                 {startToken();
+                                         addToToken();
+                                         endToken('RIGHT_PAREN');}
+    comma           nil                 {startToken();
+                                         addToToken();
+                                         endToken('COMMA');}
+    semicolon       nil                 {startToken();
+                                         addToToken();
+                                         endToken('SEMICOLON');}
+    equal           nil                 {startToken();
+                                         addToToken();
+                                         endToken('EQUAL');}
+    dollar          nil                 {startToken();
+                                         addToToken();
+                                         endToken('DOLLAR');}
+
+    // Ignore whitespace and end-of-line.
+    whitespace      nil                 {}
+    EOL             nil                 {}
+
+//    unicode         nil                 {startToken();
+//                                         addToToken();
+//                                         outputChar();
+//                                         badToken("Unknown character");}
+
+    Default         nil                 {startToken();
+                                         addToToken();
+                                         badToken("Unknown token");}
+} // end of state Start
+
+//~ RawMode1
+//~ {
+    //~ // guard condition
+    //~ right_bracket   Start               {endToken('SOURCE');}
+
+    //~ Default         nil                 {addToToken();}
+//~ }
+
+RawMode3
+{
+    // %directive or property
+    EOL             Start               {endToken('SOURCE');
+                                         trimToken();}
+    semicolon       Start               {endToken('SOURCE');
+                                         trimToken();}
+
+    Default         nil                 {addToToken();}
+}
+
+CommentStart
+{
+    asterisk        push(OldCommentMap::Start)
+                                        {}
+    slash           push(NewCommentMap::Start)
+                                        {}
+    commentDone     Start               {}
+
+    // Any other character following a slash means this is
+    // a plain-old slash.
+    Default         Start               {ungetChar();
+                                         endToken('SLASH');}
+} // end of state CommentStart
+
+PercentStart
+{
+    // This the start of a source code.
+    left_brace      push(SourceMap::Start)
+                                        {startToken();}
+    sourceDone      Start               {}
+
+    // This is the map delimiter.
+    percent         Start               {addToToken();
+                                         endToken('EOD');}
+
+    // Look for %start, %map, %class, %header or %package.
+    alpha           PercentKeyword      {addToToken();}
+
+    // Any other character following a percent is a malformed token.
+    right_brace     Start               {addToToken();
+                                         badToken("End-of-source appears without matching start-of-source");}
+
+    Default         Start               {ungetChar();
+                                         badToken("Unknown % directive");}
+} // end of state PercentStart
+
+PercentKeyword
+{
+    // Only letters are allowed after the percent.
+    alpha           nil                 {addToToken();}
+    digit           nil                 {addToToken();}
+    underscore      nil                 {addToToken();}
+
+    // Keep collecting characters until whitespace or EOL is reached.
+    whitespace      Start               {ungetChar();
+                                         checkPercentKeyword();}
+    EOL             Start               {checkPercentKeyword();}
+
+    // Anything else is a bad token.
+    Default         Start               {addToToken();
+                                         badToken("Unknown % directive");}
+} // end of state PercentKeyword
+
+Word
+{
+    alpha           nil                 {addToToken();}
+    digit           nil                 {addToToken();}
+    underscore      nil                 {addToToken();}
+    period          nil                 {addToToken();}
+    colon           Scope               {}
+
+    whitespace      Start               {checkKeyword();}
+    EOL             Start               {checkKeyword();}
+
+    // All other characters are a part of other tokens. "Unread"
+    // the tokens so they can be read the next call to nextToken()
+    // and then pass this token back.
+    Default         Start               {ungetChar();
+                                         checkKeyword();}
+} // end of state Word
+
+Scope
+{
+    colon           Word                {addToToken("::");}
+    Default         Start               {ungetChar();
+                                         ungetChar(":");
+                                         checkKeyword();}
+} // end of state Scope
+
+//Colon
+//{
+//    colon           Word                {addToToken("::");}
+//
+//    // This is a token by itself.
+//    Default         Start               {ungetChar();
+//                                         addToToken(":");
+//                                         endToken('COLON');}
+//} // end of state Colon
+
+// This state is never used. It is here to force smc to generate
+// all the necessary default transitions.
+NeverUsed
+{
+    unicode         nil                 {}
+    alpha           nil                 {}
+    digit           nil                 {}
+    whitespace      nil                 {}
+    EOL             nil                 {}
+    double_quote    nil                 {}
+    percent         nil                 {}
+    single_quote    nil                 {}
+    left_paren      nil                 {}
+    right_paren     nil                 {}
+    asterisk        nil                 {}
+    comma           nil                 {}
+    period          nil                 {}
+    slash           nil                 {}
+    colon           nil                 {}
+    semicolon       nil                 {}
+    left_bracket    nil                 {}
+    right_bracket   nil                 {}
+    underscore      nil                 {}
+    left_brace      nil                 {}
+    right_brace     nil                 {}
+    equal           nil                 {}
+    dollar          nil                 {}
+    back_slash      nil                 {}
+} // end of state NeverUsed
+
+%% // end of map TokenMap
+
+%map SourceMap
+%%
+
+// Look for the end of the source block.
+Start
+{
+    // Is this the end of the raw source code?
+    percent         SourceEnd           {}
+
+    // No, the end has not come.
+    Default         nil                 {addToToken();}
+} // end of state Start
+
+SourceEnd
+{
+    // Yes, we are add the end of the raw source code.
+    right_brace     pop(sourceDone)     {endToken('SOURCE');}
+
+    // Perhaps this is the end of the raw source.
+    percent         nil                 {addToToken("%");}
+
+    // Nope, this is not the end of the raw source.
+    Default         Start               {addToToken("%");
+                                         addToToken();}
+} // end of state SourceEnd
+
+%% // end of map SourceMap
+
+%map GuardMap
+%%
+
+Start
+{
+    // The end of line marks the end of the comment.
+    right_bracket   pop(guardDone)      {}
+
+    left_bracket    push(GuardMap::Start)
+                                        {addToToken();}
+    guardDone       nil                 {addToToken();}
+
+    double_quote    push(StringDoubleMap::Start)
+                                        {addToToken();}
+    single_quote    push(StringSingleMap::Start)
+                                        {addToToken();}
+    stringDone      nil                 {addToToken();}
+
+    Default         nil                 {addToToken();}
+} // end of state Start
+
+%% // end of GuardMap
+
+%map ParamTypeMap
+%%
+
+Start
+{
+    // The end of line marks the end of the comment.
+    right_paren     pop(paramDone)      {}
+    comma           pop(paramDone)      {}
+
+    left_paren      push(ParamTypeMap::Start)
+                                        {addToToken();}
+    paramDone       nil                 {addToToken();}
+
+    double_quote    push(StringDoubleMap::Start)
+                                        {addToToken();}
+    single_quote    push(StringSingleMap::Start)
+                                        {addToToken();}
+    stringDone      nil                 {addToToken();}
+
+    Default         nil                 {addToToken();}
+} // end of state Start
+
+%% // end of ParamTypeMap
+
+%map StringDoubleMap
+%%
+
+Start
+{
+    double_quote    pop(stringDone)     {}
+
+    back_slash      Escape              {addToToken();}
+
+    Default         nil                 {addToToken();}
+}
+
+Escape
+{
+    Default         Start               {addToToken();}
+}
+
+%% // end of StringDoubleMap
+
+%map StringSingleMap
+%%
+
+Start
+{
+    single_quote    pop(stringDone)     {}
+
+    back_slash      Escape              {addToToken();}
+
+    Default         nil                 {addToToken();}
+}
+
+Escape
+{
+    Default         Start               {addToToken();}
+}
+
+%% // end of StringSingleMap
+
+%map NewCommentMap
+%%
+
+// Wait here for the end of the // comment.
+Start
+{
+    // The end of line marks the end of the comment.
+    EOL             pop(commentDone)    {}
+
+    Default         nil                 {}
+} // end of state Start
+
+%% // end of NewCommentMap
+
+%map OldCommentMap
+%%
+
+Start
+{
+    // This grammar correctly handles nested comments!
+    slash           CommentStart        {}
+
+    // A comment's end is */.
+    asterisk        CommentEnd          {}
+
+    Default         nil                 {}
+} // end of state Start
+
+CommentStart
+{
+    asterisk        push(OldCommentMap::Start)
+                                        {}
+    slash           push(NewCommentMap::Start)
+                                        {}
+    Default         Start               {}
+} // end of state CommentStart
+
+CommentEnd
+{
+    asterisk        nil                 {}
+    slash           pop(commentDone)    {}
+    Default         Start               {}
+} // end of state CommentEnd
+
+%% // end of map OldCommentMap

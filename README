@@ -1,0 +1,17 @@
+
+lua-Smc -- EXPERIMENTAL
+=======================
+
+Install
+-------
+
+  $ sudo aptitude install lua5.1
+  $ sudo aptitude install luarocks
+  $ export LUA_INIT="require 'luarocks.require'"
+  $ export PATH=$PATH:/usr/local/lib/luarocks/bin:~/.luarocks/bin
+#   verify in /etc/luarocks/config.lua
+#   rocks_servers --> http://www.luarocks.org/repositories/rocks
+  $ luarocks install lua-coat
+  $ cpan Test::Harness
+
+  $ make install

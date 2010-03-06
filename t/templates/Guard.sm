@@ -1,0 +1,40 @@
+
+%start Map_1::State_1
+%class AppClass
+%fsmclass AppClassContext
+
+%map Map_1
+%%
+State_1
+// State        Transition      End State       Action
+{
+                Evt_1(n)
+                        [n == 1]
+                                nil             { Output("State_1:Evt_1(1)"); }
+
+                Evt_1(n)
+                        [n == 2]
+                                nil             { Output("State_1:Evt_1(2)"); }
+
+                Evt_1(n)        State_2         { Output("State_1:Evt_1(",n,")"); }
+
+}
+
+State_2
+{
+                Evt_2
+                        [ctxt:isOk()]
+                                nil             { Output("State_2:Evt_2() isOk"); }
+
+                Evt_2           nil             { Output("State_2:Evt_2()"); }
+
+                Evt_3
+                        [ctxt:isNok()]
+                                nil             { Output("State_2:Evt_3() isNok"); }
+
+                Evt_3           nil             { Output("State_2:Evt_3()"); }
+
+                Default         State_1         { Output("State_2:Default()"); }
+}
+
+%%

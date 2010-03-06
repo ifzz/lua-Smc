@@ -1,0 +1,111 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+use Fatal qw(open close);
+
+use Test::More;
+
+my $smc = 'bin/smc';
+#my $smc = 'java -jar Smc.jar';
+my $test_graph = 1;
+my $test_table = 0;
+
+sub slurp {
+    my ($filename) = @_;
+    local $/;
+    undef $/;
+    open my $fh, '<', $filename;
+    read $fh, my $text, 4096;
+    close $fh;
+    return $text;
+}
+
+sub spew {
+    my ($filename, $text) = @_;
+    open my $fh, '>', $filename;
+    print {$fh} $text;
+    close $fh;
+}
+
+sub run {
+    my $cmd = join ' ', @_;
+    return qx{$cmd};
+}
+
+sub do_fsm {
+    my ($lang, $fsm) = @_;
+    my $sm = slurp("t/templates/${fsm}.sm");
+    spew("t/${lang}/AppClass.sm", $sm);
+}
+
+sub test_smc_graph {
+    my ($lang, $test, $level) = @_;
+    unlink("t/${lang}/AppClass.sm");
+    unlink("t/${lang}/AppClassContext.dot");
+    unlink("t/${lang}/AppClassContext${level}.png");
+    do_fsm($lang, $test);
+    system("${smc} -graph -glevel ${level} t/${lang}/AppClass.sm");
+    system("dot -T png -o t/${lang}/AppClassContext${level}.png t/${lang}/AppClassContext.dot");
+}
+
+sub test_smc_table {
+    my ($lang, $test) = @_;
+    unlink("t/${lang}/AppClass.sm");
+    unlink("t/${lang}/AppClassContext.html");
+    do_fsm($lang, $test);
+    system("${smc} -table t/${lang}/AppClass.sm");
+}
+
+sub test_smc {
+    my ($lang, $test, $options) = @_;
+    unlink("t/${lang}/AppClass.sm");
+    unlink("t/${lang}/AppClass_sm.${lang}");
+    do_fsm($lang, $test);
+    system("${smc} -${lang} ${options} t/${lang}/AppClass.sm");
+    my $expected = slurp("t/templates/${test}.out");
+    my $out = run($lang, "t/${lang}/${test}.${lang}");
+    is($out, $expected, "$test $options");
+}
+
+sub test_smc_with_options {
+    my ($lang, $test, $options) = @_;
+    for my $option (@{$options}) {
+        test_smc($lang, $test, $option);
+    }
+    if ($test_graph) {
+        for my $level (0..2) {
+            test_smc_graph($lang, $test, $level);
+        }
+    }
+    if ($test_table) {
+        test_smc_table($lang, $test) if ($test_table);
+    }
+}
+
+my @tests = qw(
+    Simple
+    EntryExit
+    Guard
+    Default
+    Map
+);
+
+#@tests = ( 'Simple' );
+
+my @opt = (
+    '',
+    '-g0',
+    '-g1',
+    '-noc',
+    '-noc -g0',
+    '-noc -g1',
+    '-reflect',
+);
+
+plan tests => scalar(@tests) * scalar(@opt);
+
+for my $test (@tests) {
+    test_smc_with_options('lua', $test, \@opt);
+}
+

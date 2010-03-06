@@ -1,0 +1,6 @@
+State_1:Evt_1(1)
+State_1:Evt_1(2)
+State_1:Evt_1(3)
+State_2:Evt_3()
+State_2:Evt_2() isOk
+State_2:Default()

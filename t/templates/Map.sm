@@ -1,0 +1,53 @@
+
+%start Map_1::State_1
+%class AppClass
+%fsmclass AppClassContext
+
+%map Map_1
+%%
+State_1
+// State        Transition      End State       Action
+{
+                Evt_1           nil             { Output("State_1:Evt_1()"); }
+
+                Evt_2           State_2/push(Map_2::State_1)
+                                                { Output("State_1:Evt_2()"); }
+
+                Evt_3(n)        jump(Map_3::State_Far)
+                                                { Output("State_1:Evt_3(",n,")"); }
+
+}
+
+State_2
+{
+                Done_2          State_1         { Output("State_2:Done_2()"); }
+
+                Done_3(n)       nil             { Output("State_2:Done_3(", n, ")"); }
+
+                Evt_1           State_1         { Output("State_2:Evt_1()"); }
+}
+
+%%
+
+%map Map_2
+%%
+
+State_1
+{
+                Evt_2           pop(Done_2)     { Output("Map_2::Evt_2()"); }
+
+                Evt_3(n)        pop(Done_3, n)  { Output("Map_2::Evt_3(", n, ")"); }
+}
+
+%%
+
+%map Map_3
+%%
+
+State_Far
+{
+                Evt_1           jump(Map_1::State_1)
+                                                { Output("Map_3::Evt_1()"); }
+}
+
+%%

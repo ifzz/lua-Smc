@@ -1,0 +1,19 @@
+
+%start Map_1::State_1
+%class AppClass
+%fsmclass AppClassContext
+
+%map Map_1
+%%
+// State        Transition      End State       Action
+State_1
+{
+                Evt_1           State_2         { Output("State_1:Evt_1"); }
+}
+
+State_2
+{
+                Evt_1           State_1         { Output("State_2:Evt_1"); }
+}
+
+%%

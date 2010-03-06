@@ -1,0 +1,56 @@
+package = 'lua-Smc'
+version = '@version@-@rev@'
+source = {
+    url = 'lua-smc-@version@.tar.gz',
+    md5 = '@md5@',
+    dir = 'lua-Smc-@version@',
+}
+description = {
+    summary = "the State Machine Compiler",
+    detailed = [[
+        lua-Smc is an experimental port of SMC (http://smc.sourceforge.net/).
+    ]],
+    homepage = 'http://smc.sourceforge.net/',
+    maintainer = 'Francois Perrad',
+    license = 'MPL'
+}
+dependencies = {
+    'lua >= 5.1',
+    'lua-coat >= 0.8.1',
+}
+build = {
+    type = 'builtin',
+    modules = {
+        ['Smc']                 = 'src/Smc.lua',
+        ['Smc.Checker']         = 'src/Smc/Checker.lua',
+        ['Smc.Generator']       = 'src/Smc/Generator.lua',
+        ['Smc.Language']        = 'src/Smc/Language.lua',
+        ['Smc.Model']           = 'src/Smc/Model.lua',
+        ['Smc.Parser']          = 'src/Smc/Parser.lua',
+        ['Smc.Parser.Lexer_sm'] = 'src/Smc/Parser/Lexer_sm.lua',
+        ['Smc.Parser.Parser_sm']= 'src/Smc/Parser/Parser_sm.lua',
+        -- languages
+        ['Smc.C']               = 'src/Smc/C.lua',
+        ['Smc.Cpp']             = 'src/Smc/Cpp.lua',
+        ['Smc.Csharp']          = 'src/Smc/Csharp.lua',
+        ['Smc.Graphviz']        = 'src/Smc/Graphviz.lua',
+        ['Smc.Groovy']          = 'src/Smc/Groovy.lua',
+        ['Smc.Java']            = 'src/Smc/Java.lua',
+        ['Smc.Lua']             = 'src/Smc/Lua.lua',
+        ['Smc.ObjC']            = 'src/Smc/ObjC.lua',
+        ['Smc.Perl']            = 'src/Smc/Perl.lua',
+        ['Smc.Php']             = 'src/Smc/Php.lua',
+        ['Smc.Python']          = 'src/Smc/Python.lua',
+        ['Smc.Ruby']            = 'src/Smc/Ruby.lua',
+        ['Smc.Scala']           = 'src/Smc/Scala.lua',
+        ['Smc.Table']           = 'src/Smc/Table.lua',
+        ['Smc.Tcl']             = 'src/Smc/Tcl.lua',
+        ['Smc.Vb']              = 'src/Smc/Vb.lua',
+        -- runtime
+        ['statemap']            = 'runtime/lua/statemap.lua',
+    },
+    install = {
+        bin = { 'bin/smc' }
+    },
+    copy_directories = { 'doc', 'runtime', 'test', 't' },
+}

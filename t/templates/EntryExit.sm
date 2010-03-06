@@ -1,0 +1,29 @@
+
+%start Map_1::State_1
+%class AppClass
+%fsmclass AppClassContext
+
+%map Map_1
+%%
+// State        Transition      End State       Action
+State_1
+        Entry                                   { Output("State_1:Entry"); }
+        Exit                                    { Output("State_1:Exit"); }
+{
+                Evt_1           State_2         { Output("State_1:Evt_1"); }
+
+                Default         nil             { Output("State_1:Default"); }
+}
+
+State_2
+        Entry                                   { Output("State_2:Entry"); }
+        Exit                                    { Output("State_2:Exit"); }
+{
+                Evt_1           State_1         { Output("State_2:Evt_1"); }
+
+                Evt_2           State_2         { Output("State_2:Evt_2"); }
+
+                Evt_3           nil             { Output("State_2:Evt_3"); }
+}
+
+%%

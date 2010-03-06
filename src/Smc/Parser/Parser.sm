@@ -1,0 +1,1524 @@
+
+%class Parser
+%start HeaderMap::Start
+
+
+%map HeaderMap
+%%
+
+Start
+{
+    SOURCE(token)
+        nil
+        {
+            setSource(token);
+        }
+
+    CLASS_NAME(token)
+        Context
+        {}
+
+    START_STATE(token)
+        StartState
+        {}
+
+    FSM_CLASS_NAME(token)
+        FsmClassName
+        {}
+
+    INCLUDE_FILE(token)
+        IncludeFile
+        {}
+
+    PACKAGE_NAME(token)
+        Package
+        {}
+
+    IMPORT(token)
+        Import
+        {}
+
+    DECLARE(token)
+        Declare
+        {}
+
+    ACCESS(token)
+        Access
+        {}
+
+    MAP_NAME(token)
+        push(MapsMap::MapName)
+        {}
+
+    Default
+        StartError
+        {
+            _error("Expecting \"%{ source %}\", %start, or %class.");
+        }
+} // end of state Start
+
+Context
+{
+    WORD(token)
+        Start
+        {
+            setContext(token);
+        }
+
+    Default
+        StartError
+        {
+            _error("Missing name after %class.");
+        }
+}
+
+StartState
+{
+    WORD(token)
+        Start
+        {
+            setStartState(token);
+        }
+
+    Default
+        StartError
+        {
+            _error("Missing state after %start.");
+        }
+}
+
+IncludeFile
+    Entry
+    {
+        setRawMode3();
+    }
+{
+    SOURCE(token)
+        Start
+        {
+            addInclude(token);
+        }
+}
+
+Package
+{
+    WORD(token)
+        Start
+        {
+            setPackageName(token);
+        }
+
+    Default
+        StartError
+        {
+            _error("Missing name after %package.");
+        }
+}
+
+FsmClassName
+{
+    WORD(token)
+        Start
+        {
+            setFsmClassName(token);
+        }
+
+    Default
+        StartError
+        {
+            _error("Missing name after %FsmClassName.");
+        }
+}
+
+Import
+    Entry
+    {
+        setRawMode3();
+    }
+{
+    SOURCE(token)
+        Start
+        {
+            addImport(token);
+        }
+}
+
+Declare
+    Entry
+    {
+        setRawMode3();
+    }
+{
+    SOURCE(token)
+        Start
+        {
+            addDeclare(token);
+        }
+}
+
+Access
+    Entry
+    {
+        setRawMode3();
+    }
+{
+    SOURCE(token)
+        Start
+        {
+            setAccessLevel(token);
+        }
+}
+
+// Remain in this state until a known good token is found.
+StartError
+{
+    SOURCE(token)
+        Start
+        {
+            setSource(token);
+        }
+
+    CLASS_NAME(token)
+        Context
+        {}
+
+    START_STATE(token)
+        StartState
+        {}
+
+    FSM_CLASS_NAME(token)
+        FsmClassName
+        {}
+
+    INCLUDE_FILE(token)
+        IncludeFile
+        {}
+
+    PACKAGE_NAME(token)
+        Package
+        {}
+
+    IMPORT(token)
+        Import
+        {}
+
+    DECLARE(token)
+        Declare
+        {}
+
+    ACCESS(token)
+        Access
+        {}
+
+    MAP_NAME(token)
+        push(MapsMap::MapName)
+        {}
+
+    Default
+        nil
+        {}
+} // end of state StartError
+
+%% // end of map HeaderMap
+
+
+
+%map MapsMap
+%%
+
+MapStart
+{
+    MAP_NAME(token)
+        MapName
+        {}
+
+    Default
+        MapStartError
+        {
+            _error("Expecting %map.");
+        }
+}
+
+MapStartError
+{
+    MAP_NAME(token)
+        MapName
+        {}
+
+    Default
+        nil
+        {}
+}
+
+MapName
+{
+    WORD(token)
+        MapStates
+        {
+            createMap(token);
+        }
+
+    EOD(token)
+        States
+        {
+            _error("Name expected after \"%map\".");
+            createMap("no_named");
+        }
+
+    Default
+        nil
+        {
+            _error("Name expected after \"%map\".");
+        }
+}
+
+MapStates
+{
+    EOD(token)
+        States
+        {}
+
+    WORD(token)
+        StateStart
+        {
+            _error("Expecting %% after \"%map mapname\".");
+            createState(token);
+        }
+
+    Default
+        MapStatesError
+        {
+            _error("Expecting %% after \"%map mapname\".");
+        }
+}
+
+MapStatesError
+{
+    EOD(token)
+        States
+        {}
+
+    MAP_NAME(token)
+        MapName
+        {
+            addMap();
+        }
+
+    WORD(token)
+        StateStart
+        {
+            createState(token);
+        }
+
+    Default
+        nil
+        {}
+}
+
+States
+{
+    // The "%%" means we have reached the end of this map's
+    // definition.
+    EOD(token)
+        MapStart
+        {
+            addMap();
+        }
+
+    WORD(token)
+        StateStart
+        {
+            createState(token);
+        }
+
+    // Error transitions.
+    ENTRY(token)
+        EntryStart
+        {
+            _error("Expecting either a new state definition or end of map (%%).");
+            createState(token);
+        }
+
+    EXIT(token)
+        ExitStart
+        {
+            _error("Expecting either a new state definition or end of map (%%).");
+            createState(token);
+        }
+
+    LEFT_BRACE(token)
+//        Transitions
+        TransEnd/push(TransitionsMap::Start)
+        {
+            _error("Expecting either a new state definition or end of map (%%).");
+            createState(token);
+        }
+
+    //~ EQUAL(token)
+        //~ Transitions
+        //~ {
+            //~ _error("Expecting either a new state definition or end of map (%%).");
+            //~ createState(token);
+        //~ }
+
+    MAP_NAME(token)
+        MapName
+        {
+            _error("Expecting \"%%\" before another \"%map\".");
+            addMap();
+        }
+
+    Default
+        nil
+        {
+            _error("Expecting either a new state definition or end of map (%%).");
+        }
+} // end of state States
+
+StateStart
+{
+    // This state has an entry actions.
+    ENTRY(token)
+        EntryStart
+        {}
+
+    // This state has an exit action.
+    EXIT(token)
+        ExitStart
+        {}
+
+    // The left brace marks the start of the transitions.
+    LEFT_BRACE(token)
+//        Transitions
+        TransEnd/push(TransitionsMap::Start)
+        {}
+
+    Default
+        StateStartError
+        {
+            _error("After the state name is given, then either an entry action, exit action or opening brace is expected.");
+        }
+} // end of state StateStart
+
+StateStartError
+{
+    ENTRY(token)
+        EntryStart
+        {}
+
+    EXIT(token)
+        ExitStart
+        {}
+
+    LEFT_BRACE(token)
+//        Transitions
+        TransEnd/push(TransitionsMap::Start)
+        {}
+
+    Default
+        nil
+        {}
+} // end of state StateStartError
+
+TransEnd
+{   // pop from TransitionsMap
+    transitionsDone
+        States
+        {
+            addState();
+        }
+}
+
+EntryStart
+{
+    LEFT_BRACE(token)
+        EntryEnd/push(ActionsMap::Start)
+        {
+            createActionList();
+        }
+
+    Default
+        StateStartError
+        {
+            _error("An opening brace is expected after Entry.");
+        }
+}
+
+EntryEnd
+{   // pop from ActionsMap
+    actionsDone
+        StateStart
+        {
+            setEntryAction();
+        }
+
+    actionsError
+//        StartState
+        MapStartError
+        {}
+}
+
+ExitStart
+{
+    LEFT_BRACE(token)
+        ExitEnd/push(ActionsMap::Start)
+        {
+            createActionList();
+        }
+
+    Default
+        StateStartError
+        {
+            _error("A opening brace is expected after Exit.");
+        }
+}
+
+ExitEnd
+{   // pop from ActionsMap
+    actionsDone
+        StateStart
+        {
+            setExitAction();
+        }
+
+    actionsError
+//        StateStart
+        MapStartError
+        {}
+}
+
+%% // end of map MapsMap
+
+
+
+
+%map TransitionsMap
+%%
+
+//Transitions
+Start
+{
+    // A '}' is the end of the transitions.
+    // Look for the next state.
+    RIGHT_BRACE(token)
+//        States
+        pop(transitionsDone)
+        {
+//            addState();
+        }
+
+    // This is the transition name.
+    WORD(token)
+        TransStart
+        {
+            storeTransitionName(token);
+        }
+
+    Default
+        TransError
+        {
+            _error("Expecting either a new transition or a closing brace.");
+        }
+} // end of state Transitions
+
+TransError
+{
+    RIGHT_BRACE(token)
+//        States
+        pop(transitionsDone)
+        {
+            addState();
+        }
+
+    WORD(token)
+        TransStart
+        {
+            storeTransitionName(token);
+        }
+
+    Default
+        nil
+        {}
+} // end of state TransError
+
+TransStart
+{
+    // A '(' means this transition has parameters.
+    LEFT_PAREN(token)
+        TransParams/push(ParamsMap::Start)
+        {
+            createParamList();
+        }
+
+    // A '[' denotes a guard. Since the code between the brackets
+    // may be raw source code, place the lexer in raw source code
+    // mode. This means the lexer will not process the characters
+    // by passing them through the lexer FSM.
+    LEFT_BRACKET(token)
+        TransGuard
+        {
+            createTransition();
+        }
+
+    // NOTE: Now that SMC allows guards to be complex condition
+    // expressions, it is no longer possible to check for
+    // duplicate guards.
+
+    PUSH(token)
+        PushStart
+        {
+            createTransition();
+            createGuard();
+            setTransType("TRANS_PUSH");
+//            setEndState("nil");
+            setEndState();
+        }
+
+    POP(token)
+        PopStart
+        {
+            createTransition();
+            createGuard();
+            setTransType("TRANS_POP");
+        }
+
+    JUMP(token)
+        JumpStart
+        {
+            createTransition();
+            createGuard();
+            setTransType("TRANS_SET");
+        }
+
+    // This word is the end state. Now get the actions.
+    WORD(token)
+        SimpleTrans
+        {
+            createTransition();
+            createGuard();
+            setTransType("TRANS_SET");
+            setEndState(token);
+        }
+
+    Default
+        TransStartError
+        {
+            _error("Expecting either a guard, \"push\", \"pop\", \"jump\" or end state.");
+
+            // Need to create a dummy transition so that _error
+            // handling will function.
+            createTransition();
+        }
+} // end of state TransStart
+
+TransStartError
+{
+    // A '(' means this transition has parameters.
+    LEFT_PAREN(token)
+        TransParams/push(ParamsMap::Start)
+        {
+            createParamList();
+        }
+
+    // A '[' means this transition is guarded. Have the lexer
+    // collect the raw source code.
+    LEFT_BRACKET(token)
+        TransGuard
+        {}
+
+    // A '{' is the start of the transition actions.
+    LEFT_BRACE(token)
+        ActionEnd/push(ActionsMap::Start)
+        {
+            createGuard();
+            setTransType("TRANS_SET");
+//            setEndState("End state missing");
+            setEndState();
+
+            createActionList();
+        }
+
+    PUSH(token)
+        PushStart
+        {
+            createGuard();
+            setTransType("TRANS_PUSH");
+//            setEndState("nil");
+            setEndState();
+        }
+
+    POP(token)
+        PopStart
+        {
+            createGuard();
+            setTransType("TRANS_POP");
+        }
+
+    JUMP(token)
+        JumpStart
+        {
+            createGuard();
+            setTransType("TRANS_SET");
+//            setEndState("nil");
+            setEndState();
+        }
+
+    // One way or another this transition is now kaput.
+    RIGHT_BRACE(token)
+//        Transitions
+        Start
+//        pop(transitionsDone)
+        {
+            addGuard();
+            addTransition();
+        }
+
+    Default
+        nil
+        {}
+} // end of state TransStartError
+
+// Wait here for the transition parameter list to be returned.
+TransParams
+{
+    // The "Default" transition may not have parameters.
+    // But create a bogus transition before continuing.
+//    paramsDone(params)
+//      [ctxt:getTransitionName() == "Default"
+//       and not params.isEmpty()]
+//        TransNext
+//        {
+//            _error("Default transitions may not have parameters.");
+//            createTransition();
+//        }
+//             XXX : move to Checker XXX
+
+    paramsDone
+        TransNext
+        {
+            createTransition();
+        }
+
+    // Create a bogus transition and keep going.
+    paramsError()
+        TransNext
+        {
+            createTransition();
+        }
+} // end of state TransParams
+
+TransNext
+{
+    // A bracket denotes a guard.
+    LEFT_BRACKET(token)
+        TransGuard
+        {}
+
+    // NOTE: Now that SMC allows guards to be complex condition
+    // expressions, it is no longer possible to check for
+    // duplicate guards.
+
+    PUSH(token)
+        PushStart
+        {
+            createGuard();
+            setTransType("TRANS_PUSH");
+//            setEndState("nil");
+            setEndState();
+        }
+
+    POP(token)
+        PopStart
+        {
+            createGuard();
+            setTransType("TRANS_POP");
+        }
+
+    JUMP(token)
+        JumpStart
+        {
+            createGuard();
+            setTransType("TRANS_SET");
+//            setEndState("nil");
+            setEndState();
+        }
+
+    // This word is the end state. Now get the actions.
+    WORD(token)
+        SimpleTrans
+        {
+            createGuard();
+            setTransType("TRANS_SET");
+            setEndState(token);
+        }
+
+    Default
+        TransNextError
+        {
+            _error("Expecting either a guard, \"push\", \"pop\", \"jump\" or end state.");
+        }
+} // end of state TransNext
+
+TransNextError
+{
+    // Transition parameters have already been defined.
+    LEFT_PAREN(token)
+        nil
+        {}
+
+    // A bracket means this transition is guarded.
+    LEFT_BRACKET(token)
+        TransGuard
+        {}
+
+    PUSH(token)
+        PushStart
+        {
+            createGuard();
+            setTransType("TRANS_PUSH");
+//            setEndState("nil");
+            setEndState();
+        }
+
+    POP(token)
+        PopStart
+        {
+            createGuard();
+            setTransType("TRANS_POP");
+        }
+
+    JUMP(token)
+        JumpStart
+        {
+            createGuard();
+            setTransType("TRANS_SET");
+//            setEndState("nil");
+            setEndState();
+        }
+
+    WORD(token)
+        SimpleTrans
+        {
+            createGuard();
+            setTransType("TRANS_SET");
+            setEndState(token);
+        }
+
+    Default
+        nil
+        {}
+} // end of state TransNextError
+
+// Because the lexer is operating in raw mode, the lexer will
+// return either a SOURCE token or an ERROR token. Since ERROR
+// tokens are not passed into this FSM, then only the SOURCE
+// token must be handled.
+TransGuard
+    Entry
+    {
+        setRawMode();
+    }
+    //~ Exit
+    //~ {
+        //~ setCookedMode();
+    //~ }
+{
+    SOURCE(token)
+        EndState
+        {
+            createGuard(token);
+        }
+} // end of state TransGuard
+
+EndState
+{
+    // NOTE: Now that SMC allows guards to be complex condition
+    // expressions, it is no longer possible to check for
+    // duplicate guards.
+    PUSH(token)
+        PushStart
+        {
+            setTransType("TRANS_PUSH");
+//            setEndState("nil");
+            setEndState();
+        }
+
+    POP(token)
+        PopStart
+        {
+            setTransType("TRANS_POP");
+        }
+
+    JUMP(token)
+        JumpStart
+        {
+            setTransType("TRANS_SET");
+//            setEndState("nil");
+            setEndState();
+        }
+
+    WORD(token)
+        SimpleTrans
+        {
+            setTransType("TRANS_SET");
+            setEndState(token);
+        }
+
+    Default
+        EndStateError
+        {
+            _error("Expecting either \"push\", \"pop\", \"jump\" or end state.");
+        }
+} // end of state EndState
+
+EndStateError
+{
+    LEFT_BRACE(token)
+        ActionEnd/push(ActionsMap::Start)
+        {
+            createActionList();
+        }
+
+    Default
+        nil
+        {}
+} // end of state EndStateError
+
+SimpleTrans
+{
+    // A slash means that this is really a push transition.
+    SLASH(token)
+        PushTransition
+        {
+            setTransType("TRANS_PUSH");
+        }
+
+    // A brace denotes the start of the actions.
+    LEFT_BRACE(token)
+        ActionEnd/push(ActionsMap::Start)
+        {
+            createActionList();
+        }
+
+    Default
+        ActionStartError
+        {
+            _error("An opening brace must proceed any action definitions.");
+        }
+} // end of state SimpleTrans
+
+// This is the push part of a "<state1>/push(<state2>)" end statefd
+// <state1> has been parse, now look for the push.
+PushTransition
+{
+    PUSH(token)
+        PushStart
+        {}
+
+    Default
+        PushError
+        {
+            _error("\"push\" must follow a '/'.");
+        }
+} // end of state PushTransition
+
+PushStart
+{
+    LEFT_PAREN(token)
+        PushMap
+        {}
+
+    Default
+        PushError
+        {
+            _error("\"push\" must be followed by a '/'.");
+        }
+} // end of state PushStart
+
+PushError
+{
+    RIGHT_PAREN(token)
+        ActionStart
+        {}
+
+    LEFT_BRACE(token)
+        ActionEnd/push(ActionsMap::Start)
+        {
+            createActionList();
+        }
+
+    Default
+        nil
+        {}
+} // end of state PushError
+
+PushMap
+{
+    WORD(token)
+        PushEnd
+        {
+            setPushState(token);
+        }
+
+    Default
+        PushError
+        {
+            _error("Expecting a state name.");
+        }
+} // end of state PushMap
+
+PushEnd
+{
+    RIGHT_PAREN(token)
+        ActionStart
+        {}
+
+    Default
+        PushError
+        {
+            _error("push transition missing closing paren.");
+        }
+} // end of state PushEnd
+
+// Must be a dead battery ...
+JumpStart
+{
+    LEFT_PAREN(token)
+        JumpMap
+        {}
+
+    Default
+        JumpError
+        {
+            _error("\"jump\" must be followed by a '/'.");
+        }
+} // end of state JumpStart
+
+// Must have reversed the leads ...
+JumpError
+{
+    RIGHT_PAREN(token)
+        ActionStart
+        {}
+
+    LEFT_BRACE(token)
+        ActionEnd/push(ActionsMap::Start)
+        {
+            createActionList();
+        }
+
+    Default
+        nil
+        {}
+} // end of state JumpError
+
+JumpMap
+{
+    WORD(token)
+        JumpEnd
+        {
+            setEndState(token);
+        }
+
+    Default
+        JumpError
+        {
+            _error("Expecting a state name.");
+        }
+} // end of state JumpMap
+
+JumpEnd
+{
+    RIGHT_PAREN(token)
+        ActionStart
+        {}
+
+    Default
+        JumpError
+        {
+            _error("jump transition missing closing paren.");
+        }
+} // end of state JumpEnd
+
+PopStart
+{
+    LEFT_PAREN(token)
+        PopAction
+        {}
+
+    // A brace denotes the start of the actions.
+    // It is acceptable not to provide a pop transition.
+    LEFT_BRACE(token)
+        ActionEnd/push(ActionsMap::Start)
+        {
+            createActionList();
+        }
+
+    Default
+        PopError
+        {
+            _error("Expecting '(trans)' or opening brace after pop.");
+        }
+} // end of state PopStart
+
+PopError
+{
+    RIGHT_PAREN(token)
+        ActionStart
+        {}
+
+    LEFT_BRACE(token)
+        ActionEnd/push(ActionsMap::Start)
+        {
+            createActionList();
+        }
+
+    Default
+        nil
+        {}
+} // end of state PopError
+
+PopAction
+{
+    RIGHT_PAREN(token)
+        ActionStart
+        {}
+
+    WORD(token)
+        PopArgs
+        {
+            setEndState(token);
+        }
+
+    Default
+        PopError
+        {
+            _error("Expecting either a pop transition or closing paren.");
+        }
+} // end of state PopAction
+
+PopArgs
+{
+    // No more pop arguments. Start collecting the actions.
+    RIGHT_PAREN(token)
+        ActionStart
+        {}
+
+    // A comma signifies there are more arguments in this
+    // transition.
+    COMMA(token)
+//        PopArgsEnd
+//        {}
+        PopArgsEnd/push(ArgsMap::Start)
+        {
+            createArgList();
+        }
+
+    Default
+        PopError
+        {
+            _error("Pop transition missing closing paren.");
+        }
+} // end of state PopArgs
+
+PopArgsEnd
+{   // pop from ArgsMap
+    argsDone
+        ActionStart
+        {
+            setPopArgs();
+        }
+
+    argsError
+        PopError
+        {
+            _error("Pop transition missing closing paren.");
+        }
+}
+
+ActionStart
+{
+    // A brace denotes the start of the actions.
+    LEFT_BRACE(token)
+        ActionEnd/push(ActionsMap::Start)
+        {
+            createActionList();
+        }
+
+    Default
+        ActionStartError
+        {
+            _error("An opening brace must proceed any action definitions.");
+        }
+} // end of state ActionStart
+
+ActionEnd
+{
+    actionsDone
+//        Transitions
+        Start
+//        pop(transitionDone)
+        {
+            setActions();
+            addGuard();
+            addTransition();
+        }
+
+    actionsError
+//        Transitions
+        Start
+//        pop(transitionDone)
+        {}
+} // end of state ActionEnd
+
+ActionStartError
+{
+    LEFT_BRACE(token)
+        ActionEnd/push(ActionsMap::Start)
+        {
+            createActionList();
+        }
+
+    Default
+        nil
+        {}
+} // end of state ActionStartError
+
+%% // end of map TransitionMap
+
+
+
+
+// This map parses transition parameters.
+%map ParamsMap
+%%
+
+Start
+{
+    WORD(token)
+        ParamSeparator
+        {
+            createParameter(token);
+        }
+
+    RIGHT_PAREN(token)
+        pop(paramsDone)
+        {}
+
+    DOLLAR(token: SmcLexer.Token)
+      [ctxt.targetLanguage == 'PERL'
+    or ctxt.targetLanguage == 'PHP'
+    or ctxt.targetLanguage == 'GRAPH'
+    or ctxt.targetLanguage == 'TABLE']
+        Dollar
+        {}
+
+    Default
+        Error
+        {
+            _error("Invalid parameter syntax.");
+        }
+}
+
+Dollar
+{
+    WORD(token)
+        ParamSeparator
+        {
+            createParameter(token, "$");
+        }
+
+    Default
+        Error
+        {
+            _error("Invalid parameter syntax.");
+        }
+}
+
+ParamSeparator
+{
+    COLON(token)
+        ParamType
+        {}
+
+    COMMA(token)
+      [ctxt.targetLanguage == 'TCL'
+    or ctxt.targetLanguage == 'GROOVY'
+    or ctxt.targetLanguage == 'LUA'
+    or ctxt.targetLanguage == 'PERL'
+    or ctxt.targetLanguage == 'PHP'
+    or ctxt.targetLanguage == 'PYTHON'
+    or ctxt.targetLanguage == 'RUBY'
+    or ctxt.targetLanguage == 'GRAPH'
+    or ctxt.targetLanguage == 'TABLE']
+        Start
+        {
+            addParameter();
+        }
+
+    RIGHT_PAREN(token)
+      [ctxt.targetLanguage == 'TCL'
+    or ctxt.targetLanguage == 'GROOVY'
+    or ctxt.targetLanguage == 'LUA'
+    or ctxt.targetLanguage == 'PERL'
+    or ctxt.targetLanguage == 'PHP'
+    or ctxt.targetLanguage == 'PYTHON'
+    or ctxt.targetLanguage == 'RUBY'
+    or ctxt.targetLanguage == 'GRAPH'
+    or ctxt.targetLanguage == 'TABLE']
+        pop(paramsDone)
+        {
+            addParameter();
+        }
+
+    COMMA(token)
+        Error
+        {
+            _error("Parameter type missing.");
+        }
+
+    RIGHT_PAREN(token)
+        pop(paramsError)
+        {
+            _error("Parameter type missing.");
+        }
+
+    Default
+        Error
+        {
+            _error("Invalid parameter syntax.");
+        }
+} // end of state ParamSeparator
+
+ParamType
+    Entry
+    {
+        setRawMode2();
+    }
+{
+    SOURCE(token)
+        NextParam
+        {
+            setParamType(token);
+        }
+}
+
+NextParam
+{
+    COMMA(token)
+        Start
+        {
+            addParameter();
+        }
+
+    RIGHT_PAREN(token)
+        pop(paramsDone)
+        {
+            addParameter();
+        }
+
+    Default
+        Error
+        {
+            _error("Invalid parameter syntax.");
+        }
+}
+
+Error
+    Entry
+    {
+        setRawMode2();
+    }
+{
+    SOURCE(token)
+        pop(paramsError)
+        {
+            clearParameter();
+        }
+}
+
+%% // end of map ParamsMap
+
+
+
+
+// This map parses transition actions.
+// Transition actions are of the form:
+//   WORD '(' SOURCE ')' ';'
+//
+// VB and C#: Transition actions may also have the form:
+//   WORD '=' SOURCE ';'
+//
+%map ActionsMap
+%%
+
+Start
+{
+    WORD(token)
+        Name
+        {
+            createAction(token);
+        }
+
+    RIGHT_BRACE(token)
+        pop(actionsDone)
+        {}
+
+    Default
+        Error
+        {
+            clearActions();
+            _error("Expecting either a method name or a closing brace");
+        }
+}
+
+Name
+{
+    LEFT_PAREN(token)
+        Args/push(ArgsMap::Start)
+        {
+            createArgList();
+        }
+
+    EQUAL(token)
+      [ctxt.targetLanguage == 'C_SHARP'
+    or ctxt.targetLanguage == 'GRAPH'
+    or ctxt.targetLanguage == 'GROOVY'
+    or ctxt.targetLanguage == 'LUA'
+    or ctxt.targetLanguage == 'SCALA'
+    or ctxt.targetLanguage == 'TABLE'
+    or ctxt.targetLanguage == 'VB']
+        PropertyAssignment
+        {
+            setProperty();
+            createArgList();
+        }
+
+    EQUAL(token)
+        Error
+        {
+            clearActions();
+            _error("'=' property assignment may only be used with -csharp, -groovy, -lua, -scala or -vb");
+        }
+
+    Default
+        Error
+        {
+            clearActions();
+            _error("Expecting an open paren after the method name");
+        }
+} // end of state Name
+
+Args
+{   // pop from ArgsMap
+    argsDone
+        End
+        {
+            setActionArgs();
+        }
+
+    argsError
+        Error
+        {}
+}
+
+End
+{
+    SEMICOLON(token)
+        Start
+        {
+            addAction();
+        }
+
+    Default
+        Error
+        {
+            _error("Expecting a ';' after closing paren");
+        }
+}
+
+PropertyAssignment
+    Entry
+    {
+        setRawMode3();
+    }
+{
+    SOURCE(token)
+        Start
+        {
+            createArgument(token);
+            addArgument();
+            setActionArgs();
+            addAction();
+        }
+}
+
+// Wait here for a right brace which we will assume to be the
+// action body's end.
+Error
+{
+    RIGHT_BRACE(token)
+        pop(actionsError)
+        {}
+
+    Default
+        nil
+        {}
+}
+
+%% // end of map ActionsMap
+
+
+
+
+// This map parses an action's arguments.
+%map ArgsMap
+%%
+
+Start
+    Entry
+    {
+        setRawMode2();
+    }
+{
+    SOURCE(token)
+        NextArg
+        {
+            createArgument(token);
+        }
+}
+
+NextArg
+{
+    COMMA(token)
+        Start
+        {
+            addArgument();
+        }
+
+    RIGHT_PAREN(token)
+        pop(argsDone)
+        {
+            addArgument();
+        }
+
+    Default
+        Error
+        {
+            _error("Missing ',' or closing paren after argument.");
+        }
+}
+
+Error
+{
+    RIGHT_BRACE(token)
+        pop(argsError)
+        {}
+
+    Default
+        nil
+        {}
+}
+
+%% // end of map ArgsMap
+
