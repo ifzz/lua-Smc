@@ -102,7 +102,7 @@ function method:visitMap (map)
                     local pushMapName;
                     local idx = pushStateName:find "::"
                     if idx then
-                        pushMapName = pushStateName:sub(1, idx)
+                        pushMapName = pushStateName:sub(1, idx-1)
                     else
                         pushMapName = mapName
                     end
@@ -343,7 +343,7 @@ function method:visitGuard (guard)
             stream:write "::"
             local idx = pushStateName:find "::"
             if idx then
-                stream:write(pushStateName.sub(1, idx))
+                stream:write(pushStateName:sub(1, idx-1))
             else
                 stream:write(mapName)
             end
