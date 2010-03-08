@@ -18,9 +18,11 @@ State_1
 
 Default
 {
-                Evt_3           nil             { Output("Default:Evt_3"); }
+                Evt_1           nil             { Output("Default:Evt_1"); }
 
                 Evt_2(n)        nil             { Output("Default:Evt_2(", n, ")"); }
+
+                Evt_3           nil             { Output("Default:Evt_3"); }
 }
 
 %%

@@ -218,6 +218,38 @@ function method:findTransition (name)
     return nil
 end
 
+function method:findGuard (name, condition)
+    condition:gsub('%s+', '')
+    for _, trans in ipairs(self.transitions) do
+        if trans.name == name then
+            for _, guard in ipairs(trans.guards) do
+                if guard.condition:gsub('%s+', '') == condition then
+                    return guard
+                end
+            end
+        end
+    end
+    return nil
+end
+
+function method:callDefault (transName)
+    for _, trans in ipairs(self.transitions) do
+        if trans.name == transName then
+            for _, guard in ipairs(trans.guards) do
+                if guard.condition == '' then
+                    return false
+                end
+            end
+            return true
+        end
+    end
+    for _, trans in ipairs(self.transitions) do
+        if trans.name == 'Default' then
+            return false
+        end
+    end
+    return true
+end
 
 class 'Smc.Transition'
 extends 'Smc.Element'

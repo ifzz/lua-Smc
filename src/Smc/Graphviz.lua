@@ -20,6 +20,7 @@ class 'Smc.Graphviz.Generator'
 extends 'Smc.Generator'
 
 has.suffix          = { '+', default = 'dot' }
+has.state           = { is = 'rw', isa = 'Smc.State' }
 
 local indent_action = "&nbsp;&nbsp;&nbsp;"
 
@@ -79,44 +80,66 @@ function method:visitMap (map)
         state:visit(self)
     end
 
-    local defaultState = map.defaultState
-    if defaultState then
-        defaultState:visit(self)
-    end
+    local popTransMap = {}
+    local function putPopTrans (guard)
+        local endStateName = guard.endState
+        local popKey = endStateName
+        local popVal = endStateName
+        local popArgs = guard.popArgs
+        if self.graphLevel == 2 and popArgs ~= '' then
+            popKey = popKey .. ", " .. escape(normalize(popArgs))
+            popVal = popVal .. ", " .. escape(popArgs):gsub("\\n", "\\\\\\l")
+        end
+        popTransMap[popKey] = popVal
+    end -- putPopTrans
 
     local mapName = map.name
-    local popTransMap = {}
     local pushStateMap = {}
+    local function putPushState (guard, state)
+        local endStateName = guard.endState
+        if endStateName == 'nil' then
+            endStateName = state.instanceName
+        end
+        local pushStateName = guard.pushState
+        local pushMapName;
+        local idx = pushStateName:find "::"
+        if idx then
+            pushMapName = pushStateName:sub(1, idx-1)
+        else
+            pushMapName = mapName
+        end
+        pushStateMap[mapName .. "::" .. endStateName .. "::" .. pushMapName] = pushMapName
+    end -- putPushState
+
+    local defaultState = map.defaultState
     local needEnd = false
-    for _, state in ipairs(map.allStates) do
+    for _, state in ipairs(map.states) do
         for _, trans in ipairs(state.transitions) do
             for _, guard in ipairs(trans.guards) do
-                local endStateName = guard.endState
                 local transType = guard.transType
-
                 if transType == 'TRANS_PUSH' then
-                    if endStateName == 'nil' then
-                        endStateName = state.instanceName
-                    end
-                    local pushStateName = guard.pushState
-                    local pushMapName;
-                    local idx = pushStateName:find "::"
-                    if idx then
-                        pushMapName = pushStateName:sub(1, idx-1)
-                    else
-                        pushMapName = mapName
-                    end
-                    pushStateMap[mapName .. "::" .. endStateName .. "::" .. pushMapName] = pushMapName
+                    putPushState(guard, state)
                 elseif transType == 'TRANS_POP' then
-                    local popKey = endStateName
-                    local popVal = endStateName
-                    local popArgs = guard.popArgs
-                    if self.graphLevel == 2 and popArgs ~= '' then
-                        popKey = popKey .. ", " .. escape(normalize(popArgs))
-                        popVal = popVal .. ", " .. escape(popArgs):gsub("\\n", "\\\\\\l")
-                    end
-                    popTransMap[popKey] = popVal
+                    putPopTrans(guard)
                     needEnd = true;
+                end
+            end
+        end
+        if defaultState then
+            for _, trans in ipairs(defaultState.transitions) do
+                local transName = trans.name
+                if state:callDefault(transName) then
+                    for _, guard in ipairs(trans.guards) do
+                        if not state:findGuard(transName, guard.condition) then
+                            local transType = guard.transType
+                            if transType == 'TRANS_PUSH' then
+                                putPushState(guard, state)
+                            elseif transType == 'TRANS_POP' then
+                                putPopTrans(guard)
+                                needEnd = true;
+                            end
+                        end
+                    end
                 end
             end
         end
@@ -173,9 +196,22 @@ function method:visitMap (map)
     stream:write "        // Transitions (Edges)\n"
     stream:write "        //\n"
 
-    for _, state in ipairs(map.allStates) do
+    for _, state in ipairs(map.states) do
+        self.state = state
         for _, trans in ipairs(state.transitions) do
             trans:visit(self)
+        end
+        if defaultState then
+            for _, trans in ipairs(defaultState.transitions) do
+                local transName = trans.name
+                if state:callDefault(transName) then
+                    for _, guard in ipairs(trans.guards) do
+                        if not state:findGuard(transName, guard.condition) then
+                            guard:visit(self)
+                        end
+                    end
+                end
+            end
         end
     end
 
@@ -208,21 +244,17 @@ end
 function method:visitState (state)
     local stream = self.stream
 
-    local mapName = state.map.name
+    local map = state.map
+    local mapName = map.name
     local instanceName = state.instanceName
     stream:write("        \"", mapName, "::", instanceName, "\"\n")
-
-    stream:write "            [label=\"{"
-    if instanceName == "DefaultState" then
-        stream:write "&laquo; Default &raquo;"
-    else
-        stream:write(instanceName)
-    end
+    stream:write("            [label=\"{", instanceName)
 
     if self.graphLevel >= 1 then
+        local defaultState = map.defaultState
         local empty = true
 
-        local actions = state.entryActions
+        local actions = state.entryActions or (defaultState and defaultState.entryActions)
         if actions then
             if empty then
                 stream:write "|"
@@ -235,7 +267,7 @@ function method:visitState (state)
             end
         end
 
-        local actions = state.exitActions
+        local actions = state.exitActions or (defaultState and defaultState.exitActions)
         if actions then
             if empty then
                 stream:write "|"
@@ -248,52 +280,69 @@ function method:visitState (state)
             end
         end
 
+        local function internalEvent (guard)
+            local trans = guard.transition
+            local transName = trans.name
+            local endStateName = guard.endState
+            local transType = guard.transType
+            if endStateName == 'nil' and transType == 'TRANS_SET' then
+                if empty then
+                    stream:write "|"
+                    empty = false
+                end
+                stream:write(transName)
+
+                if self.graphLevel == 2 then
+                    stream:write "("
+                    local sep = ""
+                    for _, param in ipairs(trans.parameters) do
+                        stream:write(sep)
+                        param:visit(self)
+                        sep = ", "
+                    end
+                    stream:write ")"
+                end
+
+                local condition = guard.condition
+                if condition ~= '' then
+                    local s = escape(condition)
+                    s = s:gsub("\\n", "\\\\\\l")
+                    s = s:gsub(">", "\\\\>")
+                    s = s:gsub("<", "\\\\<")
+                    s = s:gsub("\\|", "\\\\|")
+                    stream:write("\\l\\[", s, "\\]")
+                end
+
+                stream:write "/\\l"
+
+                local actions = guard.actions
+                if actions then
+                    for _, action in ipairs(actions) do
+                        stream:write(indent_action)
+                        action:visit(self)
+                    end
+                end
+
+                if transType == 'TRANS_PUSH' then -- XXX
+                    stream:write(indent_action, "push(", guard.pushState, ")\\l")
+                end
+            end
+        end -- internalEvent
+
         empty = true;
         for _, trans in ipairs(state.transitions) do
-            local transName = trans.name
             for _, guard in ipairs(trans.guards) do
-                local endStateName = guard.endState
-                local transType = guard.transType
-                if endStateName == 'nil' and transType == 'TRANS_SET' then
-                    if empty then
-                        stream:write "|"
-                        empty = false
-                    end
-                    stream:write(transName)
-
-                    if self.graphLevel == 2 then
-                        stream:write "("
-                        local sep = ""
-                        for _, param in ipairs(trans.parameters) do
-                            stream:write(sep)
-                            param:visit(self)
-                            sep = ", "
+                internalEvent(guard)
+            end
+        end
+        if defaultState then
+            for _, trans in ipairs(defaultState.transitions) do
+                local transName = trans.name
+                if state:callDefault(transName) then
+                    for _, guard in ipairs(trans.guards) do
+                        if not state:findGuard(transName, guard.condition) then
+                            internalEvent(guard)
                         end
-                        stream:write ")"
-                    end
-
-                    local condition = guard.condition
-                    if condition ~= '' then
-                        local s = escape(condition)
-                        s = s:gsub("\\n", "\\\\\\l")
-                        s = s:gsub(">", "\\\\>")
-                        s = s:gsub("<", "\\\\<")
-                        s = s:gsub("\\|", "\\\\|")
-                        stream:write("\\l\\[", s, "\\]")
-                    end
-
-                    stream:write "/\\l"
-
-                    local actions = guard.actions
-                    if actions then
-                        for _, action in ipairs(actions) do
-                            stream:write(indent_action)
-                            action:visit(self)
-                        end
-                    end
-
-                    if transType == 'TRANS_PUSH' then -- XXX
-                        stream:write(indent_action, "push(", guard.pushState, ")\\l")
                     end
                 end
             end
@@ -319,8 +368,7 @@ function method:visitGuard (guard)
 
     local stream = self.stream
 
-    local transition = guard.transition
-    local state = transition.state
+    local state = self.state
     local map = state.map
     local mapName = map.name
     local stateName = state.instanceName
@@ -359,6 +407,7 @@ function method:visitGuard (guard)
         stream:write ")\"\n"
     end
 
+    local transition = guard.transition
     local transName = transition.name
     stream:write("            [label=\"", transName)
 
