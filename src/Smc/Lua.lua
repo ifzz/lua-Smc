@@ -208,7 +208,7 @@ function method:visitState (state)
     local stateName = state.className
 
     stream:write "\n"
-    stream:write(mapName, ".", stateName, " = ", mapName, ".Default:new('", mapName, ".", stateName, "', ", map:getNextStateId(), ")\n")
+    stream:write(mapName, ".", stateName, " = ", mapName, ".Default:new('", mapName, ".", stateName, "', ", map.nextStateId, ")\n")
 
     local actions = state.entryActions
     if actions and #actions > 0 then

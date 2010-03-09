@@ -149,7 +149,7 @@ end
 
 local StateId = 0
 
-function method:getNextStateId ()
+function method:_get_nextStateId ()
     StateId = StateId + 1
     return StateId
 end
