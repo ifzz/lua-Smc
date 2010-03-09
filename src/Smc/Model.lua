@@ -300,7 +300,7 @@ has.hasCtxtReference= { is = 'ro', lazy_build = true }
 function method:_build_hasActions ()
     if self.actions then
         for _, action in ipairs(self.actions) do
-            if not action:isEmptyStateStack() then
+            if not action.isEmptyStateStack then
                 return true
             end
         end
@@ -336,6 +336,7 @@ has.arguments       = { is = 'rw', isa = 'table<string>',
                                 assert(#value == 1, "property must have exactly one argument")
                             end
                         end }
+has.isEmptyStateStack= { is = 'ro', lazy_build = true }
 
 function method:BUILD ()
     if self.propertyFlag then
@@ -343,7 +344,7 @@ function method:BUILD ()
     end
 end
 
-function method:isEmptyStateStack ()
+function method:_build_isEmptyStateStack ()
     return 'emptystatestack' == self.name:lower()
 end
 

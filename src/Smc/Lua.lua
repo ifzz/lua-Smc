@@ -497,7 +497,7 @@ function method:visitAction (action)
     if action.propertyFlag then
         stream:write("ctxt.", action.name, " = ", action.arguments[1], "\n")
     else
-        if action:isEmptyStateStack() then
+        if action.isEmptyStateStack then
             stream:write "fsm:emptyStateStack()\n"
         else
             local args = table.concat(action.arguments or {}, ', ')
