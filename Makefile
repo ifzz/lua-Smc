@@ -76,6 +76,12 @@ test: tu
 testclean:
 	-rm -f t/lua/*.png t/lua/*.dot t/lua/*.html t/lua/*Context.lua t/lua/*.sm
 
+coverage:
+	rm -f luacov.stats.out luacov.report.out
+	prove --exec="$(LUA) -lluacov" test/*.t
+#	prove t/harness
+	luacov
+
 doc:
 	coat2dot Smc.Model > doc/Model.dot
 	dot -T png -o doc/Model.png doc/Model.dot

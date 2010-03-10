@@ -11,6 +11,7 @@ Install
   $ export PATH=$PATH:/usr/local/lib/luarocks/bin:~/.luarocks/bin
 #   verify in /etc/luarocks/config.lua
 #   rocks_servers --> http://www.luarocks.org/repositories/rocks
+  $ luarocks install luacov
   $ luarocks install lua-coat
   $ cpan Test::Harness
 
