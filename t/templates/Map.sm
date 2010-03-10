@@ -2,6 +2,7 @@
 %start Map_1::State_1
 %class AppClass
 %fsmclass AppClassContext
+%package MyPkg
 
 %map Map_1
 %%
