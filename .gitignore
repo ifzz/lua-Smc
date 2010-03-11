@@ -2,4 +2,7 @@
 MANIFEST
 Smc.jar
 *.tar.gz
+*.patch
+
+luacov.*
 
