@@ -23,7 +23,6 @@ extends 'Smc.Generator'
 has.suffix          = { '+', default = 'groovy' }
 
 function method:visitFSM (fsm)
-    self.indent = ""
     local stream = self.stream
 
 end

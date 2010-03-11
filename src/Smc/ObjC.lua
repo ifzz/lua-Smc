@@ -22,7 +22,6 @@ has.next_generator  = { '+', isa = 'Smc.ObjC.HeaderGenerator',
                         default = function () return require 'Smc.ObjC.HeaderGenerator' end }
 
 function method:visitFSM (fsm)
-    self.indent = ""
     local stream = self.stream
 
 end
@@ -57,7 +56,6 @@ extends 'Smc.Generator'
 has.suffix          = { '+', default = 'h' }
 
 function method:visitFSM (fsm)
-    self.indent = ""
     local stream = self.stream
 
 end

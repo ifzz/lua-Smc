@@ -37,7 +37,6 @@ has.syncFlag        = { is = 'rw', isa = 'boolean', default = false }
 has.genericFlag     = { is = 'rw', isa = 'boolean', default = false }
 
 has.stream          = { is = 'rw', isa = 'file' }
-has.indent          = { is = 'rw', isa = 'string' }
 has.guardCount      = { is = 'rw', isa = 'number' }
 has.guardIndex      = { is = 'rw', isa = 'number' }
 

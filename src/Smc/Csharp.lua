@@ -24,7 +24,6 @@ extends 'Smc.Generator'
 has.suffix          = { '+', default = 'cs' }
 
 function method:visitFSM (fsm)
-    self.indent = ""
     local stream = self.stream
 
 end

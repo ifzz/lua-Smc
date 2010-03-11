@@ -189,9 +189,8 @@ function method:visitState (state)
         stream:write "\n"
         stream:write("function ", mapName, ".", stateName, ":Entry (fsm)\n")
         stream:write "    local ctxt = fsm:getOwner()\n"
-        self.indent = "    "
         for _, action in ipairs(state.entryActions) do
-            action:visit(self)
+            action:visit(self, "    ")
         end
         stream:write "end\n"
     end
@@ -199,9 +198,8 @@ function method:visitState (state)
         stream:write "\n"
         stream:write("function ", mapName, ".", stateName, ":Exit (fsm)\n")
         stream:write "    local ctxt = fsm:getOwner()\n"
-        self.indent = "    "
         for _, action in ipairs(state.exitActions) do
-            action:visit(self)
+            action:visit(self, "    ")
         end
         stream:write "end\n"
     end
@@ -349,14 +347,14 @@ function method:visitGuard (guard)
         end
     else
         stream:write(indent2, "fsm:clearState()\n")
-        self.indent = indent2
+        local indent3 = indent2
         if not self.noCatchFlag then
             stream:write(indent2, "local r, msg = pcall(\n")
             stream:write(indent2, "    function ()\n")
-            self.indent = indent2 .. "        "
+            indent3 = indent2 .. "        "
         end
         for _, action in ipairs(actions) do
-            action:visit(self)
+            action:visit(self, indent3)
         end
         if not self.noCatchFlag then
             stream:write(indent2, "    end\n")
@@ -425,9 +423,9 @@ function method:visitGuard (guard)
     end
 end
 
-function method:visitAction (action)
+function method:visitAction (action, indent)
     local stream = self.stream
-    stream:write(self.indent)
+    stream:write(indent)
     if action.propertyFlag then
         stream:write("ctxt.", action.name, " = ", action.arguments[1], "\n")
     else

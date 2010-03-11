@@ -36,7 +36,6 @@ local function normalize (s)
 end
 
 function method:visitFSM (fsm)
-    self.indent = ""
     local stream = self.stream
 
     stream:write "// ex: set ro:\n"
