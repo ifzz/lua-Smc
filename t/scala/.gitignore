@@ -1,0 +1,10 @@
+
+*.sm
+*.dot
+*.png
+*.html
+*Context.scala
+*.class
+
+statemap
+
