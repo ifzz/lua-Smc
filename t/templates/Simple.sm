@@ -7,9 +7,8 @@
 %import io
 
 %start Map_1::State_1
-%class AppClass
-%fsmclass AppClassContext
-%package MyPkg
+%class TestClass
+%fsmclass TestClassContext
 
 %map Map_1
 %%
@@ -22,6 +21,16 @@ State_1
 State_2
 {
                 Evt_1           State_1         { Output("State_2:Evt_1"); }
+}
+
+NotUsed
+{
+                Evt_1           nil             {}
+                Evt_2           nil             {}
+                Evt_3           nil             {}
+                Evt1(n)         nil             {}
+                Evt2(n)         nil             {}
+                Evt3(n)         nil             {}
 }
 
 %%

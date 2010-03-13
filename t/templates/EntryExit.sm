@@ -1,14 +1,13 @@
 
 %start Map_1::State_1
-%class AppClass
-%fsmclass AppClassContext
-%package MyPkg
+%class TestClass
+%fsmclass TestClassContext
 
 %map Map_1
 %%
 // State        Transition      End State       Action
 State_1
-        Entry                                   { Output("State_1:Entry"); 
+        Entry                                   { Output("State_1:Entry");
                                                   myProp = true; }
         Exit                                    { Output("State_1:Exit");
                                                   myProp = false;
@@ -28,6 +27,16 @@ State_2
                 Evt_2           State_2         { Output("State_2:Evt_2"); }
 
                 Evt_3           nil             { Output("State_2:Evt_3"); }
+}
+
+NotUsed
+{
+                Evt_1           nil             {}
+                Evt_2           nil             {}
+                Evt_3           nil             {}
+                Evt1(n)         nil             {}
+                Evt2(n)         nil             {}
+                Evt3(n)         nil             {}
 }
 
 %%

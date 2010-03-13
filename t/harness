@@ -36,35 +36,35 @@ sub run {
 sub do_fsm {
     my ($lang, $fsm) = @_;
     my $sm = slurp("t/templates/${fsm}.sm");
-    spew("t/${lang}/AppClass.sm", $sm);
+    spew("t/${lang}/TestClass.sm", $sm);
 }
 
 sub test_smc_graph {
     my ($lang, $test, $level) = @_;
-    unlink("t/${lang}/AppClass.sm");
-    unlink("t/${lang}/AppClassContext.dot");
-    unlink("t/${lang}/AppClassContext${level}.png");
+    unlink("t/${lang}/TestClass.sm");
+    unlink("t/${lang}/TestClassContext.dot");
+    unlink("t/${lang}/TestClassContext${level}.png");
     do_fsm($lang, $test);
-    system("${smc} -graph -glevel ${level} t/${lang}/AppClass.sm");
-    system("dot -T png -o t/${lang}/AppClassContext${level}.png t/${lang}/AppClassContext.dot");
+    system("${smc} -graph -glevel ${level} t/${lang}/TestClass.sm");
+    system("dot -T png -o t/${lang}/TestClassContext${level}.png t/${lang}/TestClassContext.dot");
 }
 
 sub test_smc_table {
     my ($lang, $test) = @_;
-    unlink("t/${lang}/AppClass.sm");
-    unlink("t/${lang}/AppClassContext.html");
+    unlink("t/${lang}/TestClass.sm");
+    unlink("t/${lang}/TestClassContext.html");
     do_fsm($lang, $test);
-    system("${smc} -table t/${lang}/AppClass.sm");
+    system("${smc} -table t/${lang}/TestClass.sm");
 }
 
 sub test_smc {
     my ($lang, $test, $options) = @_;
-    unlink("t/${lang}/AppClass.sm");
-    unlink("t/${lang}/AppClass_sm.${lang}");
+    unlink("t/${lang}/TestClass.sm");
+    unlink("t/${lang}/TestClassContext.${lang}");
     do_fsm($lang, $test);
-    system("${smc} -${lang} ${options} t/${lang}/AppClass.sm");
-    my $expected = slurp("t/templates/${test}.out");
+    system("${smc} -${lang} ${options} t/${lang}/TestClass.sm");
     my $out = run($lang, "t/${lang}/${test}.${lang}");
+    my $expected = slurp("t/templates/${test}.out");
     is($out, $expected, "$test $options");
 }
 

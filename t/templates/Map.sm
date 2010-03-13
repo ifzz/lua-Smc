@@ -1,8 +1,7 @@
 
 %start Map_1::State_1
-%class AppClass
-%fsmclass AppClassContext
-%package MyPkg
+%class TestClass
+%fsmclass TestClassContext
 
 %map Map_1
 %%
@@ -14,7 +13,7 @@ State_1
                 Evt_2           State_2/push(Map_2::State_1)
                                                 { Output("State_1:Evt_2()"); }
 
-                Evt_3(n)        jump(Map_3::State_Far)
+                Evt3(n)         jump(Map_3::State_Far)
                                                 { Output("State_1:Evt_3(",n,")"); }
 
 }
@@ -37,7 +36,7 @@ State_1
 {
                 Evt_2           pop(Done_2)     { Output("Map_2::Evt_2()"); }
 
-                Evt_3(n)        pop(Done_3, n)  { Output("Map_2::Evt_3(", n, ")"); }
+                Evt3(n)         pop(Done_3, n)  { Output("Map_2::Evt_3(", n, ")"); }
 }
 
 %%
@@ -49,6 +48,16 @@ State_Far
 {
                 Evt_1           jump(Map_1::State_1)
                                                 { Output("Map_3::Evt_1()"); }
+}
+
+NotUsed
+{
+                Evt_1           nil             {}
+                Evt_2           nil             {}
+                Evt_3           nil             {}
+                Evt1(n)         nil             {}
+                Evt2(n)         nil             {}
+                Evt3(n)         nil             {}
 }
 
 %%
