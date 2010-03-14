@@ -2,6 +2,8 @@
 require 'Coat'
 require 'Coat.Role'
 
+local string = require 'string'
+
 role 'Smc.Visitor'
 
 requires('visitFSM',
@@ -58,3 +60,6 @@ function method:scopeStateName(stateName, mapName)
     end
 end
 
+function indent(n)
+    return string.rep(" ", n)
+end

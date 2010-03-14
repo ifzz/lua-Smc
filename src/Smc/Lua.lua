@@ -156,7 +156,7 @@ function method:visitMap (map)
     if defaultState then
         for _, trans in ipairs(defaultState.transitions) do
             trans:visit(self)
-        end 
+        end
     end
     if self.reflectFlag then
         stream:write "\n"
@@ -164,7 +164,7 @@ function method:visitMap (map)
         for _, trans in ipairs(fsm.transitions) do
             local transName = trans.name
             local transDefinition
-            if defaultState and defaultState:findTransition(transName) then 
+            if defaultState and defaultState:findTransition(transName) then
                 transDefinition = 2
             else
                 transDefinition = 0
@@ -190,7 +190,7 @@ function method:visitState (state)
         stream:write("function ", mapName, ".", stateName, ":Entry (fsm)\n")
         stream:write "    local ctxt = fsm:getOwner()\n"
         for _, action in ipairs(state.entryActions) do
-            action:visit(self, "    ")
+            action:visit(self, self.indent(4))
         end
         stream:write "end\n"
     end
@@ -199,7 +199,7 @@ function method:visitState (state)
         stream:write("function ", mapName, ".", stateName, ":Exit (fsm)\n")
         stream:write "    local ctxt = fsm:getOwner()\n"
         for _, action in ipairs(state.exitActions) do
-            action:visit(self, "    ")
+            action:visit(self, self.indent(4))
         end
         stream:write "end\n"
     end
@@ -212,7 +212,7 @@ function method:visitState (state)
         stream:write(mapName, ".", stateName, "._transitions = {\n")
         for _, trans in ipairs(map.fsm.transitions) do
             local transName = trans.name
-            local transDefinition 
+            local transDefinition
             if state:findTransition(transName) then
                 transDefinition = 1
             elseif defaultState and defaultState:findTransition(transName) then
@@ -276,8 +276,10 @@ function method:visitGuard (guard)
     local stream = self.stream
     local condition = guard.condition
     local indent2
-    if self.guardCount > 1 then
-        indent2 = "        "
+    if condition == '' and self.guardCount == 1 then
+        indent2 = self.indent(4)
+    else
+        indent2 = self.indent(8)
         if self.guardIndex == 0 and condition ~= '' then
              stream:write("    if ", condition, " then\n")
         elseif condition ~= '' then
@@ -285,11 +287,6 @@ function method:visitGuard (guard)
         else
             stream:write("    else\n")
         end
-    elseif condition == '' then
-        indent2 = "    "
-    else
-        indent2 = "            "
-        stream:write("        if ", condition, " then\n")
     end
 
     local transition = guard.transition
@@ -351,7 +348,7 @@ function method:visitGuard (guard)
         if not self.noCatchFlag then
             stream:write(indent2, "local r, msg = pcall(\n")
             stream:write(indent2, "    function ()\n")
-            indent3 = indent2 .. "        "
+            indent3 = indent2 .. self.indent(8)
         end
         for _, action in ipairs(actions) do
             action:visit(self, indent3)
