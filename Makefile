@@ -71,7 +71,7 @@ tu:
 	prove --exec=$(LUA) test/*.t
 
 test: tu
-	prove t/harness
+	prove t/*.t
 
 testclean:
 	-rm -f t/lua/*.png t/lua/*.dot t/lua/*.html t/lua/*Context.lua t/lua/*.sm

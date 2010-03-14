@@ -1,15 +1,21 @@
-#!/usr/bin/env perl
+
+package Util;
 
 use strict;
 use warnings;
 use Fatal qw(open close);
 
-use Test::More;
-
-my $smc = 'bin/smc';
-#my $smc = 'java -jar Smc.jar';
-my $test_graph = 1;
-my $test_table = 0;
+our $smc = 'java -jar Smc.jar';
+our $test_graph = 1;
+our $test_table = 0;
+our @tests = qw(
+    Simple
+    EntryExit
+    Guard
+    Default
+    Map
+);
+our $config;
 
 sub slurp {
     my ($filename) = @_;
@@ -30,12 +36,14 @@ sub spew {
 
 sub run {
     my $cmd = join ' ', @_;
+#    print $cmd, "\n";
     return qx{$cmd};
 }
 
 sub do_fsm {
     my ($lang, $fsm) = @_;
     my $sm = slurp("t/templates/${fsm}.sm");
+    $sm =~ s/@(\w+)@/$config->{$1}/g;
     spew("t/${lang}/TestClass.sm", $sm);
 }
 
@@ -57,21 +65,10 @@ sub test_smc_table {
     system("${smc} -table t/${lang}/TestClass.sm");
 }
 
-sub test_smc {
-    my ($lang, $test, $options) = @_;
-    unlink("t/${lang}/TestClass.sm");
-    unlink("t/${lang}/TestClassContext.${lang}");
-    do_fsm($lang, $test);
-    system("${smc} -${lang} ${options} t/${lang}/TestClass.sm");
-    my $out = run($lang, "t/${lang}/${test}.${lang}");
-    my $expected = slurp("t/templates/${test}.out");
-    is($out, $expected, "$test $options");
-}
-
 sub test_smc_with_options {
-    my ($lang, $test, $options) = @_;
+    my ($lang, $func, $test, $options) = @_;
     for my $option (@{$options}) {
-        test_smc($lang, $test, $option);
+        &$func($test, $option);
     }
     if ($test_graph) {
         for my $level (0..2) {
@@ -83,29 +80,4 @@ sub test_smc_with_options {
     }
 }
 
-my @tests = qw(
-    Simple
-    EntryExit
-    Guard
-    Default
-    Map
-);
-
-#@tests = ( 'Simple' );
-
-my @opt = (
-    '',
-    '-g0',
-    '-g1',
-    '-noc',
-    '-noc -g0',
-    '-noc -g1',
-    '-reflect',
-);
-
-plan tests => scalar(@tests) * scalar(@opt);
-
-for my $test (@tests) {
-    test_smc_with_options('lua', $test, \@opt);
-}
-
+1;

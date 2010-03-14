@@ -10,7 +10,7 @@ State_1
 {
                 Evt_1           nil             { Output("State_1:Evt_1"); }
 
-                Evt2(n)
+                Evt2(@param@)
                         [n == 1]
                                 nil             { Output("State_1:Evt_2(1)"); }
 
@@ -20,7 +20,7 @@ Default
 {
                 Evt_1           nil             { Output("Default:Evt_1"); }
 
-                Evt2(n)         nil             { Output("Default:Evt_2(", n, ")"); }
+                Evt2(@param@)   nil             { Output("Default:Evt_2(", n, ")"); }
 
                 Evt_3           nil             { Output("Default:Evt_3"); }
 }
@@ -30,8 +30,9 @@ NotUsed
                 Evt_1           nil             {}
                 Evt_2           nil             {}
                 Evt_3           nil             {}
-                Evt1(n)         nil             {}
-                Evt2(n)         nil             {}
-                Evt3(n)         nil             {}
+                Evt1(@param@)   nil             {}
+                Evt2(@param@)   nil             {}
+                Evt3(@param@)   nil             {}
 }
+
 %%

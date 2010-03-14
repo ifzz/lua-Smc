@@ -1,10 +1,10 @@
 
 %{
--- comment
+@code@
 %}
 
-%import table
-%import io
+%import @import1@
+%import @import2@
 
 %start Map_1::State_1
 %class TestClass
@@ -28,9 +28,9 @@ NotUsed
                 Evt_1           nil             {}
                 Evt_2           nil             {}
                 Evt_3           nil             {}
-                Evt1(n)         nil             {}
-                Evt2(n)         nil             {}
-                Evt3(n)         nil             {}
+                Evt1(@param@)   nil             {}
+                Evt2(@param@)   nil             {}
+                Evt3(@param@)   nil             {}
 }
 
 %%

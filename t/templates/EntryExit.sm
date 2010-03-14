@@ -10,7 +10,7 @@ State_1
         Entry                                   { Output("State_1:Entry");
                                                   myProp = true; }
         Exit                                    { Output("State_1:Exit");
-                                                  myProp = false;
+                                                  @prop@
                                                   emptyStateStack(); }
 {
                 Evt_1           State_2         { Output("State_1:Evt_1"); }
@@ -34,9 +34,9 @@ NotUsed
                 Evt_1           nil             {}
                 Evt_2           nil             {}
                 Evt_3           nil             {}
-                Evt1(n)         nil             {}
-                Evt2(n)         nil             {}
-                Evt3(n)         nil             {}
+                Evt1(@param@)   nil             {}
+                Evt2(@param@)   nil             {}
+                Evt3(@param@)   nil             {}
 }
 
 %%
