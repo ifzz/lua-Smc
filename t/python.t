@@ -27,16 +27,19 @@ $Util::config = {
     code        => '# comment',
     import1     => 'os.path',
     import2     => 'zlib',
+    include1    => 'a',
+    include2    => 'b',
+    is_ok       => 'ctxt.isOk()',
+    is_nok      => 'ctxt.isNok()',
+    false       => 'False',
+    param       => 'n',
     prop1       => 'myProp = True;',
     prop2       => 'myProp = False;',
-    param       => 'n',
-    ctxt        => 'ctxt.',
-    false       => 'False',
 };
 
-sub test_smc_scala {
+sub test_smc_python {
     my ($test, $options) = @_;
-    unlink(glob("t/python/*.class"));
+    unlink(glob("t/python/*.pyc"));
     unlink("t/python/TestClass.sm");
     unlink("t/python/TestClassContext.py");
     Util::do_fsm('python', $test);
@@ -54,6 +57,6 @@ plan tests => scalar(@Util::tests) * scalar(@opt);
 $ENV{PYTHONPATH} = './runtime/python';
 
 for my $test (@Util::tests) {
-    Util::test_smc_with_options('python', \&test_smc_scala, $test, \@opt);
+    Util::test_smc_with_options('python', \&test_smc_python, $test, \@opt);
 }
 

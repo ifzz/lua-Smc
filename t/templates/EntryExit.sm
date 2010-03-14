@@ -10,8 +10,7 @@ State_1
         Entry                                   { Output("State_1:Entry");
                                                   @prop1@ }
         Exit                                    { Output("State_1:Exit");
-                                                  @prop2@
-                                                  emptyStateStack(); }
+                                                  @prop2@ }
 {
                 Evt_1           State_2         { Output("State_1:Evt_1"); }
 

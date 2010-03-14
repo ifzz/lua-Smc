@@ -5,6 +5,8 @@
 
 %import @import1@
 %import @import2@
+%include @include1@
+%include @include2@
 
 %start Map_1::State_1
 %class TestClass

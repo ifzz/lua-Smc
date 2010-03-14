@@ -35,11 +35,14 @@ $Util::config = {
     code        => '// comment',
     import1     => 'java.io._',
     import2     => 'java.net._',
+    include1    => '',
+    include2    => '',
+    is_ok       => 'ctxt.isOk()',
+    is_nok      => 'ctxt.isNok()',
+    false       => 'false',
+    param       => 'n: Int',
     prop1       => 'myProp = true;',
     prop2       => 'myProp = false;',
-    param       => 'n: Int',
-    ctxt        => 'ctxt.',
-    false       => 'false',
 };
 
 sub test_smc_scala {

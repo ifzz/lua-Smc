@@ -11,7 +11,11 @@ function new (self)
     return o
 end
 
-function Output (self, ...)
+function Output (self, str)
+    print(str)
+end
+
+function Output_n (self, ...)
     print(table.concat({...}, ''))
 end
 

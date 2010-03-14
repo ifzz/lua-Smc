@@ -8,7 +8,10 @@ class TestClass:
         # Uncomment to see debug output.
         # self._fsm.setDebugFlag(True)
 
-    def Output(self, *args):
+    def Output(self, s):
+        print s
+
+    def Output_n(self, *args):
         print ''.join(map(str,args))
 
     def isOk(self):

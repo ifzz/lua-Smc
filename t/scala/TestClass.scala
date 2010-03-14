@@ -10,7 +10,7 @@ class TestClass() {
         System.out.println(str)
     }
 
-    def Output(str1: String, n: Int, str2: String) {
+    def Output_n(str1: String, n: Int, str2: String) {
         System.out.print(str1)
         System.out.print(n)
         System.out.println(str2)

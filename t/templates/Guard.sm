@@ -16,20 +16,20 @@ State_1
                         [n == 2]
                                 nil             { Output("State_1:Evt_1(2)"); }
 
-                Evt1(@param@)   State_2         { Output("State_1:Evt_1(",n,")"); }
+                Evt1(@param@)   State_2         { Output_n("State_1:Evt_1(",n,")"); }
 
 }
 
 State_2
 {
                 Evt_2
-                        [@ctxt@isOk()]
+                        [@is_ok@]
                                 nil             { Output("State_2:Evt_2() isOk"); }
 
                 Evt_2           nil             { Output("State_2:Evt_2()"); }
 
                 Evt_3
-                        [@ctxt@isNok()]
+                        [@is_nok@]
                                 nil             { Output("State_2:Evt_3() isNok"); }
 
                 Evt_3
