@@ -32,7 +32,9 @@ State_2
                         [@ctxt@isNok()]
                                 nil             { Output("State_2:Evt_3() isNok"); }
 
-                Evt_3   [false] nil             {}
+                Evt_3
+                        [@false@]
+                                nil             {}
 
                 Evt_3           nil             { Output("State_2:Evt_3()"); }
 

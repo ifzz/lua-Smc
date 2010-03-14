@@ -27,9 +27,11 @@ $Util::config = {
     code        => '-- comment',
     import1     => 'table',
     import2     => 'io',
-    prop        => 'myProp = false;',
+    prop1       => 'myProp = true;',
+    prop2       => 'myProp = false;',
     param       => 'n',
     ctxt        => 'ctxt:',
+    false       => 'false',
 };
 
 sub test_smc_lua {

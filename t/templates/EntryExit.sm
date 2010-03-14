@@ -8,9 +8,9 @@
 // State        Transition      End State       Action
 State_1
         Entry                                   { Output("State_1:Entry");
-                                                  myProp = true; }
+                                                  @prop1@ }
         Exit                                    { Output("State_1:Exit");
-                                                  @prop@
+                                                  @prop2@
                                                   emptyStateStack(); }
 {
                 Evt_1           State_2         { Output("State_1:Evt_1"); }
