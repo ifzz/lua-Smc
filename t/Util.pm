@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use Fatal qw(open close);
 
-our $smc = 'java -jar Smc.jar';
+our $smc = 'bin/smc';
 our $test_graph = 1;
 our $test_table = 0;
 our @tests = qw(
