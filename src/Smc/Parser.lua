@@ -39,7 +39,7 @@ enum.SMC_TokenType = {
     'CLASS_NAME',
     'DECLARE',
     'FSM_CLASS_NAME',
---    'HEADER_FILE',
+    'HEADER_FILE',
     'IMPORT',
     'INCLUDE_FILE',
     'MAP_NAME',
@@ -131,7 +131,7 @@ function method:_build_percentKeyword ()
         ['%class']      = 'CLASS_NAME',
         ['%declare']    = 'DECLARE',
         ['%fsmclass']   = 'FSM_CLASS_NAME',
---        ['%header']     = 'HEADER_FILE',
+        ['%header']     = 'HEADER_FILE',
         ['%import']     = 'IMPORT',
         ['%include']    = 'INCLUDE_FILE',
         ['%map']        = 'MAP_NAME',
@@ -294,10 +294,10 @@ function method:BUILD ()
     require 'Smc.Parser.Parser_sm'
     self.parserFSM = Smc.Parser.Parser_sm.ParserContext:new{_owner = self}
     self.parserFSM:setDebugFlag(self.debugFlag)
-    self.lexer = Smc.Lexer.new{ 
-        filename = self.filename, 
-        stream = self.stream, 
-        debugFlag = self.debugFlag 
+    self.lexer = Smc.Lexer.new{
+        filename = self.filename,
+        stream = self.stream,
+        debugFlag = self.debugFlag
     }
 end
 
@@ -321,10 +321,10 @@ function method:parse ()
             if f == nil then
                 self:_error("Cannot open " .. filename .. " (" .. msg .. ")", token.lineno)
             else
-                self.lexer = Smc.Lexer.new{ 
-                    filename = filename, 
-                    stream = f, 
-                    prev = lexer, 
+                self.lexer = Smc.Lexer.new{
+                    filename = filename,
+                    stream = f,
+                    prev = lexer,
                     debugFlag = self.debugFlag,
                 }
             end
@@ -433,6 +433,14 @@ function method:addDeclare (token)
         decl = decl .. ";"
     end
     table.insert(self.fsm.declareList, decl)
+end
+
+function method:setHeader (token)
+    if self.fsm.header then
+        self:warning("%header previously specified, new header file ignored.", token.lineno)
+    else
+        self.fsm.header = token.value
+    end
 end
 
 function method:addInclude (token)

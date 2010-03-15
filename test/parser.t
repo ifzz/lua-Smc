@@ -5,7 +5,7 @@ require 'Smc.Parser'
 require 'Test.More'
 require 'io'
 
-plan(215)
+plan(217)
 
 local function do_parse (text, lang)
     local f = io.tmpfile()
@@ -65,6 +65,8 @@ raw code
 %package        net.sf.smc
 %access         private
 
+%header         AppClass.h
+
 %import         java.util
 %import         java.other
 
@@ -84,6 +86,7 @@ is( fsm.startState, 'StartMap::StartState' )
 is( fsm.fsmClassname, 'AppContext' )
 is( fsm._package, 'net.sf.smc' )
 is( fsm.accessLevel, 'private' )
+is( fsm.header, 'AppClass.h' )
 eq_array( fsm.includeList, {
     '<stdlib.h>',
     '"file.h"',
@@ -112,6 +115,8 @@ raw code
 %package        net.sf.smc
 %access         private
 
+%header         AppClass.h
+
 %{
 another raw code
 %}
@@ -122,13 +127,16 @@ another raw code
 %package        smc.sf.net
 %access         public
 
+%header         AppClass.hpp
+
 ]===]
 is( get_messages(parser), [=[
-<tmpfile>:12: warning - %{ %} source previously specified, new source ignored.
-<tmpfile>:16: warning - %class previously specified, new context ignored.
-<tmpfile>:17: warning - %start previously specified, new start state ignored.
-<tmpfile>:19: warning - %package previously specified, new package ignored.
-<tmpfile>:20: warning - %access previously specified, new access level ignored.
+<tmpfile>:14: warning - %{ %} source previously specified, new source ignored.
+<tmpfile>:18: warning - %class previously specified, new context ignored.
+<tmpfile>:19: warning - %start previously specified, new start state ignored.
+<tmpfile>:21: warning - %package previously specified, new package ignored.
+<tmpfile>:22: warning - %access previously specified, new access level ignored.
+<tmpfile>:24: warning - %header previously specified, new header file ignored.
 ]=], "headers (duplicated)" )
 ok( fsm.isValid )
 is( fsm.source, "\nraw code\n" )
@@ -136,6 +144,7 @@ is( fsm.context, 'AppClass' )
 is( fsm.startState, 'StartMap::StartState' )
 is( fsm._package, 'net.sf.smc' )
 is( fsm.accessLevel, 'private' )
+is( fsm.header, 'AppClass.h' )
 
 
 parser, fsm = do_parse [===[

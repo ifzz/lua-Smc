@@ -5,7 +5,7 @@ require 'Smc.Parser'
 require 'Test.More'
 require 'io'
 
-plan(154)
+plan(156)
 
 function do_parse (text)
     local f = io.tmpfile()
@@ -120,7 +120,7 @@ token = lexer:nextToken()
 is( token._type, 'DONE_SUCCESS' )
 
 
-lexer = do_parse " %access %class %declare %fsmclass %import %include %map %package %source %start "
+lexer = do_parse " %access %class %declare %fsmclass %header %import %include %map %package %source %start "
 token = lexer:nextToken()
 is( token._type, 'ACCESS', "%keywords" )
 is( token.value, '%access' )
@@ -133,6 +133,9 @@ is( token.value, '%declare' )
 token = lexer:nextToken()
 is( token._type, 'FSM_CLASS_NAME' )
 is( token.value, '%fsmclass' )
+token = lexer:nextToken()
+is( token._type, 'HEADER_FILE' )
+is( token.value, '%header' )
 token = lexer:nextToken()
 is( token._type, 'IMPORT' )
 is( token.value, '%import' )

@@ -26,6 +26,10 @@ Start
         FsmClassName
         {}
 
+    HEADER_FILE(token)
+        HeaderFile
+        {}
+
     INCLUDE_FILE(token)
         IncludeFile
         {}
@@ -84,6 +88,19 @@ StartState
         StartError
         {
             _error("Missing state after %start.");
+        }
+}
+
+HeaderFile
+    Entry
+    {
+        setRawMode3();
+    }
+{
+    SOURCE(token)
+        Start
+        {
+            setHeader(token);
         }
 }
 
@@ -190,6 +207,10 @@ StartError
         FsmClassName
         {}
 
+    HEADER_FILE(token)
+        HeaderFile
+        {}
+
     INCLUDE_FILE(token)
         IncludeFile
         {}
@@ -211,7 +232,7 @@ StartError
         {}
 
     MAP_NAME(token)
-        push(MapsMap::MapName)
+        Start/push(MapsMap::MapName)
         {}
 
     Default

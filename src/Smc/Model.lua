@@ -33,6 +33,7 @@ has.fsmClassname    = { is = 'rw', isa = 'string', lazy = true,
                         trigger = function (self, value) self.targetFilename = value end }
 has._package        = { is = 'rw', isa = 'string' }
 has.accessLevel     = { is = 'rw', isa = 'string' }
+has.header          = { is = 'rw', isa = 'string' }
 has.includeList     = { is = 'rw', isa = 'table<string>',
                         default = function () return {} end }
 has.importList      = { is = 'rw', isa = 'table<string>',
