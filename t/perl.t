@@ -44,12 +44,12 @@ sub test_smc_perl {
     unlink("t/perl/TestClassContext.pm");
     Util::do_fsm('perl', $test);
     system("${Util::smc} -perl ${options} t/perl/TestClass.sm");
-    my $out = Util::run('perl', "-I t/perl t/perl/${test}.pl");
+    my $out = Util::run('perl', "-I t/perl -I/runtime/perl t/perl/${test}.pl");
     my $expected = Util::slurp("t/templates/${test}.out");
     is($out, $expected, "$test $options");
 }
 
-unless (`perl -version 2>&1` =~ /^\nThis is perl/) {
+unless (`perl -version` =~ /^\nThis is perl/) {
     plan skip_all => 'no perl';
 }
 plan tests => scalar(@Util::tests) * scalar(@opt);
