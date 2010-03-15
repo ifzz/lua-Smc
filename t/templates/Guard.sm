@@ -2,6 +2,7 @@
 %start Map_1::State_1
 %class TestClass
 %fsmclass TestClassContext
+%header TestClass.h
 
 %map Map_1
 %%

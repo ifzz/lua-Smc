@@ -45,6 +45,7 @@ sub test_smc_c {
     unlink("t/c/${test}");
     unlink("t/c/TestClass.sm");
     unlink("t/c/TestClassContext.c");
+    unlink("t/c/TestClassContext.h");
     Util::do_fsm('c', $test);
     system("${Util::smc} -c ${options} -headerd t/c t/c/TestClass.sm");
     my $out = Util::run('gcc', "-I runtime/c -I . -o t/c/${test} t/c/${test}.c t/c/TestClass.c t/c/TestClassContext.c");
