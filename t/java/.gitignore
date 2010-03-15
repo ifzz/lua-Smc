@@ -1,0 +1,10 @@
+
+*.sm
+*.dot
+*.png
+*.html
+*.class
+
+TestClass.sm
+TestClassContext.java
+
