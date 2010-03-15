@@ -32,6 +32,7 @@ $Util::config = {
     is_ok       => 'ctxt.isOk()',
     is_nok      => 'ctxt.isNok()',
     false       => 'False',
+    n           => 'n',
     param       => 'n',
     prop1       => 'myProp = True;',
     prop2       => 'myProp = False;',

@@ -34,6 +34,7 @@ $Util::config = {
     is_ok       => 'TestClass_isOk(ctxt)',
     is_nok      => 'TestClass_isNok(ctxt)',
     false       => '0',
+    n           => 'n',
     param       => 'n: int',
     prop1       => '',
     prop2       => '',

@@ -9,14 +9,14 @@ State_1
 // State        Transition      End State       Action
 {
                 Evt1(@param@)
-                        [n == 1]
+                        [@n@ == 1]
                                 nil             { Output("State_1:Evt_1(1)"); }
 
                 Evt1(@param@)
-                        [n == 2]
+                        [@n@ == 2]
                                 nil             { Output("State_1:Evt_1(2)"); }
 
-                Evt1(@param@)   State_2         { Output_n("State_1:Evt_1(",n,")"); }
+                Evt1(@param@)   State_2         { Output_n("State_1:Evt_1(", @n@,")"); }
 
 }
 

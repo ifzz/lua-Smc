@@ -14,7 +14,7 @@ State_1
                                                 { Output("State_1:Evt_2()"); }
 
                 Evt3(@param@)   jump(Map_3::State_Far)
-                                                { Output_n("State_1:Evt_3(",n,")"); }
+                                                { Output_n("State_1:Evt_3(", @n@,")"); }
 
 }
 
@@ -22,7 +22,7 @@ State_2
 {
                 Done_2          State_1         { Output("State_2:Done_2()"); }
 
-                Done_3(@param@) nil             { Output_n("State_2:Done_3(", n, ")"); }
+                Done_3(@param@) nil             { Output_n("State_2:Done_3(", @n@, ")"); }
 
                 Evt_1           State_1         { Output("State_2:Evt_1()"); }
 }
@@ -36,7 +36,7 @@ State_1
 {
                 Evt_2           pop(Done_2)     { Output("Map_2::Evt_2()"); }
 
-                Evt3(@param@)   pop(Done_3, n)  { Output_n("Map_2::Evt_3(", n, ")"); }
+                Evt3(@param@)   pop(Done_3, @n@)  { Output_n("Map_2::Evt_3(", @n@, ")"); }
 }
 
 %%
