@@ -11,13 +11,7 @@ use Util;
 $Util::smc = 'java -jar Smc.jar';
 #$Util::test_graph = 0;
 #$Util::test_table = 1;
-#@Util::tests = ( 'Guard' );
-@Util::tests = qw(
-    Simple
-    EntryExit
-    Default
-    Map
-);
+#@Util::tests = ( 'Simple' );
 
 my @opt = (
     '',
