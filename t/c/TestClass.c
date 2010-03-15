@@ -1,11 +1,12 @@
 
 #include <stdio.h>
+#define NDEBUG
 #include "TestClass.h"
+
+const struct TestClassState* stack[4];
 
 void TestClass_Init(struct TestClass *this)
 {
-    const struct TestClassState* stack[4];
-
     TestClassContext_Init(&this->_fsm, this);
     FSM_STACK(&this->_fsm, stack);
 
