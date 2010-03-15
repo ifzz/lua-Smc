@@ -13,7 +13,7 @@ our @tests = qw(
     EntryExit
     Guard
     Default
-    Map
+    PushJump
 );
 our $config;
 
