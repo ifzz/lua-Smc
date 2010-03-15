@@ -114,6 +114,7 @@ abstract class FSMContext[State] {
         }
         val previousState = _state
         _state = _stateStack.pop()
+        _isInTransaction = false
         if (_debugFlag)
             _debugStream.println("POP TO STATE    : " + _state)
         // Inform all listeners about this state change
