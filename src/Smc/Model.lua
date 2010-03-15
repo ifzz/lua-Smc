@@ -130,7 +130,7 @@ end
 function method:_build_hasEntryActions ()
     for _, state in ipairs(self.states) do
         actions = state.entryActions
-        if actions and #actions > 0 then
+        if actions then
             return true
         end
     end
@@ -140,7 +140,7 @@ end
 function method:_build_hasExitActions ()
     for _, state in ipairs(self.states) do
         actions = state.exitActions
-        if actions and #actions > 0 then
+        if actions then
             return true
         end
     end
@@ -148,8 +148,7 @@ function method:_build_hasExitActions ()
 end
 
 local StateId = 0
-
-function method:_get_nextStateId ()
+function _get_nextStateId ()
     StateId = StateId + 1
     return StateId
 end
