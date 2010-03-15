@@ -1,0 +1,7 @@
+
+*.dot
+*.png
+*.html
+
+TestClass.sm
+TestClassContext.groovy
