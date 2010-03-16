@@ -635,7 +635,7 @@ parser, fsm = do_parse [===[
 
 ]===]
 is( get_messages(parser), [=[
-map1.inc:2: warning - %class previously specified, new context ignored.
+./map1.inc:2: warning - %class previously specified, new context ignored.
 ]=], "source" )
 ok( fsm.isValid )
 is( #fsm.maps, 2 )
@@ -655,7 +655,7 @@ parser, fsm = do_parse [===[
 
 ]===]
 is( get_messages(parser), [=[
-<tmpfile>:2: error - Cannot open no_file.inc (no_file.inc: No such file or directory)
+<tmpfile>:2: error - Cannot open ./no_file.inc (./no_file.inc: No such file or directory)
 <tmpfile>:5: warning - %class previously specified, new context ignored.
 ]=], "source no_file" )
 nok( fsm.isValid )

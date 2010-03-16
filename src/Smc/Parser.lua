@@ -302,6 +302,17 @@ function method:BUILD ()
 end
 
 function method:parse ()
+    local function dirname (filename)
+        filename = filename:reverse()
+        local idx = filename:find"/"
+        if idx then
+            filename = filename:sub(idx+1)
+            return filename:reverse()
+        else
+            return "."
+        end
+    end -- dirname
+
     self.fsm = Smc.FSM.new{
         name = self.name,
         filename = self.filename,
@@ -316,7 +327,7 @@ function method:parse ()
             lexer:setRawMode3()
             token = lexer:nextToken()
             assert(token._type == 'SOURCE')
-            local filename = token.value
+            local filename = dirname(lexer.filename) .. '/' .. token.value
             local f, msg = io.open(filename, 'r')
             if f == nil then
                 self:_error("Cannot open " .. filename .. " (" .. msg .. ")", token.lineno)
