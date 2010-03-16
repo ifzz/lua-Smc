@@ -14,6 +14,7 @@ $Util::smc = 'java -jar Smc.jar';
 @Util::tests = qw(
     Simple
     EntryExit
+    TransUndef
 );
 #@Util::tests = ( 'Simple' );
 
@@ -42,6 +43,10 @@ $Util::config = {
     prop2       => '',
 };
 
+my %re = (
+    TransUndef  => 'Transition',
+);
+
 sub test_smc_tcl {
     my ($test, $options) = @_;
     unlink("t/tcl/TestClass.sm");
@@ -50,7 +55,12 @@ sub test_smc_tcl {
     system("${Util::smc} -tcl ${options} t/tcl/TestClass.sm");
     my $out = Util::run('tclsh', "t/tcl/${test}.tcl");
     my $expected = Util::slurp("t/templates/${test}.out");
-    is($out, $expected, "$test $options");
+    if ($expected =~ /^like/) {
+        like($out, qr{$re{$test}}, "$test $options");
+    }
+    else {
+        is($out, $expected, "$test $options");
+    }
 }
 
 unless (`which tclsh` =~ /^\//) {

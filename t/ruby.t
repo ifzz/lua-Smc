@@ -38,6 +38,10 @@ $Util::config = {
     prop2       => 'myProp = false;',
 };
 
+my %re = (
+    TransUndef  => '\(Statemap::TransitionUndefinedException\)\nState: Map_1\.State_1\nTransition: Evt_1',
+);
+
 sub test_smc_ruby {
     my ($test, $options) = @_;
     unlink("t/ruby/TestClass.sm");
@@ -46,7 +50,12 @@ sub test_smc_ruby {
     system("${Util::smc} -ruby ${options} t/ruby/TestClass.sm");
     my $out = Util::run('ruby', "-I t/ruby -I runtime/ruby t/ruby/${test}.rb");
     my $expected = Util::slurp("t/templates/${test}.out");
-    is($out, $expected, "$test $options");
+    if ($expected =~ /^like/) {
+        like($out, qr{$re{$test}}, "$test $options");
+    }
+    else {
+        is($out, $expected, "$test $options");
+    }
 }
 
 unless (`ruby -v` =~ /^ruby/) {

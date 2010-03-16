@@ -43,6 +43,10 @@ $Util::config = {
     prop2       => '',
 };
 
+my %re = (
+    TransUndef  => 'statemap::TransitionUndefinedException',
+);
+
 sub test_smc_cpp {
     my ($test, $options) = @_;
     unlink("t/c++/${test}");
@@ -54,7 +58,12 @@ sub test_smc_cpp {
     my $out = Util::run('g++', "-I runtime/c++ -I . -o t/c++/${test} t/c++/${test}.cpp t/c++/TestClass.cpp t/c++/TestClassContext.cpp");
     $out = Util::run("t/c++/${test}");
     my $expected = Util::slurp("t/templates/${test}.out");
-    is($out, $expected, "$test $options");
+    if ($expected =~ /^like/) {
+        like($out, qr{$re{$test}}, "$test $options");
+    }
+    else {
+        is($out, $expected, "$test $options");
+    }
 }
 
 unless (`g++ --version 2>&1` =~ /^g++/) {

@@ -40,6 +40,10 @@ $Util::config = {
     prop2       => 'myProp = false;',
 };
 
+my %re = (
+    TransUndef  => 'GroovyRuntimeException',    # XXX
+);
+
 sub test_smc_groovy {
     my ($test, $options) = @_;
     unlink("t/groovy/TestClass.sm");
@@ -48,7 +52,12 @@ sub test_smc_groovy {
     system("${Util::smc} -groovy ${options} t/groovy/TestClass.sm");
     my $out = Util::run('cd t/groovy && groovy -classpath ../../runtime/groovy/statemap.jar', $test);
     my $expected = Util::slurp("t/templates/${test}.out");
-    is($out, $expected, "$test $options");
+    if ($expected =~ /^like/) {
+        like($out, qr{$re{$test}}, "$test $options");
+    }
+    else {
+        is($out, $expected, "$test $options");
+    }
 }
 
 unless (`groovy -v` =~ /^Groovy/) {

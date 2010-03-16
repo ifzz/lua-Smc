@@ -38,6 +38,10 @@ $Util::config = {
     prop2       => 'myProp = False;',
 };
 
+my %re = (
+    TransUndef  => 'statemap\.TransitionUndefinedException: \n\tState: Map_1\.State_1\n\tTransition: Evt_1',
+);
+
 sub test_smc_python {
     my ($test, $options) = @_;
     unlink(glob("t/python/*.pyc"));
@@ -47,7 +51,12 @@ sub test_smc_python {
     system("${Util::smc} -python ${options} t/python/TestClass.sm");
     my $out = Util::run('python', "t/python/${test}.py");
     my $expected = Util::slurp("t/templates/${test}.out");
-    is($out, $expected, "$test $options");
+    if ($expected =~ /^like/) {
+        like($out, qr{$re{$test}}, "$test $options");
+    }
+    else {
+        is($out, $expected, "$test $options");
+    }
 }
 
 unless (`python -V 2>&1` =~ /^Python/) {

@@ -34,6 +34,10 @@ $Util::config = {
     prop2       => '',
 };
 
+my %re = (
+    TransUndef  => 'TestClassState_Default',
+);
+
 sub test_smc_c {
     my ($test, $options) = @_;
     unlink("t/c/${test}");
@@ -45,7 +49,12 @@ sub test_smc_c {
     my $out = Util::run('gcc', "-I runtime/c -I . -o t/c/${test} t/c/${test}.c t/c/TestClass.c t/c/TestClassContext.c");
     $out = Util::run("t/c/${test}");
     my $expected = Util::slurp("t/templates/${test}.out");
-    is($out, $expected, "$test $options");
+    if ($expected =~ /^like/) {
+        like($out, qr{$re{$test}}, "$test $options");
+    }
+    else {
+        is($out, $expected, "$test $options");
+    }
 }
 
 unless (`gcc --version 2>&1` =~ /^gcc/) {

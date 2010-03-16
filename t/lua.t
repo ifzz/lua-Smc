@@ -38,6 +38,10 @@ $Util::config = {
     prop2       => 'myProp = false;',
 };
 
+my %re = (
+    TransUndef  => 'Undefined Transition\nState: Map_1\.State_1\nTransition: Evt_1',
+);
+
 sub test_smc_lua {
     my ($test, $options) = @_;
     unlink("t/lua/TestClass.sm");
@@ -46,7 +50,12 @@ sub test_smc_lua {
     system("${Util::smc} -lua ${options} t/lua/TestClass.sm");
     my $out = Util::run('lua', "t/lua/${test}.lua");
     my $expected = Util::slurp("t/templates/${test}.out");
-    is($out, $expected, "$test $options");
+    if ($expected =~ /^like/) {
+        like($out, qr{$re{$test}}, "$test $options");
+    }
+    else {
+        is($out, $expected, "$test $options");
+    }
 }
 
 unless (`lua -v 2>&1` =~ /^Lua/) {

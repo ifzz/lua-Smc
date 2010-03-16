@@ -37,7 +37,7 @@ sub spew {
 sub run {
     my $cmd = join ' ', @_;
 #    print $cmd, "\n";
-    return qx{$cmd};
+    return qx{$cmd 2>&1};
 }
 
 sub do_fsm {

@@ -38,6 +38,10 @@ $Util::config = {
     prop2       => '',
 };
 
+my %re = (
+    TransUndef  => "'TransitionUndefinedException' with message '\n\tState: Map_1\.State_1\n\tTransition: Evt_1'",
+);
+
 sub test_smc_php {
     my ($test, $options) = @_;
     unlink("t/php/TestClass.sm");
@@ -46,7 +50,12 @@ sub test_smc_php {
     system("${Util::smc} -php ${options} t/php/TestClass.sm");
     my $out = Util::run('php', "-q t/php/${test}.php");
     my $expected = Util::slurp("t/templates/${test}.out");
-    is($out, "\n\n" . $expected, "$test $options");
+    if ($expected =~ /^like/) {
+        like($out, qr{$re{$test}}, "$test $options");
+    }
+    else {
+        is($out, "\n\n" . $expected, "$test $options");
+    }
 }
 
 unless (`php -v` =~ /^PHP/) {

@@ -45,6 +45,10 @@ $Util::config = {
     prop2       => '',
 };
 
+my %re = (
+    TransUndef  => 'statemap\.TransitionUndefinedException: State: Map_1\.State_1, Transition: Evt_1',
+);
+
 sub test_smc_java {
     my ($test, $options) = @_;
     unlink(glob("t/java/*.class"));
@@ -55,7 +59,12 @@ sub test_smc_java {
     my $out = Util::run('cd t/java && javac -g -Xlint:unchecked -classpath ../../runtime/java/statemap.jar TestClass.java TestClassContext.java', "${test}.java");
     $out = Util::run('java -classpath t/java:runtime/java/statemap.jar', $test);
     my $expected = Util::slurp("t/templates/${test}.out");
-    is($out, $expected, "$test $options");
+    if ($expected =~ /^like/) {
+        like($out, qr{$re{$test}}, "$test $options");
+    }
+    else {
+        is($out, $expected, "$test $options");
+    }
 }
 
 unless (`javac -version 2>&1` =~ /^javac/) {

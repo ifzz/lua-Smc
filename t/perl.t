@@ -38,6 +38,10 @@ $Util::config = {
     prop2       => 'myProp = 0;',
 };
 
+my %re = (
+    TransUndef  => 'TransitionUndefinedException\nState: Map_1\.State_1\nTransition: Evt_1',
+);
+
 sub test_smc_perl {
     my ($test, $options) = @_;
     unlink("t/perl/TestClass.sm");
@@ -46,7 +50,12 @@ sub test_smc_perl {
     system("${Util::smc} -perl ${options} t/perl/TestClass.sm");
     my $out = Util::run('perl', "-I t/perl -I/runtime/perl t/perl/${test}.pl");
     my $expected = Util::slurp("t/templates/${test}.out");
-    is($out, $expected, "$test $options");
+    if ($expected =~ /^like/) {
+        like($out, qr{$re{$test}}, "$test $options");
+    }
+    else {
+        is($out, $expected, "$test $options");
+    }
 }
 
 unless (`perl -version` =~ /^\nThis is perl/) {

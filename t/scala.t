@@ -40,6 +40,10 @@ $Util::config = {
     prop2       => 'myProp = false;',
 };
 
+my %re = (
+    TransUndef  => 'statemap\.TransitionUndefinedException: State: Map_1\.State_1, Transition: Evt_1',
+);
+
 sub test_smc_scala {
     my ($test, $options) = @_;
     unlink(glob("t/scala/*.class"));
@@ -50,7 +54,12 @@ sub test_smc_scala {
     my $out = Util::run('cd t/scala && scalac -g ../../runtime/scala/statemap.scala TestClass.scala TestClassContext.scala', "${test}.scala");
     $out = Util::run('scala -classpath t/scala', $test);
     my $expected = Util::slurp("t/templates/${test}.out");
-    is($out, $expected, "$test $options");
+    if ($expected =~ /^like/) {
+        like($out, qr{$re{$test}}, "$test $options");
+    }
+    else {
+        is($out, $expected, "$test $options");
+    }
 }
 
 unless (`scalac -version 2>&1` =~ /^Scala/) {
