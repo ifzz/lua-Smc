@@ -79,7 +79,7 @@ testclean:
 coverage:
 	rm -f luacov.stats.out luacov.report.out
 	prove --exec="$(LUA) -lluacov" test/*.t
-#	prove t/harness
+#	prove t/*.t
 	luacov
 
 doc:

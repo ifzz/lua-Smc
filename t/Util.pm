@@ -14,6 +14,7 @@ our @tests = qw(
     Guard
     Default
     PushJump
+    TransUndef
 );
 our $config;
 
