@@ -119,7 +119,7 @@ function method:usage ()
 	          (use with -c, -c++ only)
 	-glevel   Detail level from 0 (least) to 2 (greatest)
 	          (use with -graph only)
-	-load     Use a language for a plugin 
+	-load     Use a language for a plugin
 	-dump     Ascii output
 %s
     Note: statemap_file must end in ".sm"
@@ -164,8 +164,8 @@ function method:parseArgs (args)
             local lang
             if v == '-load' then
                 local m = require(args[i+1])
-                lang = m.instance() 
-            else 
+                lang = m.instance()
+            else
                 lang = findLanguage(v)
             end
             if lang then
@@ -173,13 +173,13 @@ function method:parseArgs (args)
                     error "Only one target language may be specified"
                 else
                     retval = lang
-                end 
+                end
             end
         end
         return retval
     end -- findTargetLanguage
 
-    if not needHelp() then 
+    if not needHelp() then
         targetLanguage = findTargetLanguage()
         if not targetLanguage then
             error "Target language was not specified."
@@ -377,9 +377,6 @@ function method:parseArgs (args)
         while i <= #args do
             local v = args[i]
             v = v:gsub('\\', '/')
-            if not v:match'.sm$' then
-                error( "Source file name must end in \".sm\" (" .. v .. ")." )
-            end
             local f = io.open(v, 'r')
             if not f then
                 error( "Source file \"" .. v .. "\" is not readable" )
