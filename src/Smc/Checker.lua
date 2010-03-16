@@ -36,6 +36,10 @@ function method:_error (text, filename, lineno)
     self.isValid = false
 end
 
+function method:check (fsm)
+    self:visitFSM(fsm)
+end
+
 function method:visitFSM (fsm)
     self.isValid = fsm.isValid
 

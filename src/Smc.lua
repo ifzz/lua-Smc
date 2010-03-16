@@ -426,8 +426,7 @@ function method:generateCode (fsm)
     if not f then
         error("Cannot open " .. filename .. " (" .. msg .. ")")
     end
-    generator.stream = f
-    fsm:visit(generator)
+    generator:generate(fsm, f)
     f:close()
     if self.verbose then
         print("[wrote " .. filename .. "]")
@@ -456,8 +455,7 @@ function method:generateCode (fsm)
         if not f then
             error("Cannot open " .. filename .. " (" .. msg .. ")")
         end
-        generator.stream = f
-        fsm:visit(generator)
+        generator:generate(fsm, f)
         f:close()
         if self.verbose then
             print("[wrote " .. filename .. "]")
@@ -522,18 +520,17 @@ function method:main (args)
             if self.verbose then
                 print("[checking " .. filename .. "]")
             end
-            fsm:visit(checker)
+            checker:check(fsm)
             for _, msg in ipairs(checker.messages) do
                 print(tostring(msg))
             end
             if self.dump then
                 local generator = Smc.Dumper.new{
-                    stream = io.stdout,
                     suffix = 'dummy',
                     srcfileBase = fsm.name,
                     targetfileBase = fsm.targetFilename,
                 }
-                fsm:visit(generator)
+                generator:generate(fsm, io.stdout)
             elseif checker.isValid then
 --                self:generateCode(fsm)
                 local r, msg = pcall(self.generateCode, self, fsm)

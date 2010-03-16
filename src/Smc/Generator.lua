@@ -42,6 +42,11 @@ has.stream          = { is = 'rw', isa = 'file' }
 has.guardCount      = { is = 'rw', isa = 'number' }
 has.guardIndex      = { is = 'rw', isa = 'number' }
 
+function method:generate(fsm, stream)
+    self.stream = stream
+    self:visitFSM(fsm)
+end
+
 function method:sourceFile(path, basename, suffix)
     suffix = suffix or self.suffix
     return path .. basename .. "." .. suffix
