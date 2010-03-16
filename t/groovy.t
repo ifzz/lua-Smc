@@ -41,7 +41,7 @@ $Util::config = {
 };
 
 my %re = (
-    TransUndef  => 'GroovyRuntimeException',    # XXX
+    TransUndef  => 'statemap\.TransitionUndefinedException',
 );
 
 sub test_smc_groovy {

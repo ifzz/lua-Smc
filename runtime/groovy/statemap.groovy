@@ -47,6 +47,12 @@ class StateUndefinedException extends RuntimeException {
 }
 
 class TransitionUndefinedException extends RuntimeException {
+    def msg
+
+    def TransitionUndefinedException (msg) {
+        super()
+        this.msg = msg
+    }
 }
 
 abstract class FSMContext implements Serializable {
