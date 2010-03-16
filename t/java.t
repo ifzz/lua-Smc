@@ -26,8 +26,15 @@ my @opt = (
     '-access package',
     '-generic',
     '-reflect',
+    '-reflect -generic',
     '-serial',
     '-sync',
+    '-reflect -generic -serial -sync',
+    '-g0 -reflect -generic -serial -sync',
+    '-g1 -reflect -generic -serial -sync',
+    '-noc -reflect -generic -serial -sync',
+    '-noc -g0 -reflect -generic -serial -sync',
+    '-noc -g1 -reflect -generic -serial -sync',
 );
 
 $Util::config = {
