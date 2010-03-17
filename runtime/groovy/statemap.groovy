@@ -23,7 +23,7 @@
 // Contributor(s):
 //
 // RCS ID
-// $Id: statemap.groovy,v 1.5 2009/11/24 20:42:39 cwrapp Exp $
+// $Id: statemap.groovy,v 1.6 2010/03/16 16:43:58 fperrad Exp $
 //
 // CHANGE LOG
 // (See the bottom of this file.)
@@ -52,6 +52,10 @@ class TransitionUndefinedException extends RuntimeException {
     def TransitionUndefinedException (msg) {
         super()
         this.msg = msg
+    }
+
+    String toString () {
+        return 'statemap.TransitionUndefinedException: ' + msg
     }
 }
 
@@ -147,6 +151,9 @@ abstract class FSMContext implements Serializable {
 //
 // CHANGE LOG
 // $Log: statemap.groovy,v $
+// Revision 1.6  2010/03/16 16:43:58  fperrad
+// add TransitionUndefinedException constructor
+//
 // Revision 1.5  2009/11/24 20:42:39  cwrapp
 // v. 6.0.1 update
 //
