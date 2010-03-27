@@ -10,7 +10,7 @@ local tostring = tostring
 
 class 'Smc.Token'
 
-enum.SMC_TokenType = {
+enum.Smc.TokenType = {
     'DONE_FAILED',
     'DONE_SUCCESS',
     'SOURCE',
@@ -48,7 +48,7 @@ enum.SMC_TokenType = {
     'START_STATE',
 }
 
-has._type           = { is = 'rw', isa = 'SMC_TokenType' }
+has._type           = { is = 'rw', isa = 'Smc.TokenType' }
 has.value           = { is = 'rw', isa = 'string' }
 has.lineno          = { is = 'rw', isa = 'number' }
 
@@ -67,8 +67,8 @@ has.debugFlag       = { is = 'ro', isa = 'boolean', default = false }
 has.prev            = { is = 'ro', isa = 'Smc.Lexer' }
 has.lexerFSM        = { is = 'ro' }
 has.transMethod     = { is = 'ro', isa = 'table<string,string>', lazy_build = true }
-has.keyword         = { is = 'ro', isa = 'table<string,SMC_TokenType>', lazy_build = true }
-has.percentKeyword  = { is = 'ro', isa = 'table<string,SMC_TokenType>', lazy_build = true }
+has.keyword         = { is = 'ro', isa = 'table<string,Smc.TokenType>', lazy_build = true }
+has.percentKeyword  = { is = 'ro', isa = 'table<string,Smc.TokenType>', lazy_build = true }
 has.currentChar     = { is = 'rw', isa = 'string'}
 has.token           = { is = 'rw', isa = 'Smc.Token'}
 has.tokenBuffer     = { is = 'rw', isa = 'string'}
@@ -249,11 +249,11 @@ end
 
 class 'Smc.Message'
 
-enum.SMC_MsgLevel = { 'WARNING', 'ERROR' }
+enum.Smc.MsgLevel = { 'WARNING', 'ERROR' }
 
 has.filename        = { is = 'ro', isa = 'string', required = true }
 has.lineno          = { is = 'ro', isa = 'number', required = true }
-has.level           = { is = 'ro', isa = 'SMC_MsgLevel', required = true }
+has.level           = { is = 'ro', isa = 'Smc.MsgLevel', required = true }
 has.text            = { is = 'ro', isa = 'string', required = true }
 
 function overload:__tostring ()

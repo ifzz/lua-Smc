@@ -280,7 +280,7 @@ end
 class 'Smc.Guard'
 extends 'Smc.Element'
 
-enum.SMC_TransType = {
+enum.Smc.TransType = {
     'TRANS_SET',
     'TRANS_PUSH',
     'TRANS_POP',
@@ -289,7 +289,7 @@ enum.SMC_TransType = {
 has.name            = { '+', required = true }
 has.transition      = { is = 'ro', isa = 'Smc.Transition', required = true }
 has.condition       = { is = 'ro', isa = 'string', required = true }
-has.transType       = { is = 'rw', isa = 'SMC_TransType' }
+has.transType       = { is = 'rw', isa = 'Smc.TransType' }
 has.endState        = { is = 'rw', isa = 'string', }
 has.pushState       = { is = 'rw', isa = 'string', }
 has.popArgs         = { is = 'rw', isa = 'string', }
