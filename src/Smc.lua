@@ -27,7 +27,7 @@ has.languages       = { is = 'ro', lazy_build = true }
 has.verbose         = { is = 'rw', isa = 'boolean', default = false }
 has.fsmVerbose      = { is = 'rw', isa = 'boolean', default = false }
 has._return         = { is = 'rw', isa = 'boolean', default = false }
-has.dump            = { is = 'rw', isa = 'boolean', default = false }
+has._dump           = { is = 'rw', isa = 'boolean', default = false }
 has.targetLanguage  = { is = 'rw', isa = 'Smc.Language' }
 has.option          = { is = 'rw', isa = 'table' }
 has.sourceFileList  = { is = 'rw', isa = 'table<string>' }
@@ -240,7 +240,7 @@ function method:parseArgs (args)
                     error( targetLanguage.name .. " does not support -d.")
                 end
             elseif v:match'-du' then
-                self.dump = true
+                self._dump = true
                 consumed = 1
             elseif v:match'-hea' then
                 local vv = args[i+1]
@@ -524,7 +524,7 @@ function method:main (args)
             for _, msg in ipairs(checker.messages) do
                 print(tostring(msg))
             end
-            if self.dump then
+            if self._dump then
                 local generator = Smc.Dumper.new{
                     suffix = 'dummy',
                     srcfileBase = fsm.name,
