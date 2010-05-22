@@ -2,7 +2,6 @@
 require 'Coat'
 
 local table = require 'table'
-local ipairs = ipairs
 
 require 'Smc.Generator'
 
@@ -60,14 +59,14 @@ function method:visitFSM (fsm)
                                        .. fsm.context .. "\".", filename)
     end
 
-    for _, map in ipairs(fsm.maps) do
-        map:visit(self)
+    for i = 1, #fsm.maps do
+        fsm.maps[i]:visit(self)
     end
 end
 
 function method:visitMap (map)
-    for _, state in ipairs(map.states) do
-        state:visit(self)
+    for i = 1, #map.states do
+        map.states[i]:visit(self)
     end
     local defaultState = map.defaultState
     if defaultState then
@@ -76,15 +75,16 @@ function method:visitMap (map)
 end
 
 function method:visitState (state)
-    for _, trans in ipairs(state.transitions) do
-        trans:visit(self)
+    for i = 1, #state.transitions do
+        state.transitions[i]:visit(self)
     end
 end
 
 function method:visitTransition (transition)
     if #transition.guards > 1 then
         local hash = {}
-        for _, guard in ipairs(transition.guards) do
+        for i = 1, #transition.guards do
+            local guard = transition.guards[i]
             local condition = guard.condition
             if hash[condition] then
                 local state = transition.state
@@ -101,12 +101,12 @@ function method:visitTransition (transition)
         end
     end
 
-    for _, param in ipairs(transition.parameters) do
-        param:visit(self)
+    for i = 1, #transition.parameters do
+        transition.parameters[i]:visit(self)
     end
 
-    for _, guard in ipairs(transition.guards) do
-        guard:visit(self)
+    for i = 1, #transition.guards do
+        transition.guards[i]:visit(self)
     end
 end
 
@@ -180,8 +180,8 @@ function method:visitFSM (fsm)
     stream:write("    Context: ", fsm.context or "", "\n")
     stream:write("       Maps:\n")
 
-    for _, map in ipairs(fsm.maps) do
-        map:visit(self)
+    for i = 1, #fsm.maps do
+        fsm.maps[i]:visit(self)
     end
 end
 
@@ -195,8 +195,8 @@ function method:visitMap (map)
         defaultState:visit(self)
     end
 
-    for _, state in ipairs(map.states) do
-        state:visit(self)
+    for i = 1, #map.states do
+        map.states[i]:visit(self)
     end
 end
 
@@ -205,22 +205,22 @@ function method:visitState (state)
 
     if state.entryActions then
         stream:write "\tEntry {\n"
-        for _, action in ipairs(state.entryActions) do
-            action:visit(self)
+        for i = 1, #state.entryActions do
+            state.entryActions[i]:visit(self)
         end
         stream:write "\t}\n"
     end
 
     if state.exitActions then
         stream:write "\tExit {\n"
-        for _, action in ipairs(state.exitActions) do
-            action:visit(self)
+        for i = 1, #state.exitActions do
+            state.exitActions[i]:visit(self)
         end
         stream:write "\t}\n"
     end
 
-    for _, trans in ipairs(state.transitions) do
-        trans:visit(self)
+    for i = 1, #state.transitions do
+        state.transitions[i]:visit(self)
     end
 end
 
@@ -230,8 +230,8 @@ function method:visitTransition (transition)
     local params = table.concat(transition.parameters, ", ")
     stream:write(transition.name, "(", params, ")\n")
 
-    for _, guard in ipairs(transition.guards) do
-        guard:visit(self)
+    for i = 1, #transition.guards do
+        transition.guards[i]:visit(self)
     end
 end
 
@@ -258,9 +258,9 @@ function method:visitGuard (guard)
 
     stream:write " {\n"
     local actions = guard.actions or {}
-    for _, action in ipairs(actions) do
+    for i = 1, #actions do
         stream:write "    "
-        action:visit(self)
+        actions[i]:visit(self)
         stream:write ";\n"
     end
     stream:write "}\n"

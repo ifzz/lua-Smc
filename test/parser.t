@@ -26,7 +26,8 @@ end
 
 local function get_messages (parser)
     local t = {}
-    for _, msg in ipairs(parser.messages) do
+    for i = 1, #parser.messages do
+        local msg = parser.messages[i]
         table.insert(t, tostring(msg))
         table.insert(t, "\n")
     end

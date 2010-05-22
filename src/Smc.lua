@@ -7,7 +7,6 @@ local os = require 'os'
 local table = require 'table'
 local string = require 'string'
 local error = error
-local ipairs = ipairs
 local pairs = pairs
 local pcall = pcall
 local print = print
@@ -56,7 +55,8 @@ end
 function method:usage ()
     local langs = {}
     local gen = ''
-    for _, v in ipairs(self.languages) do
+    for i = 1, #self.languages do
+        local v = self.languages[i]
         table.insert(langs, v.option)
         gen = gen .. string.format("\t%-8s  Generate %s code\n", v.option, v.name)
     end
@@ -137,7 +137,8 @@ function method:parseArgs (args)
             self:usage()
             retval = true
         else
-            for _, v in ipairs(args) do
+            for i = 1, #args do
+                local v = args[i]
                 if v:match'-hel' then
                     self:usage()
                     retval = true
@@ -151,7 +152,7 @@ function method:parseArgs (args)
     end -- needHelp
 
     local function findLanguage (option)
-        for _, v in ipairs(self.languages) do
+        for _, v in pairs(self.languages) do
             if option == v.option then
                 return v
             end
@@ -160,7 +161,8 @@ function method:parseArgs (args)
 
     local function findTargetLanguage ()
         local retval
-        for i, v in ipairs(args) do
+        for i = 1, #args do
+            local v = args[i]
             local lang
             if v == '-load' then
                 local m = require(args[i+1])
@@ -490,7 +492,8 @@ function method:main (args)
     if not r then
         die(msg)
     elseif self.sourceFileList then
-        for _, filename in ipairs(self.sourceFileList) do
+        for i = 1, #self.sourceFileList do
+            local filename = self.sourceFileList[i]
             local name = basename(filename)
             if self.verbose then
                 print("[parsing started " .. filename .. "]")
@@ -507,8 +510,8 @@ function method:main (args)
             if self.verbose then
                 print "[parsing completed]"
             end
-            for _, msg in ipairs(parser.messages) do
-                print(tostring(msg))
+            for i = 1, #parser.messages do
+                print(tostring(parser.messages[i]))
             end
             if not fsm then
                 exit()
@@ -521,8 +524,8 @@ function method:main (args)
                 print("[checking " .. filename .. "]")
             end
             checker:check(fsm)
-            for _, msg in ipairs(checker.messages) do
-                print(tostring(msg))
+            for i = 1, #checker.messages do
+                print(tostring(checker.messages[i]))
             end
             if self._dump then
                 local generator = Smc.Dumper.new{

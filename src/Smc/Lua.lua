@@ -2,7 +2,6 @@
 require 'Coat'
 
 local table = require 'table'
-local ipairs = ipairs
 
 singleton 'Smc.Lua'
 extends 'Smc.Language'
@@ -35,8 +34,8 @@ function method:visitFSM (fsm)
         stream:write "\n"
         stream:write(fsm.source, "\n")
     end
-    for _, imp in ipairs(fsm.importList) do
-        stream:write("require '", imp, "'\n")
+    for i = 1, #fsm.importList do
+        stream:write("require '", fsm.importList[i], "'\n")
     end
     local context = fsm.context
     stream:write "\n"
@@ -46,11 +45,12 @@ function method:visitFSM (fsm)
     stream:write "\n"
     stream:write("function ", context, "State:Exit (fsm) end\n")
     stream:write "\n"
-    for _, trans in ipairs(fsm.transitions) do
+    for i = 1, #fsm.transitions do
+        local trans = fsm.transitions[i]
         if trans.name ~= "Default" then
             stream:write("function ", context, "State:", trans.name, " (fsm")
-            for _, param in ipairs(trans.parameters) do
-                stream:write(", ", param.name)
+            for j = 1, #trans.parameters do
+                stream:write(", ", trans.parameters[j].name)
             end
             stream:write ")\n"
             stream:write "    self:Default(fsm)\n"
@@ -76,11 +76,11 @@ function method:visitFSM (fsm)
         stream:write "end\n"
         stream:write "\n"
     end
-    for _, map in ipairs(fsm.maps) do
-        stream:write("local ", map.name, " = {}\n")
+    for i = 1, #fsm.maps do
+        stream:write("local ", fsm.maps[i].name, " = {}\n")
     end
-    for _, map in ipairs(fsm.maps) do
-        map:visit(self)
+    for i = 1, #fsm.maps do
+        fsm.maps[i]:visit(self)
     end
     stream:write "\n"
     local fsmClassname = fsm.fsmClassname
@@ -91,7 +91,8 @@ function method:visitFSM (fsm)
     stream:write("    self:setState(", start, ")\n")
     stream:write "end\n"
     stream:write "\n"
-    for _, trans in ipairs(fsm.transitions) do
+    for i = 1, #fsm.transitions do
+        local trans = fsm.transitions[i]
         local transName = trans.name
         if transName ~= "Default" then
             stream:write("function ", fsmClassname, ":", transName, " (")
@@ -120,9 +121,10 @@ function method:visitFSM (fsm)
     stream:write "\n"
     if self.reflectFlag then
         stream:write(fsmClassname, "._States = {\n")
-        for _, map in ipairs(fsm.maps) do
-            for _, state in ipairs(map.states) do
-                stream:write("    ", map.name, ".", state.className, ",\n")
+        for i = 1, #fsm.maps do
+            local map = fsm.maps[i]
+            for j = 1, #map.states do
+                stream:write("    ", map.name, ".", map.states[j].className, ",\n")
             end
         end
         stream:write "}\n"
@@ -131,8 +133,8 @@ function method:visitFSM (fsm)
         stream:write "end\n"
         stream:write "\n"
         stream:write(fsmClassname, "._transitions = {\n")
-        for _, trans in ipairs(fsm.transitions) do
-            stream:write("    '", trans.name, "',\n")
+        for i = 1, #fsm.transitions do
+            stream:write("    '", fsm.transitions[i].name, "',\n")
         end
         stream:write "}\n"
         stream:write("function ", fsmClassname, ":getTransitions ()\n")
@@ -154,14 +156,15 @@ function method:visitMap (map)
     stream:write "\n"
     stream:write(mapName, ".Default = ", context, "State:new('", mapName, ".Default', -1)\n")
     if defaultState then
-        for _, trans in ipairs(defaultState.transitions) do
-            trans:visit(self)
+        for i = 1, #defaultState.transitions do
+            defaultState.transitions[i]:visit(self)
         end
     end
     if self.reflectFlag then
         stream:write "\n"
         stream:write(mapName, ".Default._transitions = {\n")
-        for _, trans in ipairs(fsm.transitions) do
+        for i = 1, #fsm.transitions do
+            local trans = fsm.transitions[i]
             local transName = trans.name
             local transDefinition
             if defaultState and defaultState:findTransition(transName) then
@@ -173,8 +176,8 @@ function method:visitMap (map)
         end
         stream:write "}\n"
     end
-    for _, state in ipairs(map.states) do
-        state:visit(self)
+    for i = 1, #map.states do
+        map.states[i]:visit(self)
     end
 end
 
@@ -189,8 +192,8 @@ function method:visitState (state)
         stream:write "\n"
         stream:write("function ", mapName, ".", stateName, ":Entry (fsm)\n")
         stream:write "    local ctxt = fsm:getOwner()\n"
-        for _, action in ipairs(state.entryActions) do
-            action:visit(self, self.indent(4))
+        for i = 1, #state.entryActions do
+            state.entryActions[i]:visit(self, self.indent(4))
         end
         stream:write "end\n"
     end
@@ -198,19 +201,20 @@ function method:visitState (state)
         stream:write "\n"
         stream:write("function ", mapName, ".", stateName, ":Exit (fsm)\n")
         stream:write "    local ctxt = fsm:getOwner()\n"
-        for _, action in ipairs(state.exitActions) do
-            action:visit(self, self.indent(4))
+        for i = 1, #state.exitActions do
+            state.exitActions[i]:visit(self, self.indent(4))
         end
         stream:write "end\n"
     end
-    for _, trans in ipairs(state.transitions) do
-        trans:visit(self)
+    for i = 1, #state.transitions do
+        state.transitions[i]:visit(self)
     end
     if self.reflectFlag then
         local defaultState = map.defaultState
         stream:write "\n"
         stream:write(mapName, ".", stateName, "._transitions = {\n")
-        for _, trans in ipairs(map.fsm.transitions) do
+        for i = 1, #map.fsm.transitions do
+            local trans = map.fsm.transitions[i]
             local transName = trans.name
             local transDefinition
             if state:findTransition(transName) then
@@ -235,8 +239,8 @@ function method:visitTransition (transition)
     local transName = transition.name
     stream:write "\n"
     stream:write("function ", mapName, ".", stateName, ":", transName, " (fsm")
-    for _, param in ipairs(transition.parameters) do
-        stream:write(", ", param.name)
+    for i = 1, #transition.parameters do
+        stream:write(", ", transition.parameters[i].name)
     end
     stream:write ")\n"
     if transition.hasCtxtReference then
@@ -251,7 +255,8 @@ function method:visitTransition (transition)
     self.guardIndex = 0
     self.guardCount = #guards
     local nullCondition = false
-    for _, guard in ipairs(guards) do
+    for i = 1, #guards do
+        local guard = guards[i]
         if guard.condition == '' then
             nullCondition = true
         end
@@ -261,8 +266,8 @@ function method:visitTransition (transition)
     if self.guardIndex > 0 and not nullCondition then
         stream:write("    else\n")
         stream:write("        ", mapName, ".Default:", transName, "(fsm")
-        for _, param in ipairs(transition.parameters) do
-            stream:write(", ", param.name)
+        for i = 1, #transition.parameters do
+            stream:write(", ", transition.parameters[i].name)
         end
         stream:write ")\n"
         stream:write("    end\n")
@@ -330,7 +335,8 @@ function method:visitGuard (guard)
         stream:write(indent2, "if fsm:getDebugFlag() then\n")
         stream:write(indent2, "    fsm:getDebugStream():write(\"ENTER TRANSITION: ", stateName, ":", transName, "(")
         local sep = ""
-        for _, param in ipairs(transition.parameters) do
+        for i = 1, #transition.parameters do
+            local param = transition.parameters[i]
             stream:write(sep, param.name, "=\" .. tostring(", param.name, ") .. \"")
             sep = ", "
         end
@@ -350,8 +356,8 @@ function method:visitGuard (guard)
             stream:write(indent2, "    function ()\n")
             indent3 = indent2 .. self.indent(8)
         end
-        for _, action in ipairs(actions) do
-            action:visit(self, indent3)
+        for i = 1, #actions do
+            actions[i]:visit(self, indent3)
         end
         if not self.noCatchFlag then
             stream:write(indent2, "    end\n")
@@ -368,7 +374,8 @@ function method:visitGuard (guard)
         stream:write(indent2, "if fsm:getDebugFlag() then\n")
         stream:write(indent2, "    fsm:getDebugStream():write(\"EXIT TRANSITION: ", stateName, ":", transName, "(")
         local sep = ""
-        for _, param in ipairs(transition.parameters) do
+        for i = 1, #transition.parameters do
+            local param = transition.parameters[i]
             stream:write(sep, param.name, "=\" .. tostring(", param.name, ") .. \"")
             sep = ", "
         end

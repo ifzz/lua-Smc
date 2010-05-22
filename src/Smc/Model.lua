@@ -4,7 +4,6 @@ require 'Coat.Types'
 
 local table = require 'table'
 local error = error
-local ipairs = ipairs
 local pairs = pairs
 local unpack = table.unpack or unpack
 
@@ -49,8 +48,10 @@ has.isValid         = { is = 'rw', isa = 'boolean', default = true }
 
 function method:_build_transitions ()
     hash = {}
-    for _, map in ipairs(self.maps) do
-        for _, trans in ipairs(map.transitions) do
+    for i = 1, #self.maps do
+        local map = self.maps[i]
+        for j = 1, #map.transitions do
+            local trans = map.transitions[j]
             hash[trans.name] = trans
         end
     end
@@ -62,8 +63,8 @@ function method:_build_transitions ()
 end
 
 function method:_build_hasEntryActions ()
-    for _, map in ipairs(self.maps) do
-        if map.hasEntryActions then
+    for i = 1, #self.maps do
+        if self.maps[i].hasEntryActions then
             return true
         end
     end
@@ -71,8 +72,8 @@ function method:_build_hasEntryActions ()
 end
 
 function method:_build_hasExitActions ()
-    for _, map in ipairs(self.maps) do
-        if map.hasExitActions then
+    for i = 1, #self.maps do
+        if self.maps[i].hasExitActions then
             return true
         end
     end
@@ -84,7 +85,8 @@ function method:addMap (map)
 end
 
 function method:findMap (name)
-    for _, map in ipairs(self.maps) do
+    for i = 1, #self.maps do
+        local map = self.maps[i]
         if map.name == name then
             return map
         end
@@ -116,8 +118,10 @@ end
 
 function method:_build_transitions ()
     hash = {}
-    for _, state in ipairs(self.allStates) do
-        for _, trans in ipairs(state.transitions) do
+    for i = 1, #self.allStates do
+        local state = self.allStates[i]
+        for j = 1, #state.transitions do
+            local trans = state.transitions[j]
             hash[trans.name] = trans
         end
     end
@@ -129,8 +133,8 @@ function method:_build_transitions ()
 end
 
 function method:_build_hasEntryActions ()
-    for _, state in ipairs(self.states) do
-        actions = state.entryActions
+    for i = 1, #self.states do
+        actions = self.states[i].entryActions
         if actions then
             return true
         end
@@ -139,8 +143,8 @@ function method:_build_hasEntryActions ()
 end
 
 function method:_build_hasExitActions ()
-    for _, state in ipairs(self.states) do
-        actions = state.exitActions
+    for i = 1, #self.states do
+        actions = self.states[i].exitActions
         if actions then
             return true
         end
@@ -166,8 +170,8 @@ function method:isKnownState (name)
     if name:lower() == 'default' then
         return self.defaultState
     else
-        for _, state in ipairs(self.states) do
-            if state.instanceName == name then
+        for i = 1, #self.states do
+            if self.states[i].instanceName == name then
                 return true
             end
         end
@@ -201,8 +205,8 @@ function method:BUILD ()
 end
 
 function method:addTransition (transition)
-    for _, trans in ipairs(self.transitions) do
-        if trans == transition then
+    for i = 1, #self.transitions do
+        if self.transitions[i] == transition then
             return
         end
     end
@@ -210,7 +214,8 @@ function method:addTransition (transition)
 end
 
 function method:findTransition (name)
-    for _, trans in ipairs(self.transitions) do
+    for i = 1, #self.transitions do
+        local trans = self.transitions[i]
         if trans.name == name then
             return trans
         end
@@ -220,9 +225,11 @@ end
 
 function method:findGuard (name, condition)
     condition:gsub('%s+', '')
-    for _, trans in ipairs(self.transitions) do
+    for i = 1, #self.transitions do
+        local trans = self.transitions[i]
         if trans.name == name then
-            for _, guard in ipairs(trans.guards) do
+            for j = 1, #trans.guards do
+                local trans = trans.guards[j]
                 if guard.condition:gsub('%s+', '') == condition then
                     return guard
                 end
@@ -233,18 +240,19 @@ function method:findGuard (name, condition)
 end
 
 function method:callDefault (transName)
-    for _, trans in ipairs(self.transitions) do
+    for i = 1, #self.transitions do
+        local trans = self.transitions[i]
         if trans.name == transName then
-            for _, guard in ipairs(trans.guards) do
-                if guard.condition == '' then
+            for j = 1, #trans.guards do
+                if trans.guards[j].condition == '' then
                     return false
                 end
             end
             return true
         end
     end
-    for _, trans in ipairs(self.transitions) do
-        if trans.name == 'Default' then
+    for i = 1, #self.transitions do
+        if trans.guards[i].name == 'Default' then
             return false
         end
     end
@@ -262,8 +270,8 @@ has.guards          = { is = 'rw', isa = 'table<Smc.Guard>',
 has.hasCtxtReference= { is = 'ro', lazy_build = true }
 
 function method:_build_hasCtxtReference ()
-    for _, guard in ipairs(self.guards) do
-        if guard.hasCtxtReference then
+    for i = 1, #self.guards do
+        if self.guards[i].hasCtxtReference then
             return true
         end
     end
@@ -299,8 +307,8 @@ has.hasCtxtReference= { is = 'ro', lazy_build = true }
 
 function method:_build_hasActions ()
     if self.actions then
-        for _, action in ipairs(self.actions) do
-            if not action.isEmptyStateStack then
+        for i = 1, #self.actions do
+            if not self.actions[i].isEmptyStateStack then
                 return true
             end
         end

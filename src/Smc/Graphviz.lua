@@ -1,7 +1,6 @@
 
 require 'Coat'
 
-local ipairs = ipairs
 local pairs = pairs
 
 singleton 'Smc.Graphviz'
@@ -49,7 +48,8 @@ function method:visitFSM (fsm)
     stream:write "        [shape=Mrecord width=1.5];\n"
     stream:write "\n"
 
-    for _, map in ipairs(fsm.maps) do
+    for i = 1, #fsm.maps do
+        local map = fsm.maps[i]
         local mapName = map.name
         stream:write("    subgraph cluster_", mapName, " {\n")
         stream:write "\n"
@@ -75,8 +75,8 @@ function method:visitMap (map)
     stream:write "        //\n"
     stream:write "\n"
 
-    for _, state in ipairs(map.states) do
-        state:visit(self)
+    for i = 1, #map.states do
+        map.states[i]:visit(self)
     end
 
     local popTransMap = {}
@@ -112,9 +112,12 @@ function method:visitMap (map)
 
     local defaultState = map.defaultState
     local needEnd = false
-    for _, state in ipairs(map.states) do
-        for _, trans in ipairs(state.transitions) do
-            for _, guard in ipairs(trans.guards) do
+    for i = 1, #map.states do
+        local state = map.states[i]
+        for j = 1, #state.transitions do
+            local trans = state.transitions[j]
+            for k = 1, #trans.guards do
+                local guard = trans.guards[k]
                 local transType = guard.transType
                 if transType == 'TRANS_PUSH' then
                     putPushState(guard, state)
@@ -125,10 +128,12 @@ function method:visitMap (map)
             end
         end
         if defaultState then
-            for _, trans in ipairs(defaultState.transitions) do
+            for j = 1, #defaultState.transitions do
+                local trans = defaultState.transitions[j]
                 local transName = trans.name
                 if state:callDefault(transName) then
-                    for _, guard in ipairs(trans.guards) do
+                    for k = 1, #trans.guards do
+                        local guard = trans.guards[k]
                         if not state:findGuard(transName, guard.condition) then
                             local transType = guard.transType
                             if transType == 'TRANS_PUSH' then
@@ -170,10 +175,14 @@ function method:visitMap (map)
     end
 
     local pushEntryMap = {}
-    for _, map2 in ipairs(map.fsm.maps) do
-        for _, state in ipairs(map2.allStates) do
-            for _, trans in ipairs(state.transitions) do
-                for _, guard in ipairs(trans.guards) do
+    for i = 1, #map.fsm.maps do
+        local map2 = map.fsm.maps[i]
+        for j = 1, #map2.allStates do
+            local state = map2.allStates[j]
+            for k = 1, #state.transitions do
+                local trans = state.transitions[k]
+                for l = 1, #trans.guards do
+                    local guard = trans.guards[l]
                     if guard.transType == 'TRANS_PUSH' then
                         local pushStateName = guard.pushState
                         if pushStateName:find(mapName) == 1 then
@@ -195,16 +204,19 @@ function method:visitMap (map)
     stream:write "        // Transitions (Edges)\n"
     stream:write "        //\n"
 
-    for _, state in ipairs(map.states) do
+    for i = 1, #map.states do
+        local state = map.states[i]
         self.state = state
-        for _, trans in ipairs(state.transitions) do
-            trans:visit(self)
+        for j = 1, #state.transitions do
+            state.transitions[j]:visit(self)
         end
         if defaultState then
-            for _, trans in ipairs(defaultState.transitions) do
+            for j = 1, #defaultState.transitions do
+                local trans = defaultState.transitions[j]
                 local transName = trans.name
                 if state:callDefault(transName) then
-                    for _, guard in ipairs(trans.guards) do
+                    for k = 1, #trans.guards do
+                        local guard = trans.guards[k]
                         if not state:findGuard(transName, guard.condition) then
                             guard:visit(self)
                         end
@@ -260,9 +272,9 @@ function method:visitState (state)
                 empty = false
             end
             stream:write "Entry/\\l"
-            for _, action in ipairs(actions) do
+            for i = 1, #actions do
                 stream:write(indent_action)
-                action:visit(self)
+                actions[i]:visit(self)
             end
         end
 
@@ -273,9 +285,9 @@ function method:visitState (state)
                 empty = false
             end
             stream:write "Exit/\\l"
-            for _, action in ipairs(actions) do
+            for i = 1, #actions do
                 stream:write(indent_action)
-                action:visit(self)
+                actions[i]:visit(self)
             end
         end
 
@@ -294,9 +306,9 @@ function method:visitState (state)
                 if self.graphLevel == 2 then
                     stream:write "("
                     local sep = ""
-                    for _, param in ipairs(trans.parameters) do
+                    for i = 1, #trans.parameters do
                         stream:write(sep)
-                        param:visit(self)
+                        trans.parameters[i]:visit(self)
                         sep = ", "
                     end
                     stream:write ")"
@@ -316,9 +328,9 @@ function method:visitState (state)
 
                 local actions = guard.actions
                 if actions then
-                    for _, action in ipairs(actions) do
+                    for i = 1, #actions do
                         stream:write(indent_action)
-                        action:visit(self)
+                        actions[i]:visit(self)
                     end
                 end
 
@@ -329,16 +341,19 @@ function method:visitState (state)
         end -- internalEvent
 
         empty = true;
-        for _, trans in ipairs(state.transitions) do
-            for _, guard in ipairs(trans.guards) do
-                internalEvent(guard)
+        for i = 1, #state.transitions do
+            local trans = state.transitions[i]
+            for j = 1, #trans.guards do
+                internalEvent(trans.guards[j])
             end
         end
         if defaultState then
-            for _, trans in ipairs(defaultState.transitions) do
+            for i = 1, #defaultState.transitions do
+                local trans = defaultState.transitions[i]
                 local transName = trans.name
                 if state:callDefault(transName) then
-                    for _, guard in ipairs(trans.guards) do
+                    for j = 1, #trans.guards do
+                        local guard = trans.guards[j]
                         if not state:findGuard(transName, guard.condition) then
                             internalEvent(guard)
                         end
@@ -353,8 +368,8 @@ function method:visitState (state)
 end
 
 function method:visitTransition (transition)
-    for _, guard in ipairs(transition.guards) do
-        guard:visit(self)
+    for i = 1, #transition.guards do
+        transition.guards[i]:visit(self)
     end
 end
 
@@ -413,9 +428,9 @@ function method:visitGuard (guard)
     if self.graphLevel == 2 then
         stream:write "("
         local sep = ""
-        for _, param in ipairs(transition.parameters) do
+        for i = 1, #transition.parameters do
             stream:write(sep)
-            param:visit(self)
+            transition.parameters[i]:visit(self)
             sep = ", "
         end
         stream:write ")"
@@ -431,8 +446,8 @@ function method:visitGuard (guard)
 
     local actions = guard.actions
     if self.graphLevel > 0 and actions then
-        for _, action in ipairs(actions) do
-            action:visit(self)
+        for i = 1, #actions do
+            actions[i]:visit(self)
         end
     end
 
@@ -458,8 +473,8 @@ function method:visitAction (action)
                 stream:write "("
 
                 local sep = ""
-                for _, arg in ipairs(action.arguments) do
-                    local s = arg:gsub("\\\\", "\\\\\\\\")
+                for i = 1, #action.arguments do
+                    local s = action.arguments[i]:gsub("\\\\", "\\\\\\\\")
                     s = s:gsub("\"", "\\\"")
                     stream:write(sep, s)
                     sep = ", "
