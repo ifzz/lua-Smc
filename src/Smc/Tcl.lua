@@ -1,8 +1,6 @@
 
 require 'Coat'
 
-local ipairs = ipairs
-
 singleton 'Smc.Tcl'
 extends 'Smc.Language'
 

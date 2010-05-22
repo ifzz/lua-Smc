@@ -1,8 +1,6 @@
 
 require 'Coat'
 
-local ipairs = ipairs
-
 singleton 'Smc.Groovy'
 extends 'Smc.Language'
 

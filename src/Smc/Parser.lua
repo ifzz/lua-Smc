@@ -5,7 +5,6 @@ require 'Coat.Types'
 
 local string = require 'string'
 local table = require 'table'
-local ipairs = ipairs
 local tostring = tostring
 
 class 'Smc.Token'

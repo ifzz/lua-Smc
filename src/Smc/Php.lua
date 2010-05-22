@@ -1,8 +1,6 @@
 
 require 'Coat'
 
-local ipairs = ipairs
-
 singleton 'Smc.Php'
 extends 'Smc.Language'
 
