@@ -1,6 +1,6 @@
 #!/usr/bin/env lua
 
-require 'Smc.Parser'
+require 'Smc'
 
 require 'Test.More'
 require 'io'
