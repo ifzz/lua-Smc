@@ -163,7 +163,8 @@ function method:visitMap (map)
     end
 
     local startStateName = map.fsm.startState
-    if startStateName:find(mapName) then
+    local startMapName = startStateName:sub(1, startStateName:find(':') - 1)
+    if startMapName == mapName then
         stream:write "        \"%start\"\n"
         stream:write "            [label=\"\" shape=circle style=filled fillcolor=black width=0.25];\n"
         stream:write "\n"
@@ -228,7 +229,7 @@ function method:visitMap (map)
         stream:write "            [label=\"pop/\"]\n"
     end
 
-    if startStateName:find(mapName) == 1 then
+    if startMapName == mapName then
         stream:write "\n"
         stream:write("        \"%start\" -> \"", startStateName, "\"\n")
     end
