@@ -2,20 +2,6 @@
 require 'Coat'
 require 'Coat.Types'
 
-if _VERSION == 'Lua 5.2' then
-    local function iter (a, i)
-        i = i + 1
-        local v = a[i]
-        if v ~= nil then
-            return i, v
-        end
-    end
-
-    function ipairs (a)
-        return iter, a, 0
-    end
-end
-
 local io = require 'io'
 local os = require 'os'
 local table = require 'table'
