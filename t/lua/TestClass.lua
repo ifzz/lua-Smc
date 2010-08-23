@@ -1,5 +1,10 @@
 
-module(..., package.seeall)
+local print = print
+local require = require
+local setmetatable = setmetatable
+local table = require 'table'
+
+module(...)
 
 function new (self)
     local o = {}
