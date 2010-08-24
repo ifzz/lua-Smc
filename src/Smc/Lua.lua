@@ -213,9 +213,10 @@ end
 ]],
                                 _guard_debug_enter = [[
 if fsm:getDebugFlag() then
-    fsm:getDebugStream():write("ENTER TRANSITION: ${transition.state.fullName}:${transition.name}()\n")
+    fsm:getDebugStream():write("ENTER TRANSITION: ${transition.state.fullName}:${transition.name}(${transition.parameters:_guard_debug_param(); separator=', '})\n")
 end
-]],                                                                                          -- FIXME
+]],
+                                    _guard_debug_param = [[${name}=" .. tostring(${name}) .. "]],
                                 _guard_no_action = "${hasCondition?_guard_no_action_if()}\n",
                                 _guard_no_action_if = "-- No actions.\n",
                                 _guard_actions = [[
@@ -238,9 +239,9 @@ end
                                     _guard_actions_not_protected = "${actions:_action()}",
                                 _guard_debug_exit = [[
 if fsm:getDebugFlag() then
-    fsm:getDebugStream():write("EXIT TRANSITION: ${transition.state.fullName}:${transition.name}()\n")
+    fsm:getDebugStream():write("EXIT TRANSITION: ${transition.state.fullName}:${transition.name}(${transition.parameters:_guard_debug_param(); separator=', '})\n")
 end
-]],                                                                                          -- FIXME
+]],
                                 _guard_set = "fsm:setState(${varEndState})",
                                 _guard_push = [[
 ${doesPushSet?_guard_set()}

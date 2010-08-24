@@ -2,9 +2,13 @@
 -- DO NOT EDIT.
 -- from file : src/Smc/Parser/Parser.sm
 
-module(..., package.seeall)
+local error = error
+local tostring = tostring
+local strformat = require 'string'.format
 
-require 'statemap'
+local statemap = require 'statemap'
+
+module(...)
 
 local ParserState = statemap.State:class()
 
@@ -160,9 +164,9 @@ function ParserState:Default (fsm)
     if fsm:getDebugFlag() then
         fsm:getDebugStream():write("TRANSITION   : Default\n")
     end
-    local msg = string.format("Undefined Transition\nState: %s\nTransition: %s\n",
-                              fsm:getState():getName(),
-                              fsm:getTransition())
+    local msg = strformat("Undefined Transition\nState: %s\nTransition: %s\n",
+                          fsm:getState():getName(),
+                          fsm:getTransition())
     error(msg)
 end
 
