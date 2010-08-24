@@ -163,9 +163,9 @@ end
                         _transition_end = [[
     end
 ]],
-                        _guard = "${hasCondition?_guard_conditional():_guard_unconditional()}",
-                        _guard_conditional = "${ifCondition?_guard_if():_guard_no_if()}",
-                        _guard_no_if = "${elseifCondition?_guard_elseif():_guard_else()}",
+                        _guard = "${hasCondition?_guard_conditional()!_guard_unconditional()}",
+                        _guard_conditional = "${ifCondition?_guard_if()!_guard_no_if()}",
+                        _guard_no_if = "${elseifCondition?_guard_elseif()!_guard_else()}",
                         _guard_unconditional = [[
     ${_guard_core()}
 ]],
@@ -187,7 +187,7 @@ end
 ${needVarEndState?_guard_end_state()}
 ${doesExit?_guard_exit()}
 ${generator.debugLevel0?_guard_debug_enter()}
-${hasActions?_guard_actions():_guard_no_action()}
+${hasActions?_guard_actions()!_guard_no_action()}
 ${generator.debugLevel0?_guard_debug_exit()}
 ${doesSet?_guard_set()}
 ${doesPush?_guard_push()}
@@ -220,7 +220,7 @@ end
                                 _guard_no_action_if = "-- No actions.\n",
                                 _guard_actions = [[
 fsm:clearState()
-${generator.catchFlag?_guard_actions_protected():_guard_actions_not_protected()}
+${generator.catchFlag?_guard_actions_protected()!_guard_actions_not_protected()}
 ]],
                                     _guard_actions_protected = [[
 local r, msg = pcall(
@@ -269,9 +269,9 @@ if fsm:getDebugFlag() then
 end
 ]],
                                 _guard_end_pop = "fsm:${endStateName}(${popArgs})",
-                            _action = "${propertyFlag?_action_prop():_action_no_prop()}\n",
+                            _action = "${propertyFlag?_action_prop()!_action_no_prop()}\n",
                             _action_prop = "ctxt.${name} = ${arguments}",
-                            _action_no_prop = "${isEmptyStateStack?_action_ess():_action_no_ess()}",
+                            _action_no_prop = "${isEmptyStateStack?_action_ess()!_action_no_ess()}",
                             _action_ess = "fsm:emptyStateStack()",
                             _action_no_ess = "ctxt:${name}(${arguments; separator=', '})",
         _context = [[
