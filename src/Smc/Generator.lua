@@ -67,8 +67,8 @@ end
 --]]
 function method:generate(fsm, stream)
     local tmpl = self.template
-    tmpl.FSM = fsm
-    tmpl.GEN = self
+    tmpl.fsm = fsm
+    tmpl.generator = self
     local output, msg = tmpl 'TOP'
     stream:write(output)
     if msg then error(msg) end
