@@ -104,10 +104,10 @@ ${states:_state()}
                 _map_reflect = [[
 
 ${name}.Default._transitions = {
-    ${fsm.transitions:_transition_default_reflect()}
+    ${reflect:_reflect()}
 }
 ]],
-                    _transition_default_reflect = "${name} = '${name}', --FIXME\n",
+                    _reflect = "${name} = ${def},\n",
                 _state = [[
 
 ${map.name}.${className} = ${map.name}.Default:new('${map.name}.${className}', ${map.nextStateId})
@@ -133,10 +133,9 @@ end
                     _state_reflect = [[
 
 ${map.name}.${className}._transitions = {
-    ${fsm.transitions:_transition_reflect()}
+    ${reflect:_reflect()}
 }
 ]],
-                        _transition_reflect = "${name} = '${name}', --FIXME\n",
                     _transition = [[
 
 function ${state.map.name}.${state.className}:${name} (fsm${parameters:_parameter_proto()})

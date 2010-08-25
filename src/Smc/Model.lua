@@ -104,6 +104,7 @@ has.allStates       = { is = 'ro', lazy_build = true }
 has.transitions     = { is = 'ro', lazy_build = true }
 has.hasEntryActions = { is = 'ro', lazy_build = true }
 has.hasExitActions  = { is = 'ro', lazy_build = true }
+has.reflect         = { is = 'ro', lazy_build = true }
 
 function method:_build_allStates ()
     local default = self.defaultState
@@ -148,6 +149,20 @@ function method:_build_hasExitActions ()
     return false
 end
 
+function method:_build_reflect ()
+    local t = {}
+    for _, trans in ipairs(self.fsm.transitions) do
+        local transName = trans.name
+        local def = 0
+        local defaultState = self.defaultState
+        if defaultState and defaultState:findTransition(transName) then
+            def = 2
+        end
+        table.insert(t, { name = transName, def = def })
+    end
+    return t
+end
+
 local StateId = 0
 function _get_nextStateId ()
     StateId = StateId + 1
@@ -188,9 +203,17 @@ has.exitActions     = { is = 'rw', isa = 'table<Smc.Action>' }
 has.transitions     = { is = 'rw', isa = 'table<Smc.Transition>',
                         default = function () return {} end }
 has.fullName        = { is = 'ro', lazy_build = true }
+has.reflect         = { is = 'ro', lazy_build = true }
+
+function method:BUILD ()
+    local name = self.instanceName
+    if name:lower() == 'default' then
+        self.instanceName = 'DefaultState'
+    end
+    self.className = name:sub(1,1):upper() .. name:sub(2)
+end
 
 function method:_build_name ()
---    return self.className .. '.' .. self.instanceName
     return self.map.name .. '.' .. self.instanceName
 end
 
@@ -203,12 +226,22 @@ function method:_build_fullName ()
     end
 end
 
-function method:BUILD ()
-    local name = self.instanceName
-    if name:lower() == 'default' then
-        self.instanceName = 'DefaultState'
+function method:_build_reflect ()
+    local t = {}
+    for _, trans in ipairs(self.map.fsm.transitions) do
+        local transName = trans.name
+        local def = 0
+        if self:findTransition(transName) then
+            def = 1
+        else
+            local defaultState = self.map.defaultState
+            if defaultState and defaultState:findTransition(transName) then
+                def = 2
+            end
+        end
+        table.insert(t, { name = transName, def = def })
     end
-    self.className = name:sub(1,1):upper() .. name:sub(2)
+    return t
 end
 
 function method:addTransition (transition)
