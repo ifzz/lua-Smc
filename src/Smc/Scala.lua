@@ -89,14 +89,14 @@ def ${name} (${parameters:_parameter_proto_context(); separator=", "}): Unit = $
             _context_reflect = [[
 
 def getStates(): List[${fsm.context}State] = List(
-    ${fsm.maps:_map_context_reflect(); separator=", "} // FIXME \n
+    ${fsm.maps:_map_context_reflect(); separator=",\n"}
 )
 
 def getTransitions(): List[String] = List(
-    ${fsm.transitions:_transition_context_reflect(); separator=", "} // FIXME \n
+    ${fsm.transitions:_transition_context_reflect(); separator=",\n"}
 )
 ]],
-                _map_context_reflect = '${states:_state_context_reflect(); separator=", "}',
+                _map_context_reflect = '${states:_state_context_reflect(); separator=",\\n"}',
                      _state_context_reflect = "${map.name}.${className}",
                 _transition_context_reflect = '"${name}"',
         _default_state = [[
@@ -152,7 +152,7 @@ private object ${name} {
             _map_reflect = [[
 
 def getTransitions(): Map[String, Int] = Map(
-    ${reflect:_reflect(); separator=", "} // FIXME \n
+    ${reflect:_reflect(); separator=",\n"}
 )
 ]],
                 _reflect = [["${name}" -> ${def}]],
@@ -187,7 +187,7 @@ override def Exit (context: ${fsm.fsmClassname}): Unit = {
             _state_reflect = [[
 
 override def getTransitions(): Map[String, Int] = Map(
-    ${reflect:_reflect(); separator=", "} // FIXME \n
+    ${reflect:_reflect(); separator=",\n"}
 )
 ]],
         _transition = [[
