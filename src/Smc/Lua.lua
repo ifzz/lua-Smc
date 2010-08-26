@@ -164,9 +164,9 @@ end
 end
 ]],
         _guard = "${hasCondition?_guard_conditional()!_guard_unconditional()}",
-                        _guard_conditional = "${ifCondition?_guard_if()!_guard_no_if()}",
-                        _guard_no_if = "${elseifCondition?_guard_elseif()!_guard_else()}",
-                        _guard_unconditional = [[
+            _guard_conditional = "${ifCondition?_guard_if()!_guard_no_if()}",
+            _guard_no_if = "${elseifCondition?_guard_elseif()!_guard_else()}",
+            _guard_unconditional = [[
 ${_guard_core()}
 ]],
             _guard_if = [[
