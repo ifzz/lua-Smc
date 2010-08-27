@@ -59,20 +59,3 @@ function method:sourceFile(path, basename, suffix)
     suffix = suffix or self.suffix
     return path .. basename .. "." .. suffix
 end
-
-function method:isLoopback(transType, endState)
-    return (transType == 'TRANS_SET' or transType == 'TRANS_PUSH') and endState == 'nil'
-end
-
-function method:scopeStateName(stateName, mapName)
-    local idx = stateName:find "::"
-    if idx then
-        return stateName:sub(1, idx-1) .. self.scopeSep .. stateName:sub(idx+2)
-    else
-        return mapName .. self.scopeSep .. stateName
-    end
-end
-
-function indent(n)
-    return string.rep(" ", n)
-end
