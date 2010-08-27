@@ -18,9 +18,15 @@ has.glevelFlag      = { '+', default = true }
 
 class 'Smc.Graphviz.Generator'
 extends 'Smc.Generator'
+with 'Smc.Visitor'
 
 has.suffix          = { '+', default = 'dot' }
 has.state           = { is = 'rw', isa = 'Smc.State' }
+
+function override:generate(fsm, stream)
+    self.stream = stream
+    self:visitFSM(fsm)
+end
 
 local indent_action = "&nbsp;&nbsp;&nbsp;"
 

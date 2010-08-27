@@ -525,6 +525,7 @@ function method:main (args)
                 print(tostring(msg))
             end
             if self._dump then
+                require 'Smc.Dumper'
                 local generator = Smc.Dumper.new{
                     suffix = 'dummy',
                     srcfileBase = fsm.name,

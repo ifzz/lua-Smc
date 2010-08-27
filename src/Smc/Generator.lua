@@ -1,22 +1,9 @@
 
 require 'Coat'
-require 'Coat.Role'
 
 local string = require 'string'
 
-role 'Smc.Visitor'
-
-requires('visitFSM',
-         'visitMap',
-         'visitState',
-         'visitTransition',
-         'visitGuard',
-         'visitAction',
-         'visitParameter')
-
-
 abstract 'Smc.Generator'
---with 'Smc.Visitor'
 
 has.suffix          = { is = 'ro', isa = 'string', required = true }
 has.srcfileBase     = { is = 'ro', isa = 'string', required = true }
@@ -59,12 +46,6 @@ function method:_build_catchFlag ()
     return not self.noCatchFlag
 end
 
---[[
-function method:generate(fsm, stream)
-    self.stream = stream
-    self:visitFSM(fsm)
-end
---]]
 function method:generate(fsm, stream)
     local tmpl = self.template
     tmpl.fsm = fsm
