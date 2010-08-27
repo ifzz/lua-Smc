@@ -152,7 +152,7 @@ local ctxt = fsm:getOwner()
 ]],
             _transition_debug = [[
 if fsm:getDebugFlag() then
-    fsm:getDebugStream():write("LEAVING STATE   : ${map.name}.${state.className}\n")
+    fsm:getDebugStream():write("LEAVING STATE   : ${state.map.name}.${state.className}\n")
 end
 ]],
             _transition_else = [[

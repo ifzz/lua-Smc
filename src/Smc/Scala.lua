@@ -205,7 +205,7 @@ val ctxt: ${fsm.context} = context.getOwner()
 ]],
             _transition_debug = [[
 if (context.getDebugFlag())
-    context.getDebugStream().println("LEAVING STATE   : ${map.name}.${state.className}")
+    context.getDebugStream().println("LEAVING STATE   : ${state.map.name}.${state.className}")
 ]],
             _transition_else = [[
 else {
