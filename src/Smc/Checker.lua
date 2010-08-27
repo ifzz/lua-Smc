@@ -173,110 +173,62 @@ end
 class 'Smc.Dumper'
 extends 'Smc.Generator'
 
-function method:visitFSM (fsm)
-    local stream = self.stream
-
-    stream:write("Start State: ", fsm.startState or "", "\n")
-    stream:write("    Context: ", fsm.context or "", "\n")
-    stream:write("       Maps:\n")
-
-    for _, map in ipairs(fsm.maps) do
-        map:visit(self)
-    end
+function method:_build_template ()
+    return CodeGen{
+        TOP = [[
+Start State: ${fsm.startState}
+    Context: ${fsm.context}
+       Maps:
+${fsm.maps:_map()}
+]],
+        _map = [[
+%map ${name}
+${defaultState?_state()}
+${states:_state()}
+]],
+        _state = [[
+${entryActions?_entry()}
+${exitActions?_exit()}
+${transitions:_transition()}
+]],
+            _entry = [[
+	Entry {
+${entryActions:_action()}
+	}
+]],
+            _exit = [[
+	Exit {
+${exitActions:_action()}
+	}
+]],
+        _transition = [[
+${name}(${parameters:_param(); separator=", "})
+${guards:_guard()}
+]],
+            _param = "${name}",
+        _guard = [[
+${name}${condition; format=f_cond} ${transType; format=f_type} ${endState}${pushState?_push()} {
+    ${actions:_action(); separator=",\n"}
+}
+]],
+            _push = "/ push(${pushState})",
+            f_cond = function (s)
+                if s == '' then
+                    return s
+                else
+                    return " [" .. s .. "]"
+                end
+            end,
+            f_type = function (s)
+                if s == 'TRANS_SET' or s == 'TRANS_PUSH' then
+                    return "set"
+                else
+                    return "pop"
+                end
+            end,
+        _action = "${propertyFlag?_action_prop()!_action_no_prop()}\n",
+            _action_prop = "${name} = ${arguments}",
+            _action_no_prop = "${name}(${arguments; separator=', '})",
+    }
 end
 
-function method:visitMap (map)
-    local stream = self.stream
-
-    stream:write("%map ", map.name, "\n")
-
-    local defaultState = map.defaultState
-    if defaultState then
-        defaultState:visit(self)
-    end
-
-    for _, state in ipairs(map.states) do
-        state:visit(self)
-    end
-end
-
-function method:visitState (state)
-    local stream = self.stream
-
-    if state.entryActions then
-        stream:write "\tEntry {\n"
-        for _, action in ipairs(state.entryActions) do
-            action:visit(self)
-        end
-        stream:write "\t}\n"
-    end
-
-    if state.exitActions then
-        stream:write "\tExit {\n"
-        for _, action in ipairs(state.exitActions) do
-            action:visit(self)
-        end
-        stream:write "\t}\n"
-    end
-
-    for _, trans in ipairs(state.transitions) do
-        trans:visit(self)
-    end
-end
-
-function method:visitTransition (transition)
-    local stream = self.stream
-
-    local params = table.concat(transition.parameters, ", ")
-    stream:write(transition.name, "(", params, ")\n")
-
-    for _, guard in ipairs(transition.guards) do
-        guard:visit(self)
-    end
-end
-
-function method:visitGuard (guard)
-    local stream = self.stream
-
-    stream:write(guard.name)
-    local condition = guard.condition
-    if condition ~= '' then
-        stream:write(" [", condition, "]")
-    end
-
-    local transType = guard.transType
-    if transType == 'TRANS_SET' or transType == 'TRANS_PUSH' then
-        stream:write " set"
-    elseif transType == 'TRANS_POP' then
-        stream:write " pop"
-    end
-
-    stream:write(" ", guard.endState)
-    if transType == 'TRANS_PUSH' then
-        stream:write("/", " push(", guard.pushState, ")")
-    end
-
-    stream:write " {\n"
-    local actions = guard.actions or {}
-    for _, action in ipairs(actions) do
-        stream:write "    "
-        action:visit(self)
-        stream:write ";\n"
-    end
-    stream:write "}\n"
-end
-
-function method:visitAction (action)
-    local stream = self.stream
-
-    stream:write(action.name)
-    if action.propertyFlag then
-        stream:write(" = ", action.arguments[1])
-    else
-        local args = table.concat(action.arguments or {}, ", ")
-        stream:write("(", args, ")")
-    end
-end
-
-function method:visitParameter (parameter)
-end
