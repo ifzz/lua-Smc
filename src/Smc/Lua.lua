@@ -239,7 +239,7 @@ end
                     _guard_actions_not_protected = "${actions:_action()}",
                 _guard_debug_exit = [[
 if fsm:getDebugFlag() then
-    fsm:getDebugStream():write("EXIT TRANSITION: ${transition.state.fullName}:${transition.name}(${transition.parameters:_guard_debug_param(); separator=', '})\n")
+    fsm:getDebugStream():write("EXIT TRANSITION : ${transition.state.fullName}:${transition.name}(${transition.parameters:_guard_debug_param(); separator=', '})\n")
 end
 ]],
                 _guard_set = "fsm:setState(${varEndState})",
