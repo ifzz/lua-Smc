@@ -19,64 +19,9 @@ has.suffix          = { '+', default = 'm' }
 has.next_generator  = { '+', isa = 'Smc.ObjC.HeaderGenerator',
                         default = function () return require 'Smc.ObjC.HeaderGenerator' end }
 
-function method:visitFSM (fsm)
-    local stream = self.stream
-
-end
-
-function method:visitMap (map)
-    local stream = self.stream
-end
-
-function method:visitState (state)
-    local stream = self.stream
-end
-
-function method:visitTransition (transition)
-    local stream = self.stream
-end
-
-function method:visitGuard (guard)
-    local stream = self.stream
-end
-
-function method:visitAction (action)
-    local stream = self.stream
-end
-
-function method:visitParameter (parameter)
-end
-
 
 class 'Smc.ObjC.HeaderGenerator'
 extends 'Smc.Generator'
 
 has.suffix          = { '+', default = 'h' }
 
-function method:visitFSM (fsm)
-    local stream = self.stream
-
-end
-
-function method:visitMap (map)
-    local stream = self.stream
-end
-
-function method:visitState (state)
-    local stream = self.stream
-end
-
-function method:visitTransition (transition)
-    local stream = self.stream
-end
-
-function method:visitGuard (guard)
-    local stream = self.stream
-end
-
-function method:visitAction (action)
-    local stream = self.stream
-end
-
-function method:visitParameter (parameter)
-end
