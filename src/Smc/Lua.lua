@@ -217,7 +217,7 @@ if fsm:getDebugFlag() then
 end
 ]],
                     _guard_debug_param = [[${name}=" .. tostring(${name}) .. "]],
-                _guard_no_action = "${hasCondition?_guard_no_action_if()}\n",
+                _guard_no_action = "${hasCondition?_guard_no_action_if()}",
                     _guard_no_action_if = "-- No actions.\n",
                 _guard_actions = [[
 fsm:clearState()
@@ -247,11 +247,6 @@ end
 ${doesPushSet?_guard_set()}
 ${doesPushEntry?_guard_entry()}
 fsm:pushState(${pushStateName})
-]],
-                    _guard_push_entry = [[
-${generator.debugLevel1?_guard_debug_before_entry()}
-fsm:getState():Entry(fsm)
-${generator.debugLevel1?_guard_debug_after_entry()}
 ]],
                 _guard_pop = "fsm:popState()",
                 _guard_entry = [[

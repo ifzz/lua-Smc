@@ -110,11 +110,11 @@ package ${name};
 
     sub BEGIN {
         ${states:_state_init()}
-        $Default = new ${name}_Default('${name}.Default', -1);
+        $Default = ${name}_Default->new('${name}.Default', -1);
     }
 ]],
             _state_var = "$${instanceName}\n",
-            _state_init = "$${instanceName} = new ${map.name}_${className}('${map.name}.${className}', ${map.nextStateId});\n",
+            _state_init = "$${instanceName} = ${map.name}_${className}->new('${map.name}.${className}', ${map.nextStateId});\n",
             _map_default_state = "${defaultState.transitions:_transition()}",
             _map_reflect = [[
 
@@ -350,6 +350,6 @@ sub getTransitions {
 ]],
                 _map_context_reflect = "${states:_state_context_reflect()}\n",
                      _state_context_reflect = "$${map.name}::${className},\n",
-                _transition_context_reflect = "'${name}',\n"
+                _transition_context_reflect = "'${name}',\n",
     }
 end

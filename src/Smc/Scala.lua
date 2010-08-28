@@ -298,11 +298,6 @@ ${doesPushSet?_guard_set()}
 ${doesPushEntry?_guard_entry()}
 context.pushState(${pushStateName})
 ]],
-                                    _guard_push_entry = [[
-${generator.debugLevel1?_guard_debug_before_entry()}
-context.getState().Entry(context)
-${generator.debugLevel1?_guard_debug_after_entry()}
-]],
                                 _guard_pop = "context.popState()",
                                 _guard_entry = [[
 ${generator.debugLevel1?_guard_debug_before_entry()}
