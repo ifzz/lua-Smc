@@ -3514,6 +3514,9 @@ function ActionsMap.Name:EQUAL (fsm, token)
         or ctxt.targetLanguage == 'GRAPH'
         or ctxt.targetLanguage == 'GROOVY'
         or ctxt.targetLanguage == 'LUA'
+        or ctxt.targetLanguage == 'PERL'
+        or ctxt.targetLanguage == 'PYTHON'
+        or ctxt.targetLanguage == 'RUBY'
         or ctxt.targetLanguage == 'SCALA'
         or ctxt.targetLanguage == 'TABLE'
         or ctxt.targetLanguage == 'VB' then
