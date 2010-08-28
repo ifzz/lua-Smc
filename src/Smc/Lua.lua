@@ -323,7 +323,7 @@ end
 ]],
                 _map_context_reflect = "${states:_state_context_reflect()}\n",
                      _state_context_reflect = "${map.name}.${className},\n",
-                _transition_context_reflect = "'${name}',\n"
+                _transition_context_reflect = "'${name}',\n",
     }
 end
 
