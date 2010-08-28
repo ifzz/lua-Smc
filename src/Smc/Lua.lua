@@ -98,17 +98,16 @@ ${fsm.maps:_map()}
 
 ${name}.Default = ${fsm.context}State:new('${name}.Default', -1)
 ${defaultState?_map_default_state()}
-${generator.reflectFlag?_map_reflect()}
+${generator.reflectFlag?_default_state_reflect()}
 ${states:_state()}
 ]],
             _map_default_state = "${defaultState.transitions:_transition()}",
-            _map_reflect = [[
+            _default_state_reflect = [[
 
 ${name}.Default._transitions = {
     ${reflect:_reflect()}
 }
 ]],
-                _reflect = "${name} = ${def},\n",
         _state = [[
 
 ${map.name}.${className} = ${map.name}.Default:new('${map.name}.${className}', ${map.nextStateId})
@@ -137,6 +136,7 @@ ${map.name}.${className}._transitions = {
     ${reflect:_reflect()}
 }
 ]],
+                _reflect = "${name} = ${def},\n",
         _transition = [[
 
 function ${state.map.name}.${state.className}:${name} (fsm${parameters:_parameter_proto()})

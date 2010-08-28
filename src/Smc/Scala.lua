@@ -139,7 +139,7 @@ if (context.getDebugFlag())
 
 private class ${name}_Default(name: String, id: Int) extends ${fsm.context}State(name, id) {
     ${defaultState?_map_default_state()}
-    ${generator.reflectFlag?_map_reflect()}
+    ${generator.reflectFlag?_default_state_reflect()}
 }
 ${states:_state()}
 
@@ -149,13 +149,12 @@ private object ${name} {
 }
 ]],
             _map_default_state = "${defaultState.transitions:_transition()}",
-            _map_reflect = [[
+            _default_state_reflect = [[
 
 def getTransitions(): Map[String, Int] = Map(
     ${reflect:_reflect(); separator=",\n"}
 )
 ]],
-                _reflect = [["${name}" -> ${def}]],
             _state_init = [[
 val ${instanceName} = new ${map.name}_${className}("${map.name}.${className}", ${map.nextStateId})
 ]],
@@ -190,6 +189,7 @@ override def getTransitions(): Map[String, Int] = Map(
     ${reflect:_reflect(); separator=",\n"}
 )
 ]],
+                _reflect = [["${name}" -> ${def}]],
         _transition = [[
 
 override def ${name}(context: ${fsm.fsmClassname}${parameters:_parameter_proto()}): Unit = {

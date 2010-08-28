@@ -81,7 +81,7 @@ def getTransitions (self):
 
 class ${name}_Default(${fsm.context}State):
     ${defaultState?_map_default_state()}
-    ${generator.reflectFlag?_map_reflect()!_else_pass()}
+    ${generator.reflectFlag?_state_reflect()!_else_pass()}
 
 ${states:_state()}
 
@@ -93,13 +93,6 @@ class ${name}(object):
             _else_pass = "${defaultState?_empty()!_pass()}",
             _empty = '',
             _pass = "pass\n",
-            _map_reflect = [[
-
-_transitions = dict(
-    ${reflect:_reflect()}
-)
-]],
-                _reflect = "${name} = ${def},\n",
             _state_init = "${instanceName} = ${map.name}_${className}('${map.name}.${className}', ${map.nextStateId})\n",
         _state = [[
 
@@ -128,6 +121,7 @@ _transitions = dict(
     ${reflect:_reflect()}
 )
 ]],
+                _reflect = "${name} = ${def},\n",
         _transition = [[
 
 def ${name}(self, fsm${parameters:_parameter_proto()}):

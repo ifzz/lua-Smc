@@ -103,7 +103,7 @@ package ${name};
 package ${name}_Default;
     use base qw(${fsm.context}State);
     ${defaultState?_map_default_state()}
-    ${generator.reflectFlag?_map_reflect()}
+    ${generator.reflectFlag?_state_reflect()}
 ${states:_state()}
 
 package ${name};
@@ -116,15 +116,6 @@ package ${name};
             _state_var = "$${instanceName}\n",
             _state_init = "$${instanceName} = ${map.name}_${className}->new('${map.name}.${className}', ${map.nextStateId});\n",
             _map_default_state = "${defaultState.transitions:_transition()}",
-            _map_reflect = [[
-
-sub getTransitions {
-    return {
-        ${reflect:_reflect()}
-    }
-}
-]],
-                _reflect = "'${name}' => ${def},\n",
         _state = [[
 
 package ${map.name}_${className};
@@ -160,6 +151,7 @@ sub getTransitions {
     }
 }
 ]],
+                _reflect = "'${name}' => ${def},\n",
         _transition = [[
 
 sub ${name} {
