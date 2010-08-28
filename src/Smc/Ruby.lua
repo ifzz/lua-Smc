@@ -170,7 +170,6 @@ ${needVarEndState?_guard_end_state()}
 ${doesExit?_guard_exit()}
 ${generator.debugLevel0?_guard_debug_enter()}
 ${hasActions?_guard_actions()!_guard_no_action()}
-${generator.debugLevel0?_guard_debug_exit()}
 ${doesEndPop?_guard_end_pop()}
 ]],
                 _guard_end_state = "${varEndState} = fsm.getState",
@@ -195,7 +194,10 @@ if fsm.getDebugFlag then
 end
 ]],
                     _guard_debug_param = "${name}",
-                _guard_no_action = "${hasCondition?_guard_no_action_if()}",
+                _guard_no_action = [[
+${hasCondition?_guard_no_action_if()}
+${_guard_final()}
+]],
                     _guard_no_action_if = "# No actions.\n",
                 _guard_actions = [[
 fsm.clearState
