@@ -32,7 +32,7 @@ function method:_build_template ()
 
 ${_preamble()}
 ${_context()}
-${_default_state()}
+${_base_state()}
 ${fsm.maps:_map()}
 
 // Local variables:
@@ -99,7 +99,7 @@ def getTransitions(): List[String] = List(
                 _map_context_reflect = '${states:_state_context_reflect(); separator=",\\n"}',
                      _state_context_reflect = "${map.name}.${className}",
                 _transition_context_reflect = '"${name}"',
-        _default_state = [[
+        _base_state = [[
 
 ${generator.serialFlag?_serializable()}
 class ${fsm.context}State(name: String, id: Int) {
@@ -112,25 +112,25 @@ class ${fsm.context}State(name: String, id: Int) {
 
     def Entry(context: ${fsm.fsmClassname}): Unit = {}
     def Exit(context: ${fsm.fsmClassname}): Unit = {}
-    ${fsm.transitions:_transition_default_state()}
+    ${fsm.transitions:_transition_base_state()}
 
     def Default(context: ${fsm.fsmClassname}): Unit = {
-        ${generator.debugLevel0?_default_state_debug()}
+        ${generator.debugLevel0?_base_state_debug()}
         throw new statemap.TransitionUndefinedException(
                 "State: " + context.getState()._name +
                 ", Transition: " + context.getTransition())
     }
 }
 ]],
-            _transition_default_state = "${isntDefault?_transition_default_state_if()}\n",
-            _transition_default_state_if = [[
+            _transition_base_state = "${isntDefault?_transition_base_state_if()}\n",
+            _transition_base_state_if = [[
 
 def ${name}(context: ${fsm.fsmClassname}${parameters:_parameter_proto()}): Unit = {
     Default(context)
 }
 ]],
                 _parameter_proto = ", ${name}: ${_type}",
-            _default_state_debug = [[
+            _base_state_debug = [[
 if (context.getDebugFlag())
     context.getDebugStream().println("TRANSITION   : Default")
 

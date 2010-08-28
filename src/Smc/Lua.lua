@@ -28,7 +28,7 @@ function method:_build_template ()
 -- from file : ${fsm.filename}
 
 ${_preamble()}
-${_default_state()}
+${_base_state()}
 ${_states()}
 ${_context()}
 
@@ -51,38 +51,38 @@ module(...)
             _local_pcall = "local pcall = pcall",
             _local_tostring = "local tostring = tostring",
             _import = "require '${it}'\n",
-        _default_state = [[
+        _base_state = [[
 
 local ${fsm.context}State = statemap.State:class()
 
 function ${fsm.context}State:Entry (fsm) end
 
 function ${fsm.context}State:Exit (fsm) end
-${fsm.transitions:_transition_default_state()}
+${fsm.transitions:_transition_base_state()}
 
 function ${fsm.context}State:Default (fsm)
-    ${generator.debugLevel0?_default_state_debug()}
+    ${generator.debugLevel0?_base_state_debug()}
     local msg = strformat("Undefined Transition\nState: %s\nTransition: %s\n",
                           fsm:getState():getName(),
                           fsm:getTransition())
     error(msg)
 end
-${generator.reflectFlag?_default_state_reflect()}
+${generator.reflectFlag?_base_state_reflect()}
 ]],
-            _transition_default_state = "${isntDefault?_transition_default_state_if()}\n",
-            _transition_default_state_if = [[
+            _transition_base_state = "${isntDefault?_transition_base_state_if()}\n",
+            _transition_base_state_if = [[
 
 function ${fsm.context}State:${name} (fsm${parameters:_parameter_proto()})
     self:Default(fsm)
 end
 ]],
                 _parameter_proto = ", ${name}",
-            _default_state_debug = [[
+            _base_state_debug = [[
 if fsm:getDebugFlag() then
     fsm:getDebugStream():write("TRANSITION   : Default\n")
 end
 ]],
-            _default_state_reflect = [[
+            _base_state_reflect = [[
 
 function ${fsm.context}State:getTransitions ()
     return self._transitions
