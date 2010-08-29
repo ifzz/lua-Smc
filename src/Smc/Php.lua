@@ -214,7 +214,7 @@ if ($fsm->getDebugFlag() == true) {
 ]],
                 _guard_debug_enter = [[
 if ($fsm->getDebugFlag() == true) {
-    fwrite($fsm->getDebugStream(), "ENTER TRANSITION: ${transition.state.fullName}.${transition.name}(${transition.parameters:_guard_debug_param(); separator=', '})\n");
+    fwrite($fsm->getDebugStream(), "ENTER TRANSITION: ${transition.state.fullName}->${transition.name}(${transition.parameters:_guard_debug_param(); separator=', '})\n");
 }
 ]],
                     _guard_debug_param = "${name}",

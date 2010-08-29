@@ -254,7 +254,7 @@ warn $@ if ($@);
                 _guard_debug_exit = [[
 if ($fsm->getDebugFlag()) {
     my $fh = $fsm->getDebugStream();
-    print $fh "EXIT TRANSITION : ${transition.state.fullName}:${transition.name}(${transition.parameters:_guard_debug_param(); separator=', '})\n";
+    print $fh "EXIT TRANSITION : ${transition.state.fullName}->${transition.name}(${transition.parameters:_guard_debug_param(); separator=', '})\n";
 }
 ]],
                 _guard_set = "$fsm->setState($${varEndState; format=scoped});",

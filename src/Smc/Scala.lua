@@ -258,7 +258,7 @@ if (context.getDebugFlag())
 ]],
                     _guard_debug_enter = [[
 if (context.getDebugFlag())
-    context.getDebugStream().println("ENTER TRANSITION: ${transition.state.fullName}:${transition.name}(${transition.parameters:_parameter_proto_context(); separator=', '})")
+    context.getDebugStream().println("ENTER TRANSITION: ${transition.state.fullName}.${transition.name}(${transition.parameters:_parameter_proto_context(); separator=', '})")
 ]],
                     _guard_no_action = [[
 ${hasCondition?_guard_no_action_if()}
@@ -290,7 +290,7 @@ ${doesEntry?_guard_entry()}
 ]],
                                 _guard_debug_exit = [[
 if (context.getDebugFlag())
-    context.getDebugStream().println("EXIT TRANSITION : ${transition.state.fullName}:${transition.name}(${transition.parameters:_parameter_proto_context(); separator=', '})")
+    context.getDebugStream().println("EXIT TRANSITION : ${transition.state.fullName}.${transition.name}(${transition.parameters:_parameter_proto_context(); separator=', '})")
 ]],
                                 _guard_set = "context.setState(${varEndState})",
                                 _guard_push = [[
