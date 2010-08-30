@@ -208,7 +208,7 @@ Name
         Error
         {
             clearActions();
-            _error("'=' property assignment may only be used with -csharp, -groovy, -lua, -scala or -vb");
+            _error("'=' property assignment is not available with this language");
         }
 
     Default

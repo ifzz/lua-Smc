@@ -3539,7 +3539,7 @@ function ActionsMap.Name:EQUAL (fsm, token)
         end
         fsm:clearState()
         ctxt:clearActions()
-        ctxt:_error("'=' property assignment may only be used with -csharp, -groovy, -lua, -scala or -vb")
+        ctxt:_error("'=' property assignment is not available with this language")
         if fsm:getDebugFlag() then
             fsm:getDebugStream():write("EXIT TRANSITION : ActionsMap.Name:EQUAL(token=" .. tostring(token) .. ")\n")
         end
