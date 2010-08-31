@@ -8,7 +8,7 @@ use lib "$FindBin::Bin";
 use Test::More;
 use Util;
 
-$Util::smc = 'java -jar Smc.jar';
+#$Util::smc = 'java -jar Smc.jar';
 #$Util::test_graph = 0;
 #$Util::test_table = 1;
 #@Util::tests = ( 'Simple' );
@@ -47,6 +47,7 @@ sub test_smc_c {
     Util::do_fsm('c', $test);
     system("${Util::smc} -c ${options} -headerd t/c t/c/TestClass.sm");
     my $out = Util::run('gcc', "-I runtime/c -I . -o t/c/${test} t/c/${test}.c t/c/TestClass.c t/c/TestClassContext.c");
+    diag($out) if $out;
     $out = Util::run("t/c/${test}");
     my $expected = Util::slurp("t/templates/${test}.out");
     if ($expected =~ /^like/) {

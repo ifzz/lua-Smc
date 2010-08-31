@@ -116,6 +116,7 @@ has.allStates       = { is = 'ro', lazy_build = true }
 has.transitions     = { is = 'ro', lazy_build = true }
 has.hasEntryActions = { is = 'ro', lazy_build = true }
 has.hasExitActions  = { is = 'ro', lazy_build = true }
+has.mapName         = { is = 'ro', lazy_build = true }
 has.reflect         = { is = 'ro', lazy_build = true }
 
 function method:_build_allStates ()
@@ -125,6 +126,10 @@ function method:_build_allStates ()
     else
         return self.states
     end
+end
+
+function method:_build_mapName ()
+    return self.name
 end
 
 function method:_build_transitions ()
