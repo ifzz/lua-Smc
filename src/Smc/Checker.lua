@@ -55,9 +55,9 @@ function method:visitFSM (fsm)
         self:_error("\"%header\" missing.", fsm.filename)
     end
 
-    if self.targetLanguage == 'JAVA' and not fsm.name ~= fsm.context then
+    if self.targetLanguage == 'JAVA' and fsm.name ~= fsm.context then
         self:_error(".sm file name \"" .. fsm.name .. "\" does not match context class name \""
-                                       .. fsm.context .. "\".", filename)
+                                       .. fsm.context .. "\".", fsm.filename)
     end
 
     for _, map in ipairs(fsm.maps) do
