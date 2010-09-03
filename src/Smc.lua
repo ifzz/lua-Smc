@@ -216,7 +216,7 @@ function method:parseArgs (args)
                     error "-cast not followed by a value"
                 end
                 if targetLanguage.castFlag then
-                    if not targetLanguage.accessLevels[vv] then
+                    if not targetLanguage.castTypes[vv] then
                         error("\"" .. vv ..  "\" is an invalid C++ cast type.")
                     end
                     opt.castType = vv
