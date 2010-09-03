@@ -42,7 +42,7 @@ Parser.dot:
 	coat2dot Smc.Parser > $@
 
 Checker.dot:
-	coat2dot Smc.Checker > $@
+	coat2dot Smc.Checker Smc.Dumper > $@
 
 Smc.dot:
 	coat2dot --no-attr --no-meth Smc > $@

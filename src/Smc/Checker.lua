@@ -4,7 +4,7 @@ require 'Coat'
 local table = require 'table'
 local ipairs = ipairs
 
-require 'Smc.Model'
+require 'Smc.Visitor'
 
 class 'Smc.Checker'
 with 'Smc.Visitor'

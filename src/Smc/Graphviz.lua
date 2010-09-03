@@ -4,6 +4,8 @@ require 'Coat'
 local ipairs = ipairs
 local pairs = pairs
 
+require 'Smc.Visitor'
+
 singleton 'Smc.Graphviz'
 extends 'Smc.Language'
 

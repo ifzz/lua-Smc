@@ -1,6 +1,5 @@
 
 require 'Coat'
-require 'Coat.Role'
 require 'Coat.Types'
 
 local table = require 'table'
@@ -8,16 +7,6 @@ local error = error
 local ipairs = ipairs
 local pairs = pairs
 local unpack = table.unpack or unpack
-
-role 'Smc.Visitor'
-
-requires('visitFSM',
-         'visitMap',
-         'visitState',
-         'visitTransition',
-         'visitGuard',
-         'visitAction',
-         'visitParameter')
 
 
 abstract 'Smc.Element'
