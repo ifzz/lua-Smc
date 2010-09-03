@@ -88,6 +88,7 @@ is( fsm._package, 'net.sf.smc' )
 is( fsm.accessLevel, 'private' )
 is( fsm.header, 'AppClass.h' )
 eq_array( fsm.includeList, {
+    '"AppClass.h"',
     '<stdlib.h>',
     '"file.h"',
     '"bare.h"',
