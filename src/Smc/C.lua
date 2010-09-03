@@ -34,7 +34,7 @@ function method:_build_template ()
 
 ${_preamble()}
 ${_base_state()}
-${_states()}
+${fsm.maps:_map()}
 ${_context()}
 
 /*
@@ -112,7 +112,6 @@ if (getDebugFlag(fsm) != 0) {
     TRACE("TRANSITION   : %s.%s\n\r", getName(getState(fsm)), getTransition(fsm));
 }
 ]],
-        _states = "${fsm.maps:_map()}",
         _map = [[
 ${defaultState?_map_default_state()}
 ${states:_state()}
@@ -360,7 +359,7 @@ function method:_build_template ()
 
 ${_preample()}
 ${_base_state()}
-${_states()}
+${fsm.maps:_map()}
 ${_context()}
 
 #endif
@@ -415,7 +414,6 @@ void(*Exit)(struct ${fsm.fsmClassname}*);
 void(*${name})(struct ${fsm.fsmClassname}*${parameters:_parameter_proto()});
 ]],
                 _parameter_proto = ", ${_type}",
-        _states = "${fsm.maps:_map()}",
         _map = "${states:_state()}\n",
         _state = [[
 extern const struct ${fsm.context}State ${map.name}_${instanceName};

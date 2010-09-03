@@ -28,7 +28,7 @@ function method:_build_template ()
 
 ${_preamble()}
 ${_base_state()}
-${_states()}
+${fsm.maps:_map()}
 ${_context()}
 
 # Local variables:
@@ -68,7 +68,6 @@ if fsm.getDebugFlag then
     fsm.getDebugStream.write("TRANSITION   : Default\n")
 end
 ]],
-        _states = "${fsm.maps:_map()}",
         _map = [[
 
 class ${name}_Default < ${fsm.context}State

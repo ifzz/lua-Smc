@@ -31,7 +31,7 @@ function method:_build_template ()
 
 ${_preamble()}
 ${_base_state()}
-${_states()}
+${fsm.maps:_map()}
 ${_context()}
 
 /*
@@ -82,7 +82,6 @@ if ($fsm->getDebugFlag() == true) {
     fwrite($fsm->getDebugStream(), "TRANSITION   : Default\n");
 }
 ]],
-        _states = "${fsm.maps:_map()}",
         _map = [[
 
 class ${name}_Default extends ${fsm.context}State {

@@ -28,7 +28,7 @@ function method:_build_template ()
 
 ${_preamble()}
 ${_base_state()}
-${_states()}
+${fsm.maps:_map()}
 ${_context()}
 1;
 
@@ -90,7 +90,6 @@ croak "TransitionUndefinedException\n",
     "State: ", $fsm->getState()->getName(), "\n",
     "Transition: ", $fsm->getTransition(), "\n";
 ]],
-        _states = "${fsm.maps:_map()}",
         _map = [[
 
 package ${name};
