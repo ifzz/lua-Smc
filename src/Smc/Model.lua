@@ -186,6 +186,10 @@ function _get_nextStateId ()
     return StateId
 end
 
+function _get_index ()
+    return _get_nextStateId() - 1
+end
+
 function method:addState (state)
     if state.instanceName == 'DefaultState' then
         self.defaultState = state
