@@ -453,6 +453,5 @@ extern void ${fsm.fsmClassname}_EnterStartState(struct ${fsm.fsmClassname}*);
             _transition_context_if = [[
 extern void ${fsm.fsmClassname}_${name}(struct ${fsm.fsmClassname}*${parameters:_parameter_proto()});
 ]],
-                _transition_context_param = ", ${_type}",
     }
 end
