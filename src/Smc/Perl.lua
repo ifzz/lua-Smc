@@ -44,7 +44,9 @@ use warnings;
 use DFA::Statemap;
 ${fsm.importList:_import()}
 ]],
-            _import = "use ${it};\n",
+            _import = [[
+use ${it};
+]],
         _base_state = [[
 
 package ${fsm.context}State;
@@ -75,7 +77,9 @@ package ${fsm.context}State;
     }
 ]],
             _transition_base_state = "${isntDefault?_transition_base_state_if()}\n",
-            _transition_base_state_if = "${name} => undef,",
+            _transition_base_state_if = [[
+${name} => undef,
+]],
             _base_state_debug = [[
 if ($fsm->getDebugFlag()) {
     my $fh = $fsm->getDebugStream();
@@ -112,8 +116,12 @@ package ${name};
         $Default = ${name}_Default->new('${name}.Default', -1);
     }
 ]],
-            _state_var = "$${instanceName}\n",
-            _state_init = "$${instanceName} = ${map.name}_${className}->new('${map.name}.${className}', ${map.nextStateId});\n",
+            _state_var = [[
+$${instanceName}
+]],
+            _state_init = [[
+$${instanceName} = ${map.name}_${className}->new('${map.name}.${className}', ${map.nextStateId});
+]],
             _map_default_state = "${defaultState.transitions:_transition()}",
         _state = [[
 
@@ -150,7 +158,9 @@ sub getTransitions {
     }
 }
 ]],
-                _reflect = "'${name}' => ${def},\n",
+                _reflect = [[
+'${name}' => ${def},
+]],
         _transition = [[
 
 sub ${name} {
@@ -212,7 +222,9 @@ ${doesPop?_guard_pop()}
 ${doesEntry?_guard_entry()}
 ${doesEndPop?_guard_end_pop()}
 ]],
-                _guard_end_state = "my $${varEndState} = $fsm->getState();",
+                _guard_end_state = [[
+my $${varEndState} = $fsm->getState();
+]],
                 _guard_exit = [[
 ${generator.debugLevel1?_guard_debug_before_exit()}
 $fsm->getState()->Exit($fsm);
@@ -238,7 +250,9 @@ if ($fsm->getDebugFlag()) {
 ]],
                     _guard_debug_param = "${name}",
                 _guard_no_action = "${hasCondition?_guard_no_action_if()}",
-                    _guard_no_action_if = "# No actions.\n",
+                    _guard_no_action_if = [[
+# No actions.
+]],
                 _guard_actions = [[
 $fsm->clearState();
 ${generator.catchFlag?_guard_actions_protected()!_guard_actions_not_protected()}
@@ -256,14 +270,18 @@ if ($fsm->getDebugFlag()) {
     print $fh "EXIT TRANSITION : ${transition.state.fullName}->${transition.name}(${transition.parameters:_guard_debug_param(); separator=', '})\n";
 }
 ]],
-                _guard_set = "$fsm->setState($${varEndState; format=scoped});",
+                _guard_set = [[
+$fsm->setState($${varEndState; format=scoped});
+]],
                 scoped = function (s) return s:gsub("%.", "::") end,
                 _guard_push = [[
 ${doesPushSet?_guard_set()}
 ${doesPushEntry?_guard_entry()}
 $fsm->pushState($${pushStateName; format=scoped});
 ]],
-                _guard_pop = "$fsm->popState();",
+                _guard_pop = [[
+$fsm->popState();
+]],
                 _guard_entry = [[
 ${generator.debugLevel1?_guard_debug_before_entry()}
 $fsm->getState()->Entry($fsm);
@@ -281,12 +299,20 @@ if ($fsm->getDebugFlag()) {
     print $fh "AFTER ENTRY     : ${transition.state.fullName}.Entry(fsm)\n";
 }
 ]],
-                _guard_end_pop = "$fsm->${endStateName}(${popArgs});",
+                _guard_end_pop = [[
+$fsm->${endStateName}(${popArgs});
+]],
         _action = "${propertyFlag?_action_prop()!_action_no_prop()}\n",
-            _action_prop = "$ctxt->{${name}} = ${arguments};",
             _action_no_prop = "${isEmptyStateStack?_action_ess()!_action_no_ess()}",
-            _action_ess = "$fsm->emptyStateStack();",
-            _action_no_ess = "$ctxt->${name}(${arguments; separator=', '});",
+            _action_prop = [[
+$ctxt->{${name}} = ${arguments};
+]],
+            _action_ess = [[
+$fsm->emptyStateStack();
+]],
+            _action_no_ess = [[
+$ctxt->${name}(${arguments; separator=', '});
+]],
         _context = [[
 
 package ${fsm.context}_sm;
@@ -340,7 +366,11 @@ sub getTransitions {
 
 ]],
                 _map_context_reflect = "${states:_state_context_reflect()}\n",
-                     _state_context_reflect = "$${map.name}::${className},\n",
-                _transition_context_reflect = "'${name}',\n",
+                     _state_context_reflect = [[
+$${map.name}::${className},
+]],
+                _transition_context_reflect = [[
+'${name}',
+]],
     }
 end

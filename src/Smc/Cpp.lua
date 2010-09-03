@@ -103,7 +103,9 @@ ${fsm.context}State& ${fsm.fsmClassname}::valueOf(int stateId)
 }
 ]],
                 _map_base_state_serial = "${states:_state_base_state_serial(); separator=',\\n'}",
-                    _state_base_state_serial = "&${map.name}::${className}",
+                    _state_base_state_serial = [[
+&${map.name}::${className}
+]],
                 _assert = [[
 assert(1==0);
 ]],
@@ -245,7 +247,9 @@ ${generator.debugLevel0?_guard_debug_enter()}
 ${hasActions?_guard_actions()!_guard_no_action()}
 ${doesEndPop?_guard_end_pop()}
 ]],
-                _guard_end_state = "${fsm.context}State& ${varEndState} = context.getState();",
+                _guard_end_state = [[
+${fsm.context}State& ${varEndState} = context.getState();
+]],
                 _guard_exit = [[
 ${generator.debugLevel1?_guard_debug_before_exit()}
 (context.getState()).Exit(context);
@@ -301,7 +305,9 @@ str << "ENTER TRANSITION: ${transition.state.fullName}::${transition.name}(${tra
 ${hasCondition?_guard_no_action_if()}
 ${_guard_final()}
 ]],
-                    _guard_no_action_if = "// No actions.\n",
+                    _guard_no_action_if = [[
+// No actions.
+]],
                 _guard_actions = [[
 context.clearState();
 ${generator.catchFlag?_guard_actions_protected()!_guard_actions_not_protected()}
@@ -346,14 +352,18 @@ std::ostream& str = context.getDebugStream();
 str << "EXIT TRANSITION : ${transition.state.fullName}::${transition.name}(${transition.parameters:_guard_debug_param(); separator=', '})"
     << std::endl;
 ]],
-                _guard_set = "context.setState(${varEndState; format=scoped});",
+                _guard_set = [[
+context.setState(${varEndState; format=scoped});
+]],
                 scoped = function (str) return str:gsub('%.','::') end,
                 _guard_push = [[
 ${doesPushSet?_guard_set()}
 ${doesPushEntry?_guard_entry()}
 context.pushState(${pushStateName; format=scoped});
 ]],
-                _guard_pop = "context.popState();",
+                _guard_pop = [[
+context.popState();
+]],
                 _guard_entry = [[
 ${generator.debugLevel1?_guard_debug_before_entry()}
 (context.getState()).Entry(context);
@@ -389,10 +399,16 @@ std::ostream& str = context.getDebugStream();
 str << "AFTER ENTRY     : ${transition.state.fullName}::Entry(fsm)"
     << std::endl;
 ]],
-                _guard_end_pop = "context.${endStateName}(${popArgs});",
+                _guard_end_pop = [[
+context.${endStateName}(${popArgs});
+]],
         _action = "${isEmptyStateStack?_action_ess()!_action_no_ess()}",
-            _action_ess = "context.emptyStateStack();",
-            _action_no_ess = "ctxt.${name}(${arguments; separator=', '});",
+            _action_ess = [[
+context.emptyStateStack();
+]],
+            _action_no_ess = [[
+ctxt.${name}(${arguments; separator=', '});
+]],
     }
 end
 

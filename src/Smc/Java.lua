@@ -148,7 +148,9 @@ ${generator.accessLevel} class ${fsm.fsmClassname}
 }
 ]],
             scoped = function (str) return str:gsub('::','.') end,
-            _serializable = "implements java.io.Serializable",
+            _serializable = [[
+implements java.io.Serializable
+]],
             _synchronized = "synchronized ",
             _generic_string = "<String>",
             _generic_str_int = "<String, Integer>",
@@ -255,7 +257,9 @@ transient private static ${fsm.context}State[] _States =
 ]],
             _context_data_states_or = "${generator.serialFlag?_context_data_states()}",
             _map_context_reflect = '${states:_state_context_reflect(); separator=",\\n"}',
-                _state_context_reflect = "${map.name}.${className}",
+                _state_context_reflect = [[
+${map.name}.${className}
+]],
         _base_state = [[
 
 ${generator.accessLevel} static abstract class ${fsm.context}State
@@ -519,7 +523,9 @@ ${generator.debugLevel0?_guard_debug_enter()}
 ${hasActions?_guard_actions()!_guard_no_action()}
 ${doesEndPop?_guard_end_pop()}
 ]],
-                    _guard_end_state = "${fsm.context}State ${varEndState} = context.getState();",
+                    _guard_end_state = [[
+${fsm.context}State ${varEndState} = context.getState();
+]],
                     _guard_exit = [[
 ${generator.debugLevel1?_guard_debug_before_exit()}
 (context.getState()).Exit(context);
@@ -553,7 +559,9 @@ if (context.getDebugFlag() == true)
 ${hasCondition?_guard_no_action_if()}
 ${_guard_final()}
 ]],
-                        _guard_no_action_if = "// No actions.",
+                        _guard_no_action_if = [[
+// No actions.
+]],
                     _guard_actions = [[
 context.clearState();
 ${generator.catchFlag?_guard_actions_protected()!_guard_actions_not_protected()}
@@ -587,13 +595,17 @@ if (context.getDebugFlag() == true)
     str.println("EXIT TRANSITION : ${transition.state.fullName}.${transition.name}(${transition.parameters:_parameter_proto_context(); separator=', '})");
 }
 ]],
-                                _guard_set = "context.setState(${varEndState});",
+                                _guard_set = [[
+context.setState(${varEndState});
+]],
                                 _guard_push = [[
 ${doesPushSet?_guard_set()}
 ${doesPushEntry?_guard_entry()}
 context.pushState(${pushStateName});
 ]],
-                                _guard_pop = "context.popState();",
+                                _guard_pop = [[
+context.popState();
+]],
                                 _guard_entry = [[
 ${generator.debugLevel1?_guard_debug_before_entry()}
 (context.getState()).Entry(context);
@@ -615,9 +627,15 @@ if (context.getDebugFlag() == true)
     str.println("AFTER ENTRY     : ${transition.state.fullName}.Exit(fsm)");
 }
 ]],
-                                _guard_end_pop = "context.${endStateName}(${popArgs});",
+                                _guard_end_pop = [[
+context.${endStateName}(${popArgs});
+]],
         _action = "${isEmptyStateStack?_action_ess()!_action_no_ess()}",
-            _action_ess = "context.emptyStateStack();",
-            _action_no_ess = "ctxt.${name}(${arguments; separator=', '});",
+            _action_ess = [[
+context.emptyStateStack();
+]],
+            _action_no_ess = [[
+ctxt.${name}(${arguments; separator=', '});
+]],
     }
 end

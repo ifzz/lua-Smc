@@ -48,9 +48,15 @@ ${fsm.importList:_import()}
 
 module(...)
 ]],
-            _local_pcall = "local pcall = pcall",
-            _local_tostring = "local tostring = tostring",
-            _import = "require '${it}'\n",
+            _local_pcall = [[
+local pcall = pcall
+]],
+            _local_tostring = [[
+local tostring = tostring
+]],
+            _import = [[
+require '${it}'
+]],
         _base_state = [[
 
 local ${fsm.context}State = statemap.State:class()
@@ -93,7 +99,9 @@ end
 ${fsm.maps:_map_local()}
 ${fsm.maps:_map()}
 ]],
-            _map_local = "local ${name} = {}\n",
+            _map_local = [[
+local ${name} = {}
+]],
         _map = [[
 
 ${name}.Default = ${fsm.context}State:new('${name}.Default', -1)
@@ -136,7 +144,9 @@ ${map.name}.${className}._transitions = {
     ${reflect:_reflect()}
 }
 ]],
-                _reflect = "${name} = ${def},\n",
+                _reflect = [[
+${name} = ${def},
+]],
         _transition = [[
 
 function ${state.map.name}.${state.className}:${name} (fsm${parameters:_parameter_proto()})
@@ -195,7 +205,9 @@ ${doesPop?_guard_pop()}
 ${doesEntry?_guard_entry()}
 ${doesEndPop?_guard_end_pop()}
 ]],
-                _guard_end_state = "local ${varEndState} = fsm:getState()",
+                _guard_end_state = [[
+local ${varEndState} = fsm:getState()
+]],
                 _guard_exit = [[
 ${generator.debugLevel1?_guard_debug_before_exit()}
 fsm:getState():Exit(fsm)
@@ -218,7 +230,9 @@ end
 ]],
                     _guard_debug_param = [[${name}=" .. tostring(${name}) .. "]],
                 _guard_no_action = "${hasCondition?_guard_no_action_if()}",
-                    _guard_no_action_if = "-- No actions.\n",
+                    _guard_no_action_if = [[
+-- No actions.
+]],
                 _guard_actions = [[
 fsm:clearState()
 ${generator.catchFlag?_guard_actions_protected()!_guard_actions_not_protected()}
@@ -242,13 +256,17 @@ if fsm:getDebugFlag() then
     fsm:getDebugStream():write("EXIT TRANSITION : ${transition.state.fullName}:${transition.name}(${transition.parameters:_guard_debug_param(); separator=', '})\n")
 end
 ]],
-                _guard_set = "fsm:setState(${varEndState})",
+                _guard_set = [[
+fsm:setState(${varEndState})
+]],
                 _guard_push = [[
 ${doesPushSet?_guard_set()}
 ${doesPushEntry?_guard_entry()}
 fsm:pushState(${pushStateName})
 ]],
-                _guard_pop = "fsm:popState()",
+                _guard_pop = [[
+fsm:popState()
+]],
                 _guard_entry = [[
 ${generator.debugLevel1?_guard_debug_before_entry()}
 fsm:getState():Entry(fsm)
@@ -264,12 +282,20 @@ if fsm:getDebugFlag() then
     fsm:getDebugStream():write("AFTER ENTRY     : ${transition.state.fullName}.Entry(fsm)\n")
 end
 ]],
-                _guard_end_pop = "fsm:${endStateName}(${popArgs})",
+                _guard_end_pop = [[
+fsm:${endStateName}(${popArgs})
+]],
         _action = "${propertyFlag?_action_prop()!_action_no_prop()}\n",
-            _action_prop = "ctxt.${name} = ${arguments}",
             _action_no_prop = "${isEmptyStateStack?_action_ess()!_action_no_ess()}",
-            _action_ess = "fsm:emptyStateStack()",
-            _action_no_ess = "ctxt:${name}(${arguments; separator=', '})",
+            _action_prop = [[
+ctxt.${name} = ${arguments}
+]],
+            _action_ess = [[
+fsm:emptyStateStack()
+]],
+            _action_no_ess = [[
+ctxt:${name}(${arguments; separator=', '})
+]],
         _context = [[
 
 ${fsm.fsmClassname} = statemap.FSMContext:class()
@@ -317,8 +343,11 @@ function ${fsm.fsmClassname}:getTransitions ()
 end
 ]],
                 _map_context_reflect = "${states:_state_context_reflect()}\n",
-                     _state_context_reflect = "${map.name}.${className},\n",
-                _transition_context_reflect = "'${name}',\n",
+                     _state_context_reflect = [[
+${map.name}.${className},
+]],
+                _transition_context_reflect = [[
+'${name}',
+]],
     }
 end
-

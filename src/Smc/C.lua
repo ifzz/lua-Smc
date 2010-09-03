@@ -76,10 +76,16 @@ static void ${fsm.context}State_Default(struct ${fsm.fsmClassname}* fsm)
     State_Default(fsm);
 }
 ]],
-            _populate_entry = "state##_Entry, \\",
-            _populate_exit = "state##_Exit, \\",
+            _populate_entry = [[
+state##_Entry, \
+]],
+            _populate_exit = [[
+state##_Exit, \
+]],
             _populate_transition = "${isntDefault?_populate_transition_if()}\n",
-            _populate_transition_if = "state##_${name}, \\",
+            _populate_transition_if = [[
+state##_${name}, \
+]],
             _def_entry = [[
 #define ENTRY_STATE(state) \
     if ((state)->Entry != NULL) { \
@@ -249,7 +255,9 @@ if (getDebugFlag(fsm) != 0) {
 }
 ]],
                 _guard_no_action = "${hasCondition?_guard_no_action_if()}",
-                    _guard_no_action_if = "/* No actions. */\n",
+                    _guard_no_action_if = [[
+/* No actions. */
+]],
                 _guard_actions = [[
 clearState(fsm);
 ${actions:_action()}
@@ -259,7 +267,9 @@ if (getDebugFlag(fsm) != 0) {
     TRACE("EXIT TRANSITION : ${transition.state.fullName}_${transition.name}(fsm${transition.parameters:_parameter_context_call(); separator=', '})\n\r");
 }
 ]],
-                _guard_set = "setState(fsm, ${varEndState; format=scoped});",
+                _guard_set = [[
+setState(fsm, ${varEndState; format=scoped});
+]],
                 scoped = function (s)
                     if s == 'endState' then
                         return s
@@ -273,7 +283,9 @@ ${doesPushSet?_guard_set()}
 ${doesPushEntry?_guard_entry()}
 pushState(fsm, ${pushStateName; format=scoped});
 ]],
-                _guard_pop = "popState(fsm);",
+                _guard_pop = [[
+popState(fsm);
+]],
                 _guard_entry = [[
 ${generator.debugLevel1?_guard_debug_before_entry()}
 ENTRY_STATE(getState(fsm));
@@ -289,7 +301,9 @@ if (getDebugFlag(fsm) != 0) {
     TRACE("AFTER ENTRY     : ENTRY_STATE(${transition.state.fullName})\n\r");
 }
 ]],
-                _guard_end_pop = "${fsm.fsmClassname}_${endStateName}(fsm${popArgs; format=with_arg});",
+                _guard_end_pop = [[
+${fsm.fsmClassname}_${endStateName}(fsm${popArgs; format=with_arg});
+]],
                 with_arg = function (s)
                     if s == '' then
                         return s
@@ -298,10 +312,13 @@ if (getDebugFlag(fsm) != 0) {
                     end
                 end,
         _action = "${isEmptyStateStack?_action_ess()!_action_no_ess()}",
-            _action_ess = "emptyStateStack(fsm);",
-            _action_no_ess = "${fsm.context}_${name}(${arguments?_action_arg()!_action_no_arg()});",
-                _action_arg = "ctxt, ${arguments; separator=', '}",
-                _action_no_arg = "ctxt",
+            _action_ess = [[
+emptyStateStack(fsm);
+]],
+            _action_no_ess = [[
+${fsm.context}_${name}(ctxt${arguments?_action_arg()});
+]],
+                _action_arg = ", ${arguments; separator=', '}",
         _context = [[
 
 void ${fsm.fsmClassname}_Init(struct ${fsm.fsmClassname}* fsm, struct ${fsm.context}* owner)
@@ -342,7 +359,6 @@ class 'Smc.C.HeaderGenerator'
 extends 'Smc.Generator'
 
 has.suffix          = { '+', default = 'h' }
-has.context         = { is = 'ro', isa = 'string' } -- XXX
 
 function method:_build_template ()
     return CodeGen{
@@ -440,4 +456,3 @@ extern void ${fsm.fsmClassname}_${name}(struct ${fsm.fsmClassname}*${parameters:
                 _transition_context_param = ", ${_type}",
     }
 end
-

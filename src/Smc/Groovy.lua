@@ -41,7 +41,9 @@ ${fsm.maps:_map()}
 ${fsm.source}
 ${fsm.importList:_import()}
 ]],
-            _import = "import ${it}\n",
+            _import = [[
+import ${it}
+]],
         _context = [[
 
 class ${fsm.fsmClassname} extends statemap.FSMContext${generator.serialFlag?_serializable()} {
@@ -94,8 +96,12 @@ final transitions = [
 ]
 ]],
                 _map_context_reflect = '${states:_state_context_reflect(); separator=",\\n"}',
-                     _state_context_reflect = "${map.name}.${className}",
-                _transition_context_reflect = "'${name}'",
+                     _state_context_reflect = [[
+${map.name}.${className}
+]],
+                _transition_context_reflect = [[
+'${name}'
+]],
         _base_state = [[
 
 private class ${fsm.context}State extends statemap.State {
@@ -179,7 +185,9 @@ final transitions = [
     ${reflect:_reflect(); separator=",\n"}
 ]
 ]],
-                _reflect = "${name}:${def}",
+                _reflect = [[
+${name}:${def}
+]],
         _transition = [[
 
 def ${name}(${fsm.fsmClassname} context${parameters:_parameter_proto()}) {
@@ -233,7 +241,9 @@ ${generator.debugLevel0?_guard_debug_enter()}
 ${hasActions?_guard_actions()!_guard_no_action()}
 ${doesEndPop?_guard_end_pop()}
 ]],
-                    _guard_end_state = "def ${varEndState} = context.state",
+                    _guard_end_state = [[
+def ${varEndState} = context.state
+]],
                     _guard_exit = [[
 ${generator.debugLevel1?_guard_debug_before_exit()}
 context.state.Exit(context)
@@ -255,7 +265,9 @@ if (context.debugFlag)
 ${hasCondition?_guard_no_action_if()}
 ${_guard_final()}
 ]],
-                        _guard_no_action_if = "// No actions.",
+                        _guard_no_action_if = [[
+// No actions.
+]],
                     _guard_actions = [[
 context.clearState()
 ${generator.catchFlag?_guard_actions_protected()!_guard_actions_not_protected()}
@@ -283,13 +295,17 @@ ${doesEntry?_guard_entry()}
 if (context.debugFlag)
     context.debugStream.println('EXIT TRANSITION : ${transition.state.fullName}.${transition.name}(${transition.parameters:_parameter_proto_context(); separator=', '})')
 ]],
-                                _guard_set = "context.setState(${varEndState})",
+                                _guard_set = [[
+context.setState(${varEndState})
+]],
                                 _guard_push = [[
 ${doesPushSet?_guard_set()}
 ${doesPushEntry?_guard_entry()}
 context.pushState(${pushStateName})
 ]],
-                                _guard_pop = "context.popState()",
+                                _guard_pop = [[
+context.popState()
+]],
                                 _guard_entry = [[
 ${generator.debugLevel1?_guard_debug_before_entry()}
 context.state.Entry(context)
@@ -303,12 +319,19 @@ if (context.debugFlag)
 if (context.debugFlag)
     context.debugStream.println('AFTER ENTRY     : ${transition.state.fullName}.Exit(fsm)')
 ]],
-                                _guard_end_pop = "context.${endStateName}(${popArgs})",
+                                _guard_end_pop = [[
+context.${endStateName}(${popArgs})
+]],
         _action = "${propertyFlag?_action_prop()!_action_no_prop()}\n",
-            _action_prop = "ctxt.${name} = ${arguments}",
             _action_no_prop = "${isEmptyStateStack?_action_ess()!_action_no_ess()}",
-                _action_ess = "context.emptyStateStack()",
-                _action_no_ess = "ctxt.${name}(${arguments; separator=', '})",
+            _action_prop = [[
+ctxt.${name} = ${arguments}
+]],
+                _action_ess = [[
+context.emptyStateStack()
+]],
+                _action_no_ess = [[
+ctxt.${name}(${arguments; separator=', '})
+]],
     }
 end
-
