@@ -26,6 +26,8 @@ end
 function method:visitFSM (fsm)
     local stream = self.stream
 
+    stream:write "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n"
+    stream:write "  \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n"
     stream:write "<html>\n"
     stream:write "  <head>\n"
     stream:write("    <title>", self.srcfileBase, "</title>\n")
@@ -33,11 +35,8 @@ function method:visitFSM (fsm)
     stream:write "\n"
     stream:write "  <body>\n"
 
-    local sep = ""
     for _, map in ipairs(fsm.maps) do
-        stream:write(sep)
         map:visit(self)
-        sep = "    <p>\n"
     end
 
     stream:write "  </body>\n"
@@ -51,19 +50,20 @@ function method:visitMap (map)
     local transitions = map.transitions
     local transitionCount = #transitions + 1
 
-    stream:write "    <table align=center border=3 cellspacing=2 cellpadding=2>\n"
-    stream:write "      <caption align=\"top\">\n"
+    stream:write "   <div>\n"
+    stream:write "    <table border=\"3\" cellspacing=\"2\" cellpadding=\"2\">\n"
+    stream:write "      <caption>\n"
     stream:write("        ", mapName, " Finite State Machine\n")
     stream:write "      </caption>\n"
 
     stream:write "      <tr>\n"
-    stream:write "        <th rowspan=2>\n"
+    stream:write "        <th rowspan=\"2\">\n"
     stream:write "          State\n"
     stream:write "        </th>\n"
-    stream:write "        <th colspan=2>\n"
+    stream:write "        <th colspan=\"2\">\n"
     stream:write "          Actions\n"
     stream:write "        </th>\n"
-    stream:write("        <th colspan=", transitionCount, ">\n")
+    stream:write("        <th colspan=\"", transitionCount, "\">\n")
     stream:write "          Transition\n"
     stream:write "        </th>\n"
     stream:write "      </tr>\n"
@@ -83,13 +83,13 @@ function method:visitMap (map)
             stream:write("          ", transName, "\n")
 
             if #parameters > 0 then
-                stream:write "          <br>\n"
+                stream:write "          <br />\n"
                 stream:write "          ("
                 local first = true
                 for _, param in ipairs(parameters) do
                     if not first then
                         stream:write ",\n"
-                        stream:write "          <br>\n"
+                        stream:write "          <br />\n"
                         stream:write "          "
                     end
                     param:visit(self)
@@ -139,6 +139,8 @@ function method:visitMap (map)
     end
 
     stream:write "    </table>\n"
+    stream:write "    <br />\n"
+    stream:write "   </div>\n"
 end
 
 function method:visitState (state)

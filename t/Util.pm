@@ -7,7 +7,7 @@ use Fatal qw(open close);
 
 our $smc = 'bin/smc';
 our $test_graph = 1;
-our $test_table = 0;
+our $test_table = 1;
 our @tests = qw(
     Simple
     EntryExit
@@ -64,6 +64,7 @@ sub test_smc_table {
     unlink("t/${lang}/TestClassContext.html");
     do_fsm($lang, $test);
     system("${smc} -table t/${lang}/TestClass.sm");
+    system("xmllint -noout -valid t/${lang}/TestClassContext.html");
 }
 
 sub test_smc_with_options {
@@ -77,7 +78,7 @@ sub test_smc_with_options {
         }
     }
     if ($test_table) {
-        test_smc_table($lang, $test) if ($test_table);
+        test_smc_table($lang, $test);
     }
 }
 
