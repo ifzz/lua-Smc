@@ -1,22 +1,9 @@
 
 require 'Coat'
-require 'Coat.Role'
 
 local string = require 'string'
 
-role 'Smc.Visitor'
-
-requires('visitFSM',
-         'visitMap',
-         'visitState',
-         'visitTransition',
-         'visitGuard',
-         'visitAction',
-         'visitParameter')
-
-
 abstract 'Smc.Generator'
-with 'Smc.Visitor'
 
 has.suffix          = { is = 'ro', isa = 'string', required = true }
 has.srcfileBase     = { is = 'ro', isa = 'string', required = true }
@@ -42,29 +29,33 @@ has.stream          = { is = 'rw', isa = 'file' }
 has.guardCount      = { is = 'rw', isa = 'number' }
 has.guardIndex      = { is = 'rw', isa = 'number' }
 
+has.debugLevel0     = { is = 'ro', lazy_build = true }
+has.debugLevel1     = { is = 'ro', lazy_build = true }
+has.catchFlag       = { is = 'ro', lazy_build = true }
+has.template        = { is = 'ro', lazy_build = true }
+
+function method:_build_debugLevel0 ()
+    return self.debugLevel >= 0
+end
+
+function method:_build_debugLevel1 ()
+    return self.debugLevel >= 1
+end
+
+function method:_build_catchFlag ()
+    return not self.noCatchFlag
+end
+
 function method:generate(fsm, stream)
-    self.stream = stream
-    self:visitFSM(fsm)
+    local tmpl = self.template
+    tmpl.fsm = fsm
+    tmpl.generator = self
+    local output, msg = tmpl 'TOP'
+    stream:write(output)
+    if msg then error(msg) end
 end
 
 function method:sourceFile(path, basename, suffix)
     suffix = suffix or self.suffix
     return path .. basename .. "." .. suffix
-end
-
-function method:isLoopback(transType, endState)
-    return (transType == 'TRANS_SET' or transType == 'TRANS_PUSH') and endState == 'nil'
-end
-
-function method:scopeStateName(stateName, mapName)
-    local idx = stateName:find "::"
-    if idx then
-        return stateName:sub(1, idx-1) .. self.scopeSep .. stateName:sub(idx+2)
-    else
-        return mapName .. self.scopeSep .. stateName
-    end
-end
-
-function indent(n)
-    return string.rep(" ", n)
 end

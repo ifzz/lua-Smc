@@ -1,6 +1,6 @@
 
 LUA     := lua
-SMC     := bin/smc
+SMC     := $(LUA) bin/smc
 #SMC     := java -jar Smc.jar
 VERSION := $(shell cd src && $(LUA) -e "require [[Smc]]; print(Smc._VERSION)")
 TARBALL := lua-smc-$(VERSION).tar.gz
@@ -67,10 +67,13 @@ install: dist rockspec
 	luarocks install rockspec/lua-smc-$(VERSION)-$(REV).rockspec
 
 export LUA_PATH=;;./src/?.lua;./runtime/lua/?.lua;./t/lua/?.lua
-tu:
+
+check: unit_test
+
+unit_test:
 	prove --exec=$(LUA) test/*.t
 
-test: tu
+test: unit_test
 	prove t/*.t
 
 testclean:
@@ -81,24 +84,6 @@ coverage:
 	prove --exec="$(LUA) -lluacov" test/*.t
 #	prove t/*.t
 	luacov
-
-doc:
-	coat2dot Smc.Model > doc/Model.dot
-	dot -T png -o doc/Model.png doc/Model.dot
-	coat2dot Smc.Parser > doc/Parser.dot
-	dot -T png -o doc/Parser.png doc/Parser.dot
-	coat2dot Smc.Checker > doc/Checker.dot
-	dot -T png -o doc/Checker.png doc/Checker.dot
-	coat2dot --no-attr --no-meth Smc > doc/Smc.dot
-	dot -T png -o doc/Smc.png doc/Smc.dot
-	coat2dot --no-attr Smc.C Smc.Graphviz Smc.Groovy Smc.Lua Smc.Perl Smc.Python Smc.Ruby Smc.Scala > doc/Languages1.dot
-	dot -T png -o doc/Languages1.png doc/Languages1.dot
-	coat2dot --no-attr Smc.Cpp Smc.Csharp Smc.Java Smc.ObjC Smc.Php Smc.Table Smc.Tcl Smc.Vb > doc/Languages2.dot
-	dot -T png -o doc/Languages2.png doc/Languages2.dot
-	$(SMC) -graph -glevel 0 -verbose -d ./doc src/Smc/Parser/Parser.sm
-	dot -T png -o doc/Parser_sm.png doc/Parser_sm.dot
-	$(SMC) -graph -glevel 0 -verbose -d ./doc src/Smc/Parser/Lexer.sm
-	dot -T png -o doc/Lexer_sm.png doc/Lexer_sm.dot
 
 bootstrap:
 	$(SMC) -lua -nocatch -g -verbose src/Smc/Parser/Lexer.sm
@@ -113,7 +98,8 @@ regen: cleangen src/Smc/Parser/Parser_sm.lua src/Smc/Parser/Lexer_sm.lua
 	java -jar Smc.jar -lua -nocatch -g $<
 
 clean: testclean
-	-rm -f MANIFEST *.bak doc/*.png doc/*.dot
+	make -C maintainer clean
+	-rm -f MANIFEST *.bak
 
-.PHONY: test rockspec CHANGES doc
+.PHONY: test rockspec CHANGES
 

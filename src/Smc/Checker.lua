@@ -4,7 +4,7 @@ require 'Coat'
 local table = require 'table'
 local ipairs = ipairs
 
-require 'Smc.Generator'
+require 'Smc.Visitor'
 
 class 'Smc.Checker'
 with 'Smc.Visitor'
@@ -55,9 +55,9 @@ function method:visitFSM (fsm)
         self:_error("\"%header\" missing.", fsm.filename)
     end
 
-    if self.targetLanguage == 'JAVA' and not fsm.name ~= fsm.context then
+    if self.targetLanguage == 'JAVA' and fsm.name ~= fsm.context then
         self:_error(".sm file name \"" .. fsm.name .. "\" does not match context class name \""
-                                       .. fsm.context .. "\".", filename)
+                                       .. fsm.context .. "\".", fsm.filename)
     end
 
     for _, map in ipairs(fsm.maps) do
@@ -169,114 +169,3 @@ function method:visitParameter (parameter)
     end
 end
 
-
-class 'Smc.Dumper'
-extends 'Smc.Generator'
-
-function method:visitFSM (fsm)
-    local stream = self.stream
-
-    stream:write("Start State: ", fsm.startState or "", "\n")
-    stream:write("    Context: ", fsm.context or "", "\n")
-    stream:write("       Maps:\n")
-
-    for _, map in ipairs(fsm.maps) do
-        map:visit(self)
-    end
-end
-
-function method:visitMap (map)
-    local stream = self.stream
-
-    stream:write("%map ", map.name, "\n")
-
-    local defaultState = map.defaultState
-    if defaultState then
-        defaultState:visit(self)
-    end
-
-    for _, state in ipairs(map.states) do
-        state:visit(self)
-    end
-end
-
-function method:visitState (state)
-    local stream = self.stream
-
-    if state.entryActions then
-        stream:write "\tEntry {\n"
-        for _, action in ipairs(state.entryActions) do
-            action:visit(self)
-        end
-        stream:write "\t}\n"
-    end
-
-    if state.exitActions then
-        stream:write "\tExit {\n"
-        for _, action in ipairs(state.exitActions) do
-            action:visit(self)
-        end
-        stream:write "\t}\n"
-    end
-
-    for _, trans in ipairs(state.transitions) do
-        trans:visit(self)
-    end
-end
-
-function method:visitTransition (transition)
-    local stream = self.stream
-
-    local params = table.concat(transition.parameters, ", ")
-    stream:write(transition.name, "(", params, ")\n")
-
-    for _, guard in ipairs(transition.guards) do
-        guard:visit(self)
-    end
-end
-
-function method:visitGuard (guard)
-    local stream = self.stream
-
-    stream:write(guard.name)
-    local condition = guard.condition
-    if condition ~= '' then
-        stream:write(" [", condition, "]")
-    end
-
-    local transType = guard.transType
-    if transType == 'TRANS_SET' or transType == 'TRANS_PUSH' then
-        stream:write " set"
-    elseif transType == 'TRANS_POP' then
-        stream:write " pop"
-    end
-
-    stream:write(" ", guard.endState)
-    if transType == 'TRANS_PUSH' then
-        stream:write("/", " push(", guard.pushState, ")")
-    end
-
-    stream:write " {\n"
-    local actions = guard.actions or {}
-    for _, action in ipairs(actions) do
-        stream:write "    "
-        action:visit(self)
-        stream:write ";\n"
-    end
-    stream:write "}\n"
-end
-
-function method:visitAction (action)
-    local stream = self.stream
-
-    stream:write(action.name)
-    if action.propertyFlag then
-        stream:write(" = ", action.arguments[1])
-    else
-        local args = table.concat(action.arguments or {}, ", ")
-        stream:write("(", args, ")")
-    end
-end
-
-function method:visitParameter (parameter)
-end

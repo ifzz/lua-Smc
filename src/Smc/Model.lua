@@ -8,6 +8,7 @@ local ipairs = ipairs
 local pairs = pairs
 local unpack = table.unpack or unpack
 
+
 abstract 'Smc.Element'
 
 has.filename        = { is = 'ro', isa = 'string', required = true }
@@ -104,6 +105,8 @@ has.allStates       = { is = 'ro', lazy_build = true }
 has.transitions     = { is = 'ro', lazy_build = true }
 has.hasEntryActions = { is = 'ro', lazy_build = true }
 has.hasExitActions  = { is = 'ro', lazy_build = true }
+has.mapName         = { is = 'ro', lazy_build = true }
+has.reflect         = { is = 'ro', lazy_build = true }
 
 function method:_build_allStates ()
     local default = self.defaultState
@@ -112,6 +115,10 @@ function method:_build_allStates ()
     else
         return self.states
     end
+end
+
+function method:_build_mapName ()
+    return self.name
 end
 
 function method:_build_transitions ()
@@ -148,10 +155,28 @@ function method:_build_hasExitActions ()
     return false
 end
 
+function method:_build_reflect ()
+    local t = {}
+    for _, trans in ipairs(self.fsm.transitions) do
+        local transName = trans.name
+        local def = 0
+        local defaultState = self.defaultState
+        if defaultState and defaultState:findTransition(transName) then
+            def = 2
+        end
+        table.insert(t, { name = transName, def = def })
+    end
+    return t
+end
+
 local StateId = 0
 function _get_nextStateId ()
     StateId = StateId + 1
     return StateId
+end
+
+function _get_index ()
+    return _get_nextStateId() - 1
 end
 
 function method:addState (state)
@@ -187,10 +212,8 @@ has.entryActions    = { is = 'rw', isa = 'table<Smc.Action>' }
 has.exitActions     = { is = 'rw', isa = 'table<Smc.Action>' }
 has.transitions     = { is = 'rw', isa = 'table<Smc.Transition>',
                         default = function () return {} end }
-
-function method:_build_name ()
-    return self.className .. '.' .. self.instanceName
-end
+has.fullName        = { is = 'ro', lazy_build = true }
+has.reflect         = { is = 'ro', lazy_build = true }
 
 function method:BUILD ()
     local name = self.instanceName
@@ -198,6 +221,37 @@ function method:BUILD ()
         self.instanceName = 'DefaultState'
     end
     self.className = name:sub(1,1):upper() .. name:sub(2)
+end
+
+function method:_build_name ()
+    return self.map.name .. '.' .. self.instanceName
+end
+
+function method:_build_fullName ()
+    local packageName = self.map.fsm._package
+    if packageName then
+        return packageName .. '.' .. self.name
+    else
+        return self.name
+    end
+end
+
+function method:_build_reflect ()
+    local t = {}
+    for _, trans in ipairs(self.map.fsm.transitions) do
+        local transName = trans.name
+        local def = 0
+        if self:findTransition(transName) then
+            def = 1
+        else
+            local defaultState = self.map.defaultState
+            if defaultState and defaultState:findTransition(transName) then
+                def = 2
+            end
+        end
+        table.insert(t, { name = transName, def = def })
+    end
+    return t
 end
 
 function method:addTransition (transition)
@@ -260,6 +314,10 @@ has.parameters      = { is = 'ro', isa = 'table<Smc.Parameter>', required = true
 has.guards          = { is = 'rw', isa = 'table<Smc.Guard>',
                         default = function () return {} end }
 has.hasCtxtReference= { is = 'ro', lazy_build = true }
+has.hasParameters   = { is = 'ro', lazy_build = true }
+has.isntDefault     = { is = 'ro', lazy_build = true }
+has.needFinalElse   = { is = 'ro', lazy_build = true }
+has.needFinalEnd    = { is = 'ro', lazy_build = true }
 
 function method:_build_hasCtxtReference ()
     for _, guard in ipairs(self.guards) do
@@ -268,6 +326,28 @@ function method:_build_hasCtxtReference ()
         end
     end
     return false
+end
+
+function method:_build_hasParameters ()
+    return #self.parameters > 0
+end
+
+function method:_build_isntDefault ()
+    return self.name ~= 'Default'
+end
+
+function method:_build_needFinalElse ()
+    local nullCondition = false
+    for _, guard in ipairs(self.guards) do
+        if guard.condition == '' then
+            nullCondition = true
+        end
+    end
+    return #self.guards > 0 and not nullCondition
+end
+
+function method:_build_needFinalEnd ()
+    return not self.needFinalElse and #self.guards > 1
 end
 
 function method:addGuard (guard)
@@ -294,33 +374,134 @@ has.endState        = { is = 'rw', isa = 'string', }
 has.pushState       = { is = 'rw', isa = 'string', }
 has.popArgs         = { is = 'rw', isa = 'string', }
 has.actions         = { is = 'rw', isa = 'table<Smc.Action>' }
+has.endStateName    = { is = 'ro', lazy_build = true }
 has.hasActions      = { is = 'ro', lazy_build = true }
+has.hasCondition    = { is = 'ro', lazy_build = true }
 has.hasCtxtReference= { is = 'ro', lazy_build = true }
+has.ifCondition     = { is = 'ro', lazy_build = true }
+has.elseifCondition = { is = 'ro', lazy_build = true }
+has.isLoopback      = { is = 'ro', lazy_build = true }
+has.doesEntry       = { is = 'ro', lazy_build = true }
+has.doesExit        = { is = 'ro', lazy_build = true }
+has.doesPush        = { is = 'ro', lazy_build = true }
+has.doesPushSet     = { is = 'ro', lazy_build = true }
+has.doesPushEntry   = { is = 'ro', lazy_build = true }
+has.doesPop         = { is = 'ro', lazy_build = true }
+has.doesEndPop      = { is = 'ro', lazy_build = true }
+has.doesSet         = { is = 'ro', lazy_build = true }
+has.pushStateName   = { is = 'ro', lazy_build = true }
+has.needVarEndState = { is = 'ro', lazy_build = true }
+has.varEndState     = { is = 'ro', lazy_build = true }
 
 function method:_build_hasActions ()
-    if self.actions then
-        for _, action in ipairs(self.actions) do
-            if not action.isEmptyStateStack then
-                return true
-            end
-        end
-    end
-    return false
+    return self.actions and #self.actions > 0
+end
+
+function method:_build_hasCondition ()
+    return self.condition ~= '' or #self.transition.guards ~= 1
+end
+
+function method:_build_ifCondition ()
+    return self == self.transition.guards[1] and self.condition ~= ''
+end
+
+function method:_build_elseifCondition ()
+    return self.condition ~= ''
 end
 
 function method:_build_hasCtxtReference ()
+    function hasRealActions ()
+        if self.actions then
+            for _, action in ipairs(self.actions) do
+                if not action.isEmptyStateStack then
+                    return true
+                end
+            end
+        end
+        return false
+    end
+
     local condition = self.condition
     local popArgs = self.popArgs
     return (condition:match'ctxt '
          or condition:match'ctxt.'
          or condition:match'ctxt->'
          or condition:match'ctxt:')
-        or self.hasActions
+        or hasRealActions()
         or (self.transType == 'TRANS_POP'
             and (popArgs:match'ctxt '
               or popArgs:match'ctxt.'
               or popArgs:match'ctxt->'
               or popArgs:match'ctxt:'))
+end
+
+local function scopeStateName(stateName, mapName)
+    local idx = stateName:find '::'
+    if idx then
+        return stateName:sub(1, idx-1) .. '.' .. stateName:sub(idx+2)
+    else
+        return mapName .. '.' .. stateName
+    end
+end
+
+function method:_build_endStateName ()
+    local endStateName = self.endState
+    if self.transType == 'TRANS_POP' or endStateName == 'nil' then
+        return endStateName
+    end
+    return scopeStateName(endStateName, self.transition.state.map.name)
+end
+
+function method:_build_isLoopback ()
+    return (self.transType == 'TRANS_SET' or self.transType == 'TRANS_PUSH') and self.endState == 'nil'
+end
+
+function method:_build_doesEntry ()
+    return (self.transType == 'TRANS_SET' and not self.isLoopback) or self.transType == 'TRANS_PUSH'
+end
+
+function method:_build_doesExit ()
+    return self.transType == 'TRANS_POP' or not self.isLoopback
+end
+
+function method:_build_doesPush ()
+    return self.transType == 'TRANS_PUSH'
+end
+
+function method:_build_doesPushSet ()
+    return not self.isLoopback or #self.actions > 0
+end
+
+function method:_build_doesPushEntry ()
+    return not self.isLoopback
+end
+
+function method:_build_doesPop ()
+    return self.transType == 'TRANS_POP'
+end
+
+function method:_build_doesEndPop ()
+    return self.transType == 'TRANS_POP' and self.endState ~= 'nil'
+end
+
+function method:_build_doesSet ()
+    return self.transType == 'TRANS_SET' and (not self.isLoopback or #self.actions > 0)
+end
+
+function method:_build_pushStateName ()
+    return scopeStateName(self.pushState, self.transition.state.map.name)
+end
+
+function method:_build_needVarEndState ()
+    return self.isLoopback and #self.actions > 0
+end
+
+function method:_build_varEndState ()
+    if self.needVarEndState then
+        return 'endState'
+    else
+        return self.endStateName
+    end
 end
 
 

@@ -8,7 +8,7 @@ use lib "$FindBin::Bin";
 use Test::More;
 use Util;
 
-$Util::smc = 'java -jar Smc.jar';
+#$Util::smc = 'java -jar Smc.jar';
 #$Util::test_graph = 0;
 #$Util::test_table = 1;
 #@Util::tests = ( 'Simple' );

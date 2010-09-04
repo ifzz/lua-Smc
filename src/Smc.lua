@@ -216,7 +216,7 @@ function method:parseArgs (args)
                     error "-cast not followed by a value"
                 end
                 if targetLanguage.castFlag then
-                    if not targetLanguage.accessLevels[vv] then
+                    if not targetLanguage.castTypes[vv] then
                         error("\"" .. vv ..  "\" is an invalid C++ cast type.")
                     end
                     opt.castType = vv
@@ -525,6 +525,7 @@ function method:main (args)
                 print(tostring(msg))
             end
             if self._dump then
+                require 'Smc.Dumper'
                 local generator = Smc.Dumper.new{
                     suffix = 'dummy',
                     srcfileBase = fsm.name,

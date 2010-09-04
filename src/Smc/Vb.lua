@@ -21,31 +21,3 @@ extends 'Smc.Generator'
 
 has.suffix          = { '+', default = 'vb' }
 
-function method:visitFSM (fsm)
-    local stream = self.stream
-
-end
-
-function method:visitMap (map)
-    local stream = self.stream
-end
-
-function method:visitState (state)
-    local stream = self.stream
-end
-
-function method:visitTransition (transition)
-    local stream = self.stream
-end
-
-function method:visitGuard (guard)
-    local stream = self.stream
-end
-
-function method:visitAction (action)
-    local stream = self.stream
-end
-
-function method:visitParameter (parameter)
-end
-

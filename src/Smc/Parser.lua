@@ -450,6 +450,7 @@ function method:setHeader (token)
         self:warning("%header previously specified, new header file ignored.", token.lineno)
     else
         self.fsm.header = token.value
+        self:addInclude(token)
     end
 end
 
