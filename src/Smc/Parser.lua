@@ -395,12 +395,12 @@ function method:setStartState (token)
     if self.fsm.startState then
         self:warning("%start previously specified, new start state ignored.", token.lineno)
     else
-        local name = token.value
-        local idx = name:find'::'
-        if not idx or name:sub(idx+2):find'::' then
+        local val = token.value
+        local idx = val:find'::'
+        if not idx or val:sub(idx+2):find'::' then
             self:_error("Start state must be of the form \"map::state\".", token.lineno)
         end
-        self.fsm.startState = name
+        self.fsm.startState = val
     end
 end
 

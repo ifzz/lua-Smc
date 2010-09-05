@@ -353,13 +353,12 @@ str << "EXIT TRANSITION : ${transition.state.fullName}::${transition.name}(${tra
     << std::endl;
 ]],
                 _guard_set = [[
-context.setState(${varEndState; format=scoped});
+context.setState(${varEndState});
 ]],
-                scoped = function (str) return str:gsub('%.','::') end,
                 _guard_push = [[
 ${doesPushSet?_guard_set()}
 ${doesPushEntry?_guard_entry()}
-context.pushState(${pushStateName; format=scoped});
+context.pushState(${pushStateName});
 ]],
                 _guard_pop = [[
 context.popState();

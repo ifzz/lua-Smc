@@ -272,7 +272,6 @@ $fsm->setState(${varEndState; format=scoped});
                     if s == 'endState' then
                         return '$endState'
                     end
-                    s = s:gsub("%.", "::")
                     return s:gsub("::", "::$")
                 end,
                 _guard_push = [[

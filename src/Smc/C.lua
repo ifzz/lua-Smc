@@ -274,9 +274,7 @@ setState(fsm, ${varEndState; format=scoped});
                     if s == 'endState' then
                         return s
                     end
-                    s = s:gsub("%.", "_")
-                    s = s:gsub("::", "_")
-                    return "&" .. s
+                    return "&" .. s:gsub("::", "_")
                 end,
                 _guard_push = [[
 ${doesPushSet?_guard_set()}

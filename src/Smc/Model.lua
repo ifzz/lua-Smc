@@ -436,11 +436,10 @@ function method:_build_hasCtxtReference ()
 end
 
 local function scopeStateName(stateName, mapName)
-    local idx = stateName:find '::'
-    if idx then
-        return stateName:sub(1, idx-1) .. '.' .. stateName:sub(idx+2)
+    if stateName:find '::' then
+        return stateName
     else
-        return mapName .. '.' .. stateName
+        return mapName .. '::' .. stateName
     end
 end
 

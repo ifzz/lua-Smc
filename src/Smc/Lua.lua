@@ -257,12 +257,12 @@ if fsm:getDebugFlag() then
 end
 ]],
                 _guard_set = [[
-fsm:setState(${varEndState})
+fsm:setState(${varEndState; format=scoped})
 ]],
                 _guard_push = [[
 ${doesPushSet?_guard_set()}
 ${doesPushEntry?_guard_entry()}
-fsm:pushState(${pushStateName})
+fsm:pushState(${pushStateName; format=scoped})
 ]],
                 _guard_pop = [[
 fsm:popState()

@@ -296,12 +296,12 @@ if (context.debugFlag)
     context.debugStream.println('EXIT TRANSITION : ${transition.state.fullName}.${transition.name}(${transition.parameters:_parameter_proto_context(); separator=', '})')
 ]],
                                 _guard_set = [[
-context.setState(${varEndState})
+context.setState(${varEndState; format=scoped})
 ]],
                                 _guard_push = [[
 ${doesPushSet?_guard_set()}
 ${doesPushEntry?_guard_entry()}
-context.pushState(${pushStateName})
+context.pushState(${pushStateName; format=scoped})
 ]],
                                 _guard_pop = [[
 context.popState()

@@ -596,12 +596,12 @@ if (context.getDebugFlag() == true)
 }
 ]],
                                 _guard_set = [[
-context.setState(${varEndState});
+context.setState(${varEndState; format=scoped});
 ]],
                                 _guard_push = [[
 ${doesPushSet?_guard_set()}
 ${doesPushEntry?_guard_entry()}
-context.pushState(${pushStateName});
+context.pushState(${pushStateName; format=scoped});
 ]],
                                 _guard_pop = [[
 context.popState();

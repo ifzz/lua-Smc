@@ -271,13 +271,12 @@ if ($fsm->getDebugFlag()) {
 }
 ]],
                 _guard_set = [[
-$fsm->setState($${varEndState; format=scoped});
+$fsm->setState($${varEndState});
 ]],
-                scoped = function (s) return s:gsub("%.", "::") end,
                 _guard_push = [[
 ${doesPushSet?_guard_set()}
 ${doesPushEntry?_guard_entry()}
-$fsm->pushState($${pushStateName; format=scoped});
+$fsm->pushState($${pushStateName});
 ]],
                 _guard_pop = [[
 $fsm->popState();
