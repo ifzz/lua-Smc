@@ -391,7 +391,6 @@ has.doesEndPop      = { is = 'ro', lazy_build = true }
 has.doesSet         = { is = 'ro', lazy_build = true }
 has.pushStateName   = { is = 'ro', lazy_build = true }
 has.needVarEndState = { is = 'ro', lazy_build = true }
-has.varEndState     = { is = 'ro', lazy_build = true }
 
 function method:_build_hasActions ()
     return self.actions and #self.actions > 0
@@ -493,14 +492,6 @@ end
 
 function method:_build_needVarEndState ()
     return self.isLoopback and #self.actions > 0
-end
-
-function method:_build_varEndState ()
-    if self.needVarEndState then
-        return 'endState'
-    else
-        return self.endStateName
-    end
 end
 
 

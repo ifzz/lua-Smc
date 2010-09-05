@@ -223,7 +223,7 @@ ${doesEntry?_guard_entry()}
 ${doesEndPop?_guard_end_pop()}
 ]],
                 _guard_end_state = [[
-my $${varEndState} = $fsm->getState();
+my $endState = $fsm->getState();
 ]],
                 _guard_exit = [[
 ${generator.debugLevel1?_guard_debug_before_exit()}
@@ -271,8 +271,10 @@ if ($fsm->getDebugFlag()) {
 }
 ]],
                 _guard_set = [[
-$fsm->setState($${varEndState});
+$fsm->setState($${needVarEndState?_end_state_var()!_end_state_no_var()});
 ]],
+                    _end_state_var = "endState",
+                    _end_state_no_var = "${endStateName}",
                 _guard_push = [[
 ${doesPushSet?_guard_set()}
 ${doesPushEntry?_guard_entry()}

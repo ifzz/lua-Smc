@@ -231,7 +231,7 @@ ${doesEntry?_guard_entry()}
 ${doesEndPop?_guard_end_pop()}
 ]],
                 _guard_end_state = [[
-const struct ${fsm.context}State* ${varEndState} = getState(fsm);
+const struct ${fsm.context}State* endState = getState(fsm);
 
 ]],
                 _guard_exit = [[
@@ -268,14 +268,11 @@ if (getDebugFlag(fsm) != 0) {
 }
 ]],
                 _guard_set = [[
-setState(fsm, ${varEndState; format=scoped});
+setState(fsm, ${needVarEndState?_end_state_var()!_end_state_no_var()});
 ]],
-                scoped = function (s)
-                    if s == 'endState' then
-                        return s
-                    end
-                    return "&" .. s:gsub("::", "_")
-                end,
+                    _end_state_var = "endState",
+                    _end_state_no_var = "${endStateName; format=scoped}",
+                scoped = function (s) return "&" .. s:gsub("::", "_") end,
                 _guard_push = [[
 ${doesPushSet?_guard_set()}
 ${doesPushEntry?_guard_entry()}

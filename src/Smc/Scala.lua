@@ -251,7 +251,7 @@ ${hasActions?_guard_actions()!_guard_no_action()}
 ${doesEndPop?_guard_end_pop()}
 ]],
                     _guard_end_state = [[
-val ${varEndState} = context.getState()
+val endState = context.getState()
 ]],
                     _guard_exit = [[
 ${generator.debugLevel1?_guard_debug_before_exit()}
@@ -305,8 +305,10 @@ if (context.getDebugFlag())
     context.getDebugStream().println("EXIT TRANSITION : ${transition.state.fullName}.${transition.name}(${transition.parameters:_parameter_proto_context(); separator=', '})")
 ]],
                                 _guard_set = [[
-context.setState(${varEndState; format=scoped})
+context.setState(${needVarEndState?_end_state_var()!_end_state_no_var()})
 ]],
+                                    _end_state_var = "endState",
+                                    _end_state_no_var = "${endStateName; format=scoped}",
                                 _guard_push = [[
 ${doesPushSet?_guard_set()}
 ${doesPushEntry?_guard_entry()}

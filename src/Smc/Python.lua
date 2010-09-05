@@ -176,7 +176,7 @@ ${hasActions?_guard_actions()!_guard_no_action()}
 ${doesEndPop?_guard_end_pop()}
 ]],
                 _guard_end_state = [[
-${varEndState} = fsm.getState()
+endState = fsm.getState()
 ]],
                 _guard_exit = [[
 ${generator.debugLevel1?_guard_debug_before_exit()}
@@ -227,8 +227,10 @@ if fsm.getDebugFlag() == True:
     fsm.getDebugStream().write("EXIT TRANSITION : ${transition.state.fullName}.${transition.name}(${transition.parameters:_guard_debug_param(); separator=', '})\n")
 ]],
                 _guard_set = [[
-fsm.setState(${varEndState; format=scoped})
+fsm.setState(${needVarEndState?_end_state_var()!_end_state_no_var()})
 ]],
+                    _end_state_var = "endState",
+                    _end_state_no_var = "${endStateName; format=scoped}",
                 _guard_push = [[
 ${doesPushSet?_guard_set()}
 ${doesPushEntry?_guard_entry()}
