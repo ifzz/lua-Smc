@@ -229,7 +229,6 @@ if fsm.getDebugFlag() == True:
                 _guard_set = [[
 fsm.setState(${varEndState; format=scoped})
 ]],
-                scoped = function (s) return s:gsub("%.", "::") end,
                 _guard_push = [[
 ${doesPushSet?_guard_set()}
 ${doesPushEntry?_guard_entry()}
