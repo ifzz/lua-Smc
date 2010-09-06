@@ -140,7 +140,7 @@ def ${name}(context: ${fsm.fsmClassname}${parameters:_parameter_proto()}): Unit 
                 _parameter_proto = ", ${name}: ${_type}",
             _base_state_debug = [[
 if (context.getDebugFlag())
-    context.getDebugStream().println("TRANSITION   : Default")
+    context.getDebugStream().println("TRANSITION   : Default()")
 
 ]],
         _map = [[
@@ -213,7 +213,7 @@ val ctxt: ${fsm.context} = context.getOwner()
 ]],
             _transition_debug = [[
 if (context.getDebugFlag())
-    context.getDebugStream().println("LEAVING STATE   : ${state.map.name}.${state.className}")
+    context.getDebugStream().println("LEAVING STATE   : ${state.fullName}")
 ]],
             _transition_else = [[
 else {
@@ -260,11 +260,11 @@ ${generator.debugLevel1?_guard_debug_after_exit()}
 ]],
                         _guard_debug_before_exit = [[
 if (context.getDebugFlag())
-    context.getDebugStream().println("BEFORE EXIT     : ${transition.state.fullName}.Exit(fsm)")
+    context.getDebugStream().println("BEFORE EXIT     : ${transition.state.fullName}.Exit()")
 ]],
                         _guard_debug_after_exit = [[
 if (context.getDebugFlag())
-    context.getDebugStream().println("AFTER EXIT      : ${transition.state.fullName}.Exit(fsm)")
+    context.getDebugStream().println("AFTER EXIT      : ${transition.state.fullName}.Exit()")
 ]],
                     _guard_debug_enter = [[
 if (context.getDebugFlag())
@@ -324,11 +324,11 @@ ${generator.debugLevel1?_guard_debug_after_entry()}
 ]],
                                     _guard_debug_before_entry = [[
 if (context.getDebugFlag())
-    context.getDebugStream().println("BEFORE ENTRY    : ${transition.state.fullName}.Exit(fsm)")
+    context.getDebugStream().println("BEFORE ENTRY    : ${transition.state.fullName}.Exit()")
 ]],
                                     _guard_debug_after_entry = [[
 if (context.getDebugFlag())
-    context.getDebugStream().println("AFTER ENTRY     : ${transition.state.fullName}.Exit(fsm)")
+    context.getDebugStream().println("AFTER ENTRY     : ${transition.state.fullName}.Exit()")
 ]],
                                 _guard_end_pop = [[
 context.${endStateName}(${popArgs})

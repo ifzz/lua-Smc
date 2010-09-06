@@ -135,12 +135,12 @@ if (context.getDebugFlag() == true)
 }
 ]],
                 _base_state_debug_no_stream = [[
-TRACE("TRANSITION   : Default\n\r");
+TRACE("TRANSITION   : Default()\n\r");
 ]],
                 _base_state_debug_stream = [[
 std::ostream& str = context.getDebugStream();
 
-str << "TRANSITION   : Default"
+str << "TRANSITION   : Default()"
     << std::endl;
 ]],
             _throw_transition_undefined_exception = [[
@@ -203,12 +203,12 @@ if (context.getDebugFlag() == true)
 
 ]],
                 _transition_debug_no_stream = [[
-TRACE("LEAVING STATE   : ${state.map.name}::${state.className}\n\r");
+TRACE("LEAVING STATE   : ${state.fullName}\n\r");
 ]],
                 _transition_debug_stream = [[
 std::ostream& str = context.getDebugStream();
 
-str << "LEAVING STATE   : ${state.map.name}::${state.className}"
+str << "LEAVING STATE   : ${state.fullName}"
     << std::endl;
 ]],
             _transition_else = [[
@@ -266,12 +266,12 @@ if (context.getDebugFlag() == true)
 }
 ]],
                         _guard_debug_before_exit_no_stream = [[
-TRACE("BEFORE EXIT     : ${transition.state.fullName}::Exit(fsm)\n\r");
+TRACE("BEFORE EXIT     : ${transition.state.fullName}.Exit()\n\r");
 ]],
                         _guard_debug_before_exit_stream = [[
 std::ostream& str = context.getDebugStream();
 
-str << "BEFORE EXIT     : ${transition.state.fullName}::Exit(fsm)"
+str << "BEFORE EXIT     : ${transition.state.fullName}.Exit()"
     << std::endl;
 ]],
                     _guard_debug_after_exit = [[
@@ -281,12 +281,12 @@ if (context.getDebugFlag() == true)
 }
 ]],
                         _guard_debug_after_exit_no_stream = [[
-TRACE("AFTER EXIT      : ${transition.state.fullName}::Exit(fsm)\n\r");
+TRACE("AFTER EXIT      : ${transition.state.fullName}.Exit()\n\r");
 ]],
                         _guard_debug_after_exit_stream = [[
 std::ostream& str = context.getDebugStream();
 
-str << "AFTER EXIT      : ${transition.state.fullName}::Exit(fsm)"
+str << "AFTER EXIT      : ${transition.state.fullName}.Exit()"
     << std::endl;
 ]],
                 _guard_debug_enter = [[
@@ -296,13 +296,13 @@ if (context.getDebugFlag() == true)
 }
 ]],
                     _guard_debug_enter_no_stream = [[
-TRACE("ENTER TRANSITION: ${transition.state.fullName}::${transition.name}(${transition.parameters:_guard_debug_param(); separator=', '})\n\r");
+TRACE("ENTER TRANSITION: ${transition.state.fullName}.${transition.name}(${transition.parameters:_guard_debug_param(); separator=', '})\n\r");
 ]],
                         _guard_debug_param = "${name}",
                     _guard_debug_enter_stream = [[
 std::ostream& str = context.getDebugStream();
 
-str << "ENTER TRANSITION: ${transition.state.fullName}::${transition.name}(${transition.parameters:_guard_debug_param(); separator=', '})"
+str << "ENTER TRANSITION: ${transition.state.fullName}.${transition.name}(${transition.parameters:_guard_debug_param(); separator=', '})"
     << std::endl;
 ]],
                 _guard_no_action = [[
@@ -348,12 +348,12 @@ if (context.getDebugFlag() == true)
 }
 ]],
                     _guard_debug_exit_no_stream = [[
-TRACE("EXIT TRANSITION : ${transition.state.fullName}::${transition.name}(${transition.parameters:_guard_debug_param(); separator=', '})\n\r");
+TRACE("EXIT TRANSITION : ${transition.state.fullName}.${transition.name}(${transition.parameters:_guard_debug_param(); separator=', '})\n\r");
 ]],
                     _guard_debug_exit_stream = [[
 std::ostream& str = context.getDebugStream();
 
-str << "EXIT TRANSITION : ${transition.state.fullName}::${transition.name}(${transition.parameters:_guard_debug_param(); separator=', '})"
+str << "EXIT TRANSITION : ${transition.state.fullName}.${transition.name}(${transition.parameters:_guard_debug_param(); separator=', '})"
     << std::endl;
 ]],
                 _guard_set = [[
@@ -381,12 +381,12 @@ if (context.getDebugFlag() == true)
 }
 ]],
                         _guard_debug_before_entry_no_stream = [[
-TRACE("BEFORE ENTRY    : ${transition.state.fullName}::Entry(fsm)\n\r");
+TRACE("BEFORE ENTRY    : ${transition.state.fullName}.Entry()\n\r");
 ]],
                         _guard_debug_before_entry_stream = [[
 std::ostream& str = context.getDebugStream();
 
-str << "BEFORE ENTRY    : ${transition.state.fullName}::Entry(fsm)"
+str << "BEFORE ENTRY    : ${transition.state.fullName}.Entry()"
     << std::endl;
 ]],
                     _guard_debug_after_entry = [[
@@ -396,12 +396,12 @@ if (context.getDebugFlag() == true)
 }
 ]],
                         _guard_debug_after_entry_no_stream = [[
-TRACE("AFTER ENTRY     : ${transition.state.fullName}::Entry(fsm)\n\r");
+TRACE("AFTER ENTRY     : ${transition.state.fullName}.Entry()\n\r");
 ]],
                         _guard_debug_after_entry_stream = [[
 std::ostream& str = context.getDebugStream();
 
-str << "AFTER ENTRY     : ${transition.state.fullName}::Entry(fsm)"
+str << "AFTER ENTRY     : ${transition.state.fullName}.Entry()"
     << std::endl;
 ]],
                 _guard_end_pop = [[

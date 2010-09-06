@@ -133,7 +133,7 @@ def ${name} (${fsm.fsmClassname} context${parameters:_parameter_proto()}) {
                 _parameter_proto = ", ${_type?_parameter_type()}${name}",
             _base_state_debug = [[
         if (context.debugFlag)
-            context.debugStream.println 'TRANSITION   : Default'
+            context.debugStream.println 'TRANSITION   : Default()'
 
 ]],
         _map = [[
@@ -208,7 +208,7 @@ def ctxt = context.owner
 ]],
             _transition_debug = [[
 if (context.debugFlag)
-    context.debugStream.println('LEAVING STATE   : ${state.map.name}.${state.className}')
+    context.debugStream.println('LEAVING STATE   : ${state.fullName}')
 ]],
             _transition_else = [[
 else {
@@ -256,11 +256,11 @@ ${generator.debugLevel1?_guard_debug_after_exit()}
 ]],
                         _guard_debug_before_exit = [[
 if (context.debugFlag)
-    context.debugStream.println('BEFORE EXIT     : ${transition.state.fullName}.Exit(fsm)')
+    context.debugStream.println('BEFORE EXIT     : ${transition.state.fullName}.Exit()')
 ]],
                         _guard_debug_after_exit = [[
 if (context.debugFlag)
-    context.debugStream.println('AFTER EXIT      : ${transition.state.fullName}.Exit(fsm)')
+    context.debugStream.println('AFTER EXIT      : ${transition.state.fullName}.Exit()')
 ]],
                     _guard_debug_enter = [[
 if (context.debugFlag)
@@ -320,11 +320,11 @@ ${generator.debugLevel1?_guard_debug_after_entry()}
 ]],
                                     _guard_debug_before_entry = [[
 if (context.debugFlag)
-    context.debugStream.println('BEFORE ENTRY    : ${transition.state.fullName}.Exit(fsm)')
+    context.debugStream.println('BEFORE ENTRY    : ${transition.state.fullName}.Exit()')
 ]],
                                     _guard_debug_after_entry = [[
 if (context.debugFlag)
-    context.debugStream.println('AFTER ENTRY     : ${transition.state.fullName}.Exit(fsm)')
+    context.debugStream.println('AFTER ENTRY     : ${transition.state.fullName}.Exit()')
 ]],
                                 _guard_end_pop = [[
 context.${endStateName}(${popArgs})

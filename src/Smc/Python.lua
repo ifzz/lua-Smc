@@ -71,7 +71,7 @@ def ${name}(self, fsm${parameters:_parameter_proto()}):
                 _parameter_proto = ", ${name}",
             _base_state_debug = [[
 if fsm.getDebugFlag() == True:
-    fsm.getDebugStream().write('TRANSITION   : Default\n')
+    fsm.getDebugStream().write('TRANSITION   : Default()\n')
 ]],
             _base_state_reflect = [[
 
@@ -139,7 +139,7 @@ ctxt = fsm.getOwner()
 ]],
             _transition_debug = [[
 if fsm.getDebugFlag() == True:
-    fsm.getDebugStream().write("LEAVING STATE   : ${state.map.name}.${state.className}\n")
+    fsm.getDebugStream().write("LEAVING STATE   : ${state.fullName}\n")
 ]],
             _transition_else = [[
 else:
@@ -182,11 +182,11 @@ ${generator.debugLevel1?_guard_debug_after_exit()}
 ]],
                     _guard_debug_before_exit = [[
 if fsm.getDebugFlag() == True:
-    fsm.getDebugStream().write("BEFORE EXIT     : ${transition.state.fullName}.Exit(fsm)\n")
+    fsm.getDebugStream().write("BEFORE EXIT     : ${transition.state.fullName}.Exit()\n")
 ]],
                     _guard_debug_after_exit = [[
 if fsm.getDebugFlag() == True:
-    fsm.getDebugStream().write("AFTER EXIT      : ${transition.state.fullName}.Exit(fsm)\n")
+    fsm.getDebugStream().write("AFTER EXIT      : ${transition.state.fullName}.Exit()\n")
 ]],
                 _guard_debug_enter = [[
 if fsm.getDebugFlag() == True:
@@ -243,11 +243,11 @@ ${generator.debugLevel1?_guard_debug_after_entry()}
 ]],
                     _guard_debug_before_entry = [[
 if fsm.getDebugFlag() == True:
-    fsm.getDebugStream().write("BEFORE ENTRY    : ${transition.state.fullName}.Entry(fsm)\n")
+    fsm.getDebugStream().write("BEFORE ENTRY    : ${transition.state.fullName}.Entry()\n")
 ]],
                     _guard_debug_after_entry = [[
 if fsm.getDebugFlag() == True:
-    fsm.getDebugStream().write("AFTER ENTRY     : ${transition.state.fullName}.Entry(fsm)\n")
+    fsm.getDebugStream().write("AFTER ENTRY     : ${transition.state.fullName}.Entry()\n")
 ]],
                 _guard_end_pop = [[
 fsm.${endStateName}(${popArgs})

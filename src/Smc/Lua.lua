@@ -85,7 +85,7 @@ end
                 _parameter_proto = ", ${name}",
             _base_state_debug = [[
 if fsm:getDebugFlag() then
-    fsm:getDebugStream():write("TRANSITION   : Default\n")
+    fsm:getDebugStream():write("TRANSITION   : Default()\n")
 end
 ]],
             _base_state_reflect = [[
@@ -162,7 +162,7 @@ local ctxt = fsm:getOwner()
 ]],
             _transition_debug = [[
 if fsm:getDebugFlag() then
-    fsm:getDebugStream():write("LEAVING STATE   : ${state.map.name}.${state.className}\n")
+    fsm:getDebugStream():write("LEAVING STATE   : ${state.fullName}\n")
 end
 ]],
             _transition_else = [[
@@ -215,17 +215,17 @@ ${generator.debugLevel1?_guard_debug_after_exit()}
 ]],
                     _guard_debug_before_exit = [[
 if fsm:getDebugFlag() then
-    fsm:getDebugStream():write("BEFORE EXIT     : ${transition.state.fullName}.Exit(fsm)\n")
+    fsm:getDebugStream():write("BEFORE EXIT     : ${transition.state.fullName}.Exit()\n")
 end
 ]],
                     _guard_debug_after_exit = [[
 if fsm:getDebugFlag() then
-    fsm:getDebugStream():write("AFTER EXIT      : ${transition.state.fullName}.Exit(fsm)\n")
+    fsm:getDebugStream():write("AFTER EXIT      : ${transition.state.fullName}.Exit()\n")
 end
 ]],
                 _guard_debug_enter = [[
 if fsm:getDebugFlag() then
-    fsm:getDebugStream():write("ENTER TRANSITION: ${transition.state.fullName}:${transition.name}(${transition.parameters:_guard_debug_param(); separator=', '})\n")
+    fsm:getDebugStream():write("ENTER TRANSITION: ${transition.state.fullName}.${transition.name}(${transition.parameters:_guard_debug_param(); separator=', '})\n")
 end
 ]],
                     _guard_debug_param = [[${name}=" .. tostring(${name}) .. "]],
@@ -253,7 +253,7 @@ end
                     _guard_actions_not_protected = "${actions:_action()}",
                 _guard_debug_exit = [[
 if fsm:getDebugFlag() then
-    fsm:getDebugStream():write("EXIT TRANSITION : ${transition.state.fullName}:${transition.name}(${transition.parameters:_guard_debug_param(); separator=', '})\n")
+    fsm:getDebugStream():write("EXIT TRANSITION : ${transition.state.fullName}.${transition.name}(${transition.parameters:_guard_debug_param(); separator=', '})\n")
 end
 ]],
                 _guard_set = [[
@@ -276,12 +276,12 @@ ${generator.debugLevel1?_guard_debug_after_entry()}
 ]],
                     _guard_debug_before_entry = [[
 if fsm:getDebugFlag() then
-    fsm:getDebugStream():write("BEFORE ENTRY    : ${transition.state.fullName}.Entry(fsm)\n")
+    fsm:getDebugStream():write("BEFORE ENTRY    : ${transition.state.fullName}.Entry()\n")
 end
 ]],
                     _guard_debug_after_entry = [[
 if fsm:getDebugFlag() then
-    fsm:getDebugStream():write("AFTER ENTRY     : ${transition.state.fullName}.Entry(fsm)\n")
+    fsm:getDebugStream():write("AFTER ENTRY     : ${transition.state.fullName}.Entry()\n")
 end
 ]],
                 _guard_end_pop = [[

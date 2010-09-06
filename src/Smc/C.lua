@@ -116,7 +116,7 @@ static void ${fsm._package?_package()}${fsm.context}State_${name}(struct ${fsm.f
                 _parameter_proto = ", ${_type} ${name}",
             _base_state_debug = [[
 if (getDebugFlag(fsm) != 0) {
-    TRACE("TRANSITION   : %s.%s\n\r", getName(getState(fsm)), getTransition(fsm));
+    TRACE("TRANSITION   : %s.%s()\n\r", getName(getState(fsm)), getTransition(fsm));
 }
 ]],
         _map = [[
@@ -187,7 +187,7 @@ struct ${fsm._package?_package()}${fsm.context}* ctxt = getOwner(fsm);
 ]],
             _transition_debug = [[
 if (getDebugFlag(fsm) != 0) {
-    TRACE("LEAVING STATE   : ${state.map.name}_${state.className}\n\r");
+    TRACE("LEAVING STATE   : ${state.fullName}\n\r");
 }
 ]],
             _transition_else = [[
@@ -242,17 +242,17 @@ ${generator.debugLevel1?_guard_debug_after_exit()}
 ]],
                     _guard_debug_before_exit = [[
 if (getDebugFlag(fsm) != 0) {
-    TRACE("BEFORE EXIT     : EXIT_STATE(${transition.state.fullName})\n\r");
+    TRACE("BEFORE EXIT     : ${transition.state.fullName}.Exit()\n\r");
 }
 ]],
                     _guard_debug_after_exit = [[
 if (getDebugFlag(fsm) != 0) {
-    TRACE("AFTER EXIT      : EXIT_STATE(${transition.state.fullName})\n\r");
+    TRACE("AFTER EXIT      : ${transition.state.fullName}.Exit()\n\r");
 }
 ]],
                 _guard_debug_enter = [[
 if (getDebugFlag(fsm) != 0) {
-    TRACE("ENTER TRANSITION: ${transition.state.fullName}_${transition.name}(fsm${transition.parameters:_parameter_context_call(); separator=', '})\n\r");
+    TRACE("ENTER TRANSITION: ${transition.state.fullName}.${transition.name}(${transition.parameters:_parameter_context_call(); separator=', '})\n\r");
 }
 ]],
                 _guard_no_action = "${hasCondition?_guard_no_action_if()}",
@@ -265,7 +265,7 @@ ${actions:_action()}
 ]],
                 _guard_debug_exit = [[
 if (getDebugFlag(fsm) != 0) {
-    TRACE("EXIT TRANSITION : ${transition.state.fullName}_${transition.name}(fsm${transition.parameters:_parameter_context_call(); separator=', '})\n\r");
+    TRACE("EXIT TRANSITION : ${transition.state.fullName}.${transition.name}(${transition.parameters:_parameter_context_call(); separator=', '})\n\r");
 }
 ]],
                 _guard_set = [[
@@ -289,12 +289,12 @@ ${generator.debugLevel1?_guard_debug_after_entry()}
 ]],
                     _guard_debug_before_entry = [[
 if (getDebugFlag(fsm) != 0) {
-    TRACE("BEFORE ENTRY    : ENTRY_STATE(${transition.state.fullName})\n\r");
+    TRACE("BEFORE ENTRY    : ${transition.state.fullName}.Entry()\n\r");
 }
 ]],
                     _guard_debug_after_entry = [[
 if (getDebugFlag(fsm) != 0) {
-    TRACE("AFTER ENTRY     : ENTRY_STATE(${transition.state.fullName})\n\r");
+    TRACE("AFTER ENTRY     : ${transition.state.fullName}.Entry()\n\r");
 }
 ]],
                 _guard_end_pop = [[

@@ -84,7 +84,7 @@ ${name} => undef,
             _base_state_debug = [[
 if ($fsm->getDebugFlag()) {
     my $fh = $fsm->getDebugStream();
-    print $fh "TRANSITION   : Default\n";
+    print $fh "TRANSITION   : Default()\n";
 }
 confess "TransitionUndefinedException\n",
     "State: ", $fsm->getState()->getName(), "\n",
@@ -180,7 +180,7 @@ my $ctxt = $fsm->getOwner();
             _transition_debug = [[
 if ($fsm->getDebugFlag()) {
     my $fh = $fsm->getDebugStream();
-    print $fh "LEAVING STATE   : ${state.map.name}.${state.className}\n";
+    print $fh "LEAVING STATE   : ${state.fullName}\n";
 }
 ]],
             _transition_else = [[
@@ -234,19 +234,19 @@ ${generator.debugLevel1?_guard_debug_after_exit()}
                     _guard_debug_before_exit = [[
 if ($fsm->getDebugFlag()) {
     my $fh = $fsm->getDebugStream();
-    print $fh "BEFORE EXIT     : ${transition.state.fullName}->Exit($fsm)\n";
+    print $fh "BEFORE EXIT     : ${transition.state.fullName}.Exit()\n";
 }
 ]],
                     _guard_debug_after_exit = [[
 if ($fsm->getDebugFlag()) {
     my $fh = $fsm->getDebugStream();
-    print $fh "AFTER EXIT      : ${transition.state.fullName}->Exit($fsm)\n";
+    print $fh "AFTER EXIT      : ${transition.state.fullName}.Exit()\n";
 }
 ]],
                 _guard_debug_enter = [[
 if ($fsm->getDebugFlag()) {
     my $fh = $fsm->getDebugStream();
-    print $fh "ENTER TRANSITION: ${transition.state.fullName}->${transition.name}(${transition.parameters:_guard_debug_param(); separator=', '})\n";
+    print $fh "ENTER TRANSITION: ${transition.state.fullName}.${transition.name}(${transition.parameters:_guard_debug_param(); separator=', '})\n";
 }
 ]],
                     _guard_debug_param = "${name}",
@@ -268,7 +268,7 @@ warn $@ if ($@);
                 _guard_debug_exit = [[
 if ($fsm->getDebugFlag()) {
     my $fh = $fsm->getDebugStream();
-    print $fh "EXIT TRANSITION : ${transition.state.fullName}->${transition.name}(${transition.parameters:_guard_debug_param(); separator=', '})\n";
+    print $fh "EXIT TRANSITION : ${transition.state.fullName}.${transition.name}(${transition.parameters:_guard_debug_param(); separator=', '})\n";
 }
 ]],
                 _guard_set = [[
@@ -292,13 +292,13 @@ ${generator.debugLevel1?_guard_debug_after_entry()}
                     _guard_debug_before_entry = [[
 if ($fsm->getDebugFlag()) {
     my $fh = $fsm->getDebugStream();
-    print $fh "BEFORE ENTRY    : ${transition.state.fullName}.Entry(fsm)\n";
+    print $fh "BEFORE ENTRY    : ${transition.state.fullName}.Entry()\n";
 }
 ]],
                     _guard_debug_after_entry = [[
 if ($fsm->getDebugFlag()) {
     my $fh = $fsm->getDebugStream();
-    print $fh "AFTER ENTRY     : ${transition.state.fullName}.Entry(fsm)\n";
+    print $fh "AFTER ENTRY     : ${transition.state.fullName}.Entry()\n";
 }
 ]],
                 _guard_end_pop = [[

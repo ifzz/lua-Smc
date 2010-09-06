@@ -315,7 +315,7 @@ if (context.getDebugFlag() == true)
     context.getDebugStream();
 
     str.println(
-        "TRANSITION   : Default");
+        "TRANSITION   : Default()");
 }
 
 ]],
@@ -480,7 +480,7 @@ if (context.getDebugFlag() == true)
 {
     PrintStream str = context.getDebugStream();
 
-    str.println("LEAVING STATE   : ${state.map.name}.${state.className}");
+    str.println("LEAVING STATE   : ${state.fullName}");
 }
 
 ]],
@@ -536,7 +536,7 @@ if (context.getDebugFlag() == true)
 {
     PrintStream str = context.getDebugStream();
 
-    str.println("BEFORE EXIT     : ${transition.state.fullName}.Exit(fsm)");
+    str.println("BEFORE EXIT     : ${transition.state.fullName}.Exit()");
 }
 ]],
                         _guard_debug_after_exit = [[
@@ -544,7 +544,7 @@ if (context.getDebugFlag() == true)
 {
     PrintStream str = context.getDebugStream();
 
-    str.println("AFTER EXIT      : ${transition.state.fullName}.Exit(fsm)");
+    str.println("AFTER EXIT      : ${transition.state.fullName}.Exit()");
 }
 ]],
                     _guard_debug_enter = [[
@@ -618,7 +618,7 @@ if (context.getDebugFlag() == true)
 {
     PrintStream str = context.getDebugStream();
 
-    str.println("BEFORE ENTRY    : ${transition.state.fullName}.Exit(fsm)");
+    str.println("BEFORE ENTRY    : ${transition.state.fullName}.Exit()");
 }
 ]],
                                     _guard_debug_after_entry = [[
@@ -626,7 +626,7 @@ if (context.getDebugFlag() == true)
 {
     PrintStream str = context.getDebugStream();
 
-    str.println("AFTER ENTRY     : ${transition.state.fullName}.Exit(fsm)");
+    str.println("AFTER ENTRY     : ${transition.state.fullName}.Exit()");
 }
 ]],
                                 _guard_end_pop = [[

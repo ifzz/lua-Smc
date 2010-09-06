@@ -81,7 +81,7 @@ public function ${name}($fsm${parameters:_parameter_proto()}) {
                     _parameter_type = "${_type} ",
             _base_state_debug = [[
 if ($fsm->getDebugFlag() == true) {
-    fwrite($fsm->getDebugStream(), "TRANSITION   : Default\n");
+    fwrite($fsm->getDebugStream(), "TRANSITION   : Default()\n");
 }
 ]],
         _map = [[
@@ -164,7 +164,7 @@ $ctxt = $fsm->getOwner();
 ]],
             _transition_debug = [[
 if ($fsm->getDebugFlag() == true) {
-    fwrite($fsm->getDebugStream(), "LEAVING STATE   : ${state.map.name}.${state.className}\n");
+    fwrite($fsm->getDebugStream(), "LEAVING STATE   : ${state.fullName}\n");
 }
 ]],
             _transition_else = [[
@@ -213,17 +213,17 @@ ${generator.debugLevel1?_guard_debug_after_exit()}
 ]],
                     _guard_debug_before_exit = [[
 if ($fsm->getDebugFlag() == true) {
-    fwrite($fsm->getDebugStream(), "BEFORE EXIT     : ${transition.state.fullName}->Exit_($fsm)\n");
+    fwrite($fsm->getDebugStream(), "BEFORE EXIT     : ${transition.state.fullName}.Exit()\n");
 }
 ]],
                     _guard_debug_after_exit = [[
 if ($fsm->getDebugFlag() == true) {
-    fwrite($fsm->getDebugStream(), "AFTER EXIT      : ${transition.state.fullName}->Exit_($fsm)\n");
+    fwrite($fsm->getDebugStream(), "AFTER EXIT      : ${transition.state.fullName}.Exit()\n");
 }
 ]],
                 _guard_debug_enter = [[
 if ($fsm->getDebugFlag() == true) {
-    fwrite($fsm->getDebugStream(), "ENTER TRANSITION: ${transition.state.fullName}->${transition.name}(${transition.parameters:_guard_debug_param(); separator=', '})\n");
+    fwrite($fsm->getDebugStream(), "ENTER TRANSITION: ${transition.state.fullName}.${transition.name}(${transition.parameters:_guard_debug_param(); separator=', '})\n");
 }
 ]],
                     _guard_debug_param = "${name}",
@@ -262,7 +262,7 @@ ${doesEntry?_guard_entry()}
 ]],
                 _guard_debug_exit = [[
 if ($fsm->getDebugFlag() == true) {
-    fwrite($fsm->getDebugStream(), "EXIT TRANSITION : ${transition.state.fullName}->${transition.name}(${transition.parameters:_guard_debug_param(); separator=', '})\n");
+    fwrite($fsm->getDebugStream(), "EXIT TRANSITION : ${transition.state.fullName}.${transition.name}(${transition.parameters:_guard_debug_param(); separator=', '})\n");
 }
 ]],
                 _guard_set = [[
@@ -286,12 +286,12 @@ ${generator.debugLevel1?_guard_debug_after_entry()}
 ]],
                     _guard_debug_before_entry = [[
 if ($fsm->getDebugFlag() == true) {
-    fwrite($fsm->getDebugStream(), "BEFORE ENTRY    : ${transition.state.fullName}->Entry($fsm)\n");
+    fwrite($fsm->getDebugStream(), "BEFORE ENTRY    : ${transition.state.fullName}.Entry()\n");
 }
 ]],
                     _guard_debug_after_entry = [[
 if ($fsm->getDebugFlag() == true) {
-    fwrite($fsm->getDebugStream(), "AFTER ENTRY     : ${transition.state.fullName}->Entry($fsm)\n");
+    fwrite($fsm->getDebugStream(), "AFTER ENTRY     : ${transition.state.fullName}.Entry()\n");
 }
 ]],
                 _guard_end_pop = [[
