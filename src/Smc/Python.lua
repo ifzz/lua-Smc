@@ -81,8 +81,9 @@ def getTransitions (self):
         _map = [[
 
 class ${name}_Default(${fsm.context}State):
+    pass
     ${defaultState?_map_default_state()}
-    ${generator.reflectFlag?_state_reflect()!_else_pass()}
+    ${generator.reflectFlag?_state_reflect()}
 
 ${states:_state()}
 
@@ -91,22 +92,18 @@ class ${name}(object):
     Default = ${name}_Default('${name}.Default', -1)
 ]],
             _map_default_state = "${defaultState.transitions:_transition()}",
-            _else_pass = "${defaultState?_empty()!_pass()}",
-            _empty = '',
-            _pass = [[pass
-]],
             _state_init = [[
 ${instanceName} = ${map.name}_${className}('${map.name}.${className}', ${map.nextStateId})
 ]],
         _state = [[
 
 class ${map.name}_${className}(${map.name}_Default):
+    pass
     ${entryActions?_state_entry()}
     ${exitActions?_state_exit()}
     ${transitions:_transition()}
     ${generator.reflectFlag?_state_reflect()}
 ]],
-            -- pass FIXME ???
             _state_entry = [[
 
 def Entry(self, fsm):
