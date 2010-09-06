@@ -39,8 +39,10 @@ function method:_build_template ()
  */
 
 ${_preamble()}
+${fsm._package; format=open_pkg}
 ${_base_state()}
 ${fsm.maps:_map()}
+${fsm._package; format=close_pkg}
 
 /*
  * Local variables:
@@ -48,6 +50,8 @@ ${fsm.maps:_map()}
  * End:
  */
 ]],
+        open_pkg = function (s) return s:gsub("([%w_]+):?:?","namespace %1\n{\n\n") end,
+        close_pkg = function (s) return s:gsub("([%w_]+):?:?","\n}\n") end,
         _preamble = [[
 ${fsm.source}
 ${fsm.includeList:_include()}
@@ -433,10 +437,12 @@ function method:_build_template ()
 #define _H_${generator.targetfileBase; format=guarded}
 
 ${_preample()}
+${fsm._package; format=open_pkg}
 ${_forward_decl()}
 ${_base_state()}
 ${fsm.maps:_map()}
 ${_context()}
+${fsm._package; format=close_pkg}
 
 #endif // _H_${generator.targetfileBase; format=guarded}
 
@@ -451,6 +457,8 @@ ${_context()}
             s = s:gsub("/", "_")
             return s:upper()
         end,
+        open_pkg = function (s) return s:gsub("([%w_]+):?:?","\nnamespace %1\n{\n") end,
+        close_pkg = function (s) return s:gsub("([%w_]+):?:?","\n}\n") end,
         _preample = [[
 ${generator.noStreamFlag?_empty()!_def_stream()}
 ${generator.noExceptionFlag?_def_no_exception()}

@@ -48,7 +48,7 @@ ${fsm.importList:_import()}
 ]],
             __package = [[
 
-package ${fsm._package}
+package ${fsm._package; format=scoped}
 ]],
             _concurrent = [[
 

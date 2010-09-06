@@ -54,7 +54,7 @@ ${generator.debugLevel0?_import_debug()}
 ${generator.reflectFlag?_import_reflect()}
 ]],
             __package = [[
-package ${fsm._package};
+package ${fsm._package; format=scoped};
 
 ]],
             _import = [[

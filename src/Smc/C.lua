@@ -70,12 +70,13 @@ ${fsm.hasEntryActions?_def_entry()!_def_no_entry()}
 ${fsm.hasExitActions?_def_exit()!_def_no_exit()}
 ${fsm.transitions:_transition_base_state()}
 
-static void ${fsm.context}State_Default(struct ${fsm.fsmClassname}* fsm)
+static void ${fsm._package?_package()}${fsm.context}State_Default(struct ${fsm.fsmClassname}* fsm)
 {
     ${generator.debugLevel0?_base_state_debug()}
     State_Default(fsm);
 }
 ]],
+            _package = "${fsm._package; format=scoped}_",
             _populate_entry = [[
 state##_Entry, \
 ]],
@@ -107,7 +108,7 @@ state##_${name}, \
             _transition_base_state = "${isntDefault?_transition_base_state_if()}\n",
             _transition_base_state_if = [[
 
-static void ${fsm.context}State_${name}(struct ${fsm.fsmClassname}* fsm${parameters:_parameter_proto()})
+static void ${fsm._package?_package()}${fsm.context}State_${name}(struct ${fsm.fsmClassname}* fsm${parameters:_parameter_proto()})
 {
     getState(fsm)->Default(fsm);
 }
@@ -125,55 +126,55 @@ ${states:_state()}
             _map_default_state = [[
 
 ${fsm.transitions:_transition_default_def()}
-#define ${name}_DefaultState_Default ${fsm.context}State_Default
+#define ${fsm._package?_package()}${name}_DefaultState_Default ${fsm._package?_package()}${fsm.context}State_Default
 ${defaultState.transitions:_transition()}
 ]],
                 _transition_default_def = "${isntDefault?_transition_default_def_if()}\n",
                 _transition_default_def_if = [[
-#define ${mapName}_DefaultState_${name} ${fsm.context}State_${name}
+#define ${fullName; format=scoped}_DefaultState_${name} ${fsm._package?_package()}${fsm.context}State_${name}
 ]],
         _state = [[
 
 ${fsm.transitions:_transition_def()}
-#define ${map.name}_${instanceName}_Default ${map.defaultState?_default_state_name()!_base_state_name()}_Default
-#define ${map.name}_${instanceName}_Entry NULL
-#define ${map.name}_${instanceName}_Exit NULL
+#define ${fullName; format=scoped}_Default ${map.defaultState?_default_state_name()!_base_state_name()}_Default
+#define ${fullName; format=scoped}_Entry NULL
+#define ${fullName; format=scoped}_Exit NULL
 ${entryActions?_state_entry()}
 ${exitActions?_state_exit()}
 ${transitions:_transition()}
 
-const struct ${fsm.context}State ${map.name}_${instanceName} = { POPULATE_STATE(${map.name}_${instanceName}), "${map.name}_${instanceName}", ${map.nextStateId} };
+const struct ${fsm._package?_package()}${fsm.context}State ${fullName; format=scoped} = { POPULATE_STATE(${fullName; format=scoped}), "${fullName}", ${map.nextStateId} };
 ]],
             _transition_def = "${isntDefault?_transition_def_if()}\n",
             _transition_def_if = [[
-#define ${map.name}_${instanceName}_${name} ${map.defaultState?_default_state_name()!_base_state_name()}_${name}
+#define ${map.fullName; format=scoped}_${instanceName}_${name} ${map.defaultState?_default_state_name()!_base_state_name()}_${name}
 ]],
-                _default_state_name = "${map.name}_DefaultState",
-                _base_state_name = "${fsm.context}State",
+                _default_state_name = "${map.fullName; format=scoped}_DefaultState",
+                _base_state_name = "${fsm._package?_package()}${fsm.context}State",
             _state_entry = [[
 
-#undef ${map.name}_${instanceName}_Entry
-void ${map.name}_${instanceName}_Entry(struct ${fsm.fsmClassname}* fsm)
+#undef ${fullName; format=scoped}_Entry
+void  ${fullName; format=scoped}_Entry(struct ${fsm.fsmClassname}* fsm)
 {
-    struct ${fsm.context}* ctxt = getOwner(fsm);
+    struct ${fsm._package?_package()}${fsm.context}* ctxt = getOwner(fsm);
 
     ${entryActions:_action()}
 }
 ]],
             _state_exit = [[
 
-#undef ${map.name}_${instanceName}_Exit
-void ${map.name}_${instanceName}_Exit(struct ${fsm.fsmClassname}* fsm)
+#undef ${fullName; format=scoped}_Exit
+void ${fullName; format=scoped}_Exit(struct ${fsm.fsmClassname}* fsm)
 {
-    struct ${fsm.context}* ctxt = getOwner(fsm);
+    struct ${fsm._package?_package()}${fsm.context}* ctxt = getOwner(fsm);
 
     ${exitActions:_action()}
 }
 ]],
         _transition = [[
 
-#undef ${state.map.name}_${state.instanceName}_${name}
-static void ${state.map.name}_${state.instanceName}_${name}(struct ${fsm.fsmClassname}* fsm${parameters:_parameter_proto()})
+#undef ${state.fullName; format=scoped}_${name}
+static void ${state.fullName; format=scoped}_${name}(struct ${fsm.fsmClassname}* fsm${parameters:_parameter_proto()})
 {
     ${hasCtxtReference?_transition_ctxt()}
     ${generator.debugLevel0?_transition_debug()}
@@ -182,7 +183,7 @@ static void ${state.map.name}_${state.instanceName}_${name}(struct ${fsm.fsmClas
 }
 ]],
             _transition_ctxt = [[
-struct ${fsm.context}* ctxt = getOwner(fsm);
+struct ${fsm._package?_package()}${fsm.context}* ctxt = getOwner(fsm);
 ]],
             _transition_debug = [[
 if (getDebugFlag(fsm) != 0) {
@@ -271,12 +272,12 @@ if (getDebugFlag(fsm) != 0) {
 setState(fsm, ${needVarEndState?_end_state_var()!_end_state_no_var()});
 ]],
                     _end_state_var = "endState",
-                    _end_state_no_var = "&${endStateName; format=scoped}",
+                    _end_state_no_var = "&${fsm._package?_package()}${endStateName; format=scoped}",
                 scoped = function (s) return s:gsub("::", "_") end,
                 _guard_push = [[
 ${doesPushSet?_guard_set()}
 ${doesPushEntry?_guard_entry()}
-pushState(fsm, &${pushStateName; format=scoped});
+pushState(fsm, &${fsm._package?_package()}${pushStateName; format=scoped});
 ]],
                 _guard_pop = [[
 popState(fsm);
@@ -306,19 +307,19 @@ ${fsm.fsmClassname}_${endStateName}(fsm${popArgs; format=with_arg});
                         return ", " .. s
                     end
                 end,
-        _action = "${isEmptyStateStack?_action_ess()!_action_no_ess()}",
+        _action = "${isEmptyStateStack?_action_ess()!_action_no_ess()}\n",
             _action_ess = [[
 emptyStateStack(fsm);
 ]],
             _action_no_ess = [[
-${fsm.context}_${name}(ctxt${hasArguments?_action_arg()});
+${fsm._package?_package()}${fsm.context}_${name}(ctxt${hasArguments?_action_arg()});
 ]],
                 _action_arg = ", ${arguments; separator=', '}",
         _context = [[
 
-void ${fsm.fsmClassname}_Init(struct ${fsm.fsmClassname}* fsm, struct ${fsm.context}* owner)
+void ${fsm.fsmClassname}_Init(struct ${fsm.fsmClassname}* fsm, struct ${fsm._package?_package()}${fsm.context}* owner)
 {
-    FSM_INIT(fsm, &${fsm.startState; format=scoped});
+    FSM_INIT(fsm, &${fsm._package?_package()}${fsm.startState; format=scoped});
     fsm->_owner = owner;
 }
 ${fsm.hasEntryActions?_enter_start()}
@@ -336,7 +337,7 @@ void ${fsm.fsmClassname}_EnterStartState(struct ${fsm.fsmClassname}* fsm)
 
 void ${fsm.fsmClassname}_${name}(struct ${fsm.fsmClassname}* fsm${parameters:_parameter_context_proto()})
 {
-    const struct ${fsm.context}State* state = getState(fsm);
+    const struct ${fsm._package?_package()}${fsm.context}State* state = getState(fsm);
 
     assert(state != NULL);
     setTransition(fsm, "${name}");
@@ -400,10 +401,10 @@ ${fsm.declareList:_declare()}
                 end
             end,
         _base_state = [[
-struct ${fsm.context};
+struct ${fsm._package?_package()}${fsm.context};
 struct ${fsm.fsmClassname};
 
-struct ${fsm.context}State
+struct ${fsm._package?_package()}${fsm.context}State
 {
     ${fsm.hasEntryActions?_member_entry()}
     ${fsm.hasExitActions?_member_exit()}
@@ -414,6 +415,8 @@ struct ${fsm.context}State
 };
 
 ]],
+            _package = "${fsm._package; format=scoped}_",
+            scoped = function (s) return s:gsub("::", "_") end,
             _member_entry = [[
 void(*Entry)(struct ${fsm.fsmClassname}*);
 ]],
@@ -427,17 +430,17 @@ void(*${name})(struct ${fsm.fsmClassname}*${parameters:_parameter_proto()});
                 _parameter_proto = ", ${_type}",
         _map = "${states:_state()}\n",
         _state = [[
-extern const struct ${fsm.context}State ${map.name}_${instanceName};
+extern const struct ${fsm._package?_package()}${fsm.context}State  ${fullName; format=scoped};
 ]],
         _context = [[
 
 struct ${fsm.fsmClassname}
 {
-    FSM_MEMBERS(${fsm.context})
-    struct ${fsm.context} *_owner;
+    FSM_MEMBERS(${fsm._package?_package()}${fsm.context})
+    struct ${fsm._package?_package()}${fsm.context} *_owner;
 };
 
-extern void ${fsm.fsmClassname}_Init(struct ${fsm.fsmClassname}*, struct ${fsm.context}*);
+extern void ${fsm.fsmClassname}_Init(struct ${fsm.fsmClassname}*, struct ${fsm._package?_package()}${fsm.context}*);
 ${fsm.hasEntryActions?_enter_start()}
 ${fsm.transitions:_transition_context()}
 ]],

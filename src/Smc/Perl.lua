@@ -49,7 +49,7 @@ use ${it};
 ]],
         _base_state = [[
 
-package ${fsm.context}State;
+package ${fsm._package?_package()}${fsm.context}State;
     use base qw(DFA::Statemap::State);
 
     use Carp;
@@ -76,6 +76,7 @@ package ${fsm.context}State;
         ${generator.debugLevel0?_base_state_debug()!_base_state_no_debug()}
     }
 ]],
+            _package = "${fsm._package}::",
             _transition_base_state = "${isntDefault?_transition_base_state_if()}\n",
             _transition_base_state_if = [[
 ${name} => undef,
@@ -96,37 +97,37 @@ croak "TransitionUndefinedException\n",
 ]],
         _map = [[
 
-package ${name};
+package ${fullName};
 
     use vars qw(
         ${states:_state_var()}
-        $Default
+        $DefaultState
     );
 
-package ${name}_Default;
-    use base qw(${fsm.context}State);
+package ${fullName}::DefaultState;
+    use base qw(${fsm._package?_package()}${fsm.context}State);
     ${defaultState?_map_default_state()}
     ${generator.reflectFlag?_state_reflect()}
 ${states:_state()}
 
-package ${name};
+package ${fullName};
 
     sub BEGIN {
         ${states:_state_init()}
-        $Default = ${name}_Default->new('${name}.Default', -1);
+        $DefaultState = ${fullName}::DefaultState->new('${name}::DefaultState', -1);
     }
 ]],
             _state_var = [[
 $${instanceName}
 ]],
             _state_init = [[
-$${instanceName} = ${map.name}_${className}->new('${map.name}.${className}', ${map.nextStateId});
+$${instanceName} = ${fullName}->new('${fullName}', ${map.nextStateId});
 ]],
             _map_default_state = "${defaultState.transitions:_transition()}",
         _state = [[
 
-package ${map.name}_${className};
-    use base qw(${map.name}_Default);
+package ${fullName};
+    use base qw(${map.fullName}::DefaultState);
     ${entryActions?_state_entry()}
     ${exitActions?_state_exit()}
     ${transitions:_transition()}
@@ -274,11 +275,11 @@ if ($fsm->getDebugFlag()) {
 $fsm->setState($${needVarEndState?_end_state_var()!_end_state_no_var()});
 ]],
                     _end_state_var = "endState",
-                    _end_state_no_var = "${endStateName}",
+                    _end_state_no_var = "${fsm._package?_package()}${endStateName}",
                 _guard_push = [[
 ${doesPushSet?_guard_set()}
 ${doesPushEntry?_guard_entry()}
-$fsm->pushState($${pushStateName});
+$fsm->pushState($${fsm._package?_package()}${pushStateName});
 ]],
                 _guard_pop = [[
 $fsm->popState();
@@ -316,13 +317,13 @@ $ctxt->${name}(${arguments; separator=', '});
 ]],
         _context = [[
 
-package ${fsm.context}_sm;
+package ${fsm._package?_package()}${fsm.context}_sm;
     use base qw(DFA::Statemap::FSMContext);
 
     sub new {
         my $proto = shift;
         my $class = ref($proto) || $proto;
-        my $self = $class->SUPER::new($${fsm.startState});
+        my $self = $class->SUPER::new($${fsm._package?_package()}${fsm.startState});
         my ($owner) = @_;
         $self->{_owner} = $owner;
         return $self;
@@ -368,7 +369,7 @@ sub getTransitions {
 ]],
                 _map_context_reflect = "${states:_state_context_reflect()}\n",
                      _state_context_reflect = [[
-$${map.name}::${className},
+$${fullName},
 ]],
                 _transition_context_reflect = [[
 '${name}',

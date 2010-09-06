@@ -105,7 +105,7 @@ has.allStates       = { is = 'ro', lazy_build = true }
 has.transitions     = { is = 'ro', lazy_build = true }
 has.hasEntryActions = { is = 'ro', lazy_build = true }
 has.hasExitActions  = { is = 'ro', lazy_build = true }
-has.mapName         = { is = 'ro', lazy_build = true }
+has.fullName        = { is = 'ro', lazy_build = true }
 has.reflect         = { is = 'ro', lazy_build = true }
 
 function method:_build_allStates ()
@@ -117,8 +117,13 @@ function method:_build_allStates ()
     end
 end
 
-function method:_build_mapName ()
-    return self.name
+function method:_build_fullName ()
+    local packageName = self.fsm._package
+    if packageName then
+        return packageName .. '::' .. self.name
+    else
+        return self.name
+    end
 end
 
 function method:_build_transitions ()
@@ -224,15 +229,15 @@ function method:BUILD ()
 end
 
 function method:_build_name ()
-    return self.map.name .. '.' .. self.instanceName
+    error "use instanceName or className"
 end
 
 function method:_build_fullName ()
     local packageName = self.map.fsm._package
     if packageName then
-        return packageName .. '.' .. self.name
+        return packageName .. '::' .. self.map.name .. '::' .. self.instanceName
     else
-        return self.name
+        return self.map.name .. '::' .. self.instanceName
     end
 end
 

@@ -39,7 +39,12 @@ ${fsm.maps:_map()}
 ]],
         _preamble = [[
 ${fsm.source}
+${fsm._package?__package()}
 ${fsm.importList:_import()}
+]],
+            __package = [[
+
+package ${fsm._package; format=scoped}
 ]],
             _import = [[
 import ${it}
