@@ -271,12 +271,12 @@ if (getDebugFlag(fsm) != 0) {
 setState(fsm, ${needVarEndState?_end_state_var()!_end_state_no_var()});
 ]],
                     _end_state_var = "endState",
-                    _end_state_no_var = "${endStateName; format=scoped}",
-                scoped = function (s) return "&" .. s:gsub("::", "_") end,
+                    _end_state_no_var = "&${endStateName; format=scoped}",
+                scoped = function (s) return s:gsub("::", "_") end,
                 _guard_push = [[
 ${doesPushSet?_guard_set()}
 ${doesPushEntry?_guard_entry()}
-pushState(fsm, ${pushStateName; format=scoped});
+pushState(fsm, &${pushStateName; format=scoped});
 ]],
                 _guard_pop = [[
 popState(fsm);
@@ -318,7 +318,7 @@ ${fsm.context}_${name}(ctxt${hasArguments?_action_arg()});
 
 void ${fsm.fsmClassname}_Init(struct ${fsm.fsmClassname}* fsm, struct ${fsm.context}* owner)
 {
-    FSM_INIT(fsm, ${fsm.startState; format=scoped});
+    FSM_INIT(fsm, &${fsm.startState; format=scoped});
     fsm->_owner = owner;
 }
 ${fsm.hasEntryActions?_enter_start()}
