@@ -507,12 +507,17 @@ has.arguments       = { is = 'rw', isa = 'table<string>',
                                 assert(#value == 1, "property must have exactly one argument")
                             end
                         end }
+has.hasArguments    = { is = 'ro', lazy_build = true }
 has.isEmptyStateStack= { is = 'ro', lazy_build = true }
 
 function method:BUILD ()
     if self.propertyFlag then
         assert(#self.arguments == 1, "property must have exactly one argument")
     end
+end
+
+function method:_build_hasArguments ()
+    return #self.arguments > 0
 end
 
 function method:_build_isEmptyStateStack ()

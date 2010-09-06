@@ -311,7 +311,7 @@ ${fsm.fsmClassname}_${endStateName}(fsm${popArgs; format=with_arg});
 emptyStateStack(fsm);
 ]],
             _action_no_ess = [[
-${fsm.context}_${name}(ctxt${arguments?_action_arg()});
+${fsm.context}_${name}(ctxt${hasArguments?_action_arg()});
 ]],
                 _action_arg = ", ${arguments; separator=', '}",
         _context = [[
