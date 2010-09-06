@@ -104,7 +104,7 @@ local ${name} = {}
 ]],
         _map = [[
 
-${name}.Default = ${fsm.context}State:new('${name}.Default', -1)
+${name}.DefaultState = ${fsm.context}State:new('${name}.DefaultState', -1)
 ${defaultState?_map_default_state()}
 ${generator.reflectFlag?_default_state_reflect()}
 ${states:_state()}
@@ -112,13 +112,13 @@ ${states:_state()}
             _map_default_state = "${defaultState.transitions:_transition()}",
             _default_state_reflect = [[
 
-${name}.Default._transitions = {
+${name}.DefaultState._transitions = {
     ${reflect:_reflect()}
 }
 ]],
         _state = [[
 
-${map.name}.${className} = ${map.name}.Default:new('${map.name}.${className}', ${map.nextStateId})
+${map.name}.${instanceName} = ${map.name}.DefaultState:new('${map.name}.${instanceName}', ${map.nextStateId})
 ${entryActions?_state_entry()}
 ${exitActions?_state_exit()}
 ${transitions:_transition()}
@@ -126,21 +126,21 @@ ${generator.reflectFlag?_state_reflect()}
 ]],
             _state_entry = [[
 
-function ${map.name}.${className}:Entry (fsm)
+function ${map.name}.${instanceName}:Entry (fsm)
     local ctxt = fsm:getOwner()
     ${entryActions:_action()}
 end
 ]],
             _state_exit = [[
 
-function ${map.name}.${className}:Exit (fsm)
+function ${map.name}.${instanceName}:Exit (fsm)
     local ctxt = fsm:getOwner()
     ${exitActions:_action()}
 end
 ]],
             _state_reflect = [[
 
-${map.name}.${className}._transitions = {
+${map.name}.${instanceName}._transitions = {
     ${reflect:_reflect()}
 }
 ]],
@@ -149,7 +149,7 @@ ${name} = ${def},
 ]],
         _transition = [[
 
-function ${state.map.name}.${state.className}:${name} (fsm${parameters:_parameter_proto()})
+function ${state.map.name}.${state.instanceName}:${name} (fsm${parameters:_parameter_proto()})
     ${hasCtxtReference?_transition_ctxt()}
     ${generator.debugLevel0?_transition_debug()}
     ${guards:_guard()}
@@ -167,7 +167,7 @@ end
 ]],
             _transition_else = [[
 else
-    ${map.name}.Default:${name}(fsm${parameters:_parameter_proto()})
+    ${map.name}.DefaultState:${name}(fsm${parameters:_parameter_proto()})
 end
 ]],
             _transition_end = [[
@@ -346,7 +346,7 @@ end
 ]],
                 _map_context_reflect = "${states:_state_context_reflect()}\n",
                      _state_context_reflect = [[
-${map.name}.${className},
+${map.name}.${instanceName},
 ]],
                 _transition_context_reflect = [[
 '${name}',

@@ -75,6 +75,7 @@ class ${fsm.fsmClassname}(owner: ${fsm.context}) extends statemap.FSMContext[${f
 }
 ]],
             scoped = function (str) return str:gsub('::','.') end,
+            ucfirst = function (str) return str:sub(1,1):upper() .. str:sub(2) end,
             _serializable = [[
 @serializable
 ]],
@@ -102,7 +103,7 @@ def getTransitions(): List[String] = List(
 ]],
                 _map_context_reflect = '${states:_state_context_reflect(); separator=",\\n"}',
                      _state_context_reflect = [[
-${map.name}.${className}
+${map.name}.${instanceName; format=ucfirst}
 ]],
                 _transition_context_reflect = [[
 "${name}"
@@ -164,11 +165,11 @@ def getTransitions(): Map[String, Int] = Map(
 )
 ]],
             _state_init = [[
-val ${instanceName} = new ${map.name}_${className}("${map.name}.${className}", ${map.nextStateId})
+val ${instanceName} = new ${map.name}_${instanceName; format=ucfirst}("${map.name}.${instanceName; format=ucfirst}", ${map.nextStateId})
 ]],
         _state = [[
 
-private class ${map.name}_${className}(name: String, id: Int) extends ${map.name}_Default(name, id) {
+private class ${map.name}_${instanceName; format=ucfirst}(name: String, id: Int) extends ${map.name}_Default(name, id) {
     ${entryActions?_state_entry()}
     ${exitActions?_state_exit()}
     ${transitions:_transition()}

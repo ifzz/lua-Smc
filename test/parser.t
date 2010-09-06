@@ -5,7 +5,7 @@ require 'Smc.Parser'
 require 'Test.More'
 require 'io'
 
-plan(217)
+plan(214)
 
 local function do_parse (text, lang)
     local f = io.tmpfile()
@@ -218,13 +218,11 @@ ok( map.defaultState )
 is( #map.states, 2 )
 local state = map.states[1]
 is( state.map, map )
-is( state.className, 'StartState' )
 is( state.instanceName, 'StartState' )
 is( state.entryActions, nil )
 is( state.exitActions, nil )
 is( #state.transitions, 0 )
 state = map.states[2]
-is( state.className, 'IdleState' )
 is( state.instanceName, 'IdleState' )
 is( #state.entryActions, 2 )
 local action = state.entryActions[1]
@@ -235,7 +233,6 @@ is( #state.exitActions, 1 )
 action = state.exitActions[1]
 is( action.name, 'action3' )
 state = map.defaultState
-is( state.className, 'Default' )
 is( state.instanceName, 'DefaultState' )
 
 

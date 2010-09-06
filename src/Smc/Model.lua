@@ -212,7 +212,6 @@ extends 'Smc.Element'
 has.name            = { '+', lazy_build = true }
 has.instanceName    = { is = 'rw', isa = 'string', required = true }
 has.map             = { is = 'ro', isa = 'Smc.Map', required = true }
-has.className       = { is = 'rw', isa = 'string' }
 has.entryActions    = { is = 'rw', isa = 'table<Smc.Action>' }
 has.exitActions     = { is = 'rw', isa = 'table<Smc.Action>' }
 has.transitions     = { is = 'rw', isa = 'table<Smc.Transition>',
@@ -225,11 +224,10 @@ function method:BUILD ()
     if name:lower() == 'default' then
         self.instanceName = 'DefaultState'
     end
-    self.className = name:sub(1,1):upper() .. name:sub(2)
 end
 
 function method:_build_name ()
-    error "use instanceName or className"
+    error "use instanceName"
 end
 
 function method:_build_fullName ()

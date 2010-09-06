@@ -103,14 +103,14 @@ ${name}::$Default_ = new ${name}_Default('${name}.Default_', -1);
 ]],
             _map_default_state = "${defaultState.transitions:_transition()}",
             _state_decl = [[
-public static $${className};
+public static $${instanceName};
 ]],
             _state_init = [[
-${map.name}::$${instanceName} = new ${map.name}_${className}('${map.name}.${className}', ${map.nextStateId});
+${map.name}::$${instanceName} = new ${map.name}_${instanceName}('${map.name}.${instanceName}', ${map.nextStateId});
 ]],
         _state = [[
 
-class ${map.name}_${className} extends ${map.name}_Default {
+class ${map.name}_${instanceName} extends ${map.name}_Default {
     ${entryActions?_state_entry()}
     ${exitActions?_state_exit()}
     ${transitions:_transition()}
@@ -358,7 +358,7 @@ public function getTransitions() {
 ]],
                 _map_context_reflect = "${states:_state_context_reflect()}\n",
                      _state_context_reflect = [[
-${map.name}::$${className},
+${map.name}::$${instanceName},
 ]],
                 _transition_context_reflect = [[
 '${name}',

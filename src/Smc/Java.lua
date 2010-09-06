@@ -148,6 +148,7 @@ ${generator.accessLevel} class ${fsm.fsmClassname}
 }
 ]],
             scoped = function (str) return str:gsub('::','.') end,
+            ucfirst = function (str) return str:sub(1,1):upper() .. str:sub(2) end,
             _serializable = [[
 implements java.io.Serializable
 ]],
@@ -258,7 +259,7 @@ transient private static ${fsm.context}State[] _States =
             _context_data_states_or = "${generator.serialFlag?_context_data_states()}",
             _map_context_reflect = '${states:_state_context_reflect(); separator=",\\n"}',
                 _state_context_reflect = [[
-${map.name}.${className}
+${map.name}.${instanceName; format=ucfirst}
 ]],
         _base_state = [[
 
@@ -363,8 +364,8 @@ protected static class ${name}_Default
 ${states:_state()}
 ]],
             _state_init = [[
-public static final ${map.name}_${className} ${instanceName} =
-    new ${map.name}_${className}("${map.name}.${className}", ${map.nextStateId});
+public static final ${map.name}_${instanceName; format=ucfirst} ${instanceName} =
+    new ${map.name}_${instanceName; format=ucfirst}("${map.name}.${instanceName; format=ucfirst}", ${map.nextStateId});
 ]],
             _map_default_state = "${defaultState.transitions:_transition()}",
             _default_state_reflect = [[
@@ -389,7 +390,7 @@ static
 ]],
         _state = [[
 
-private static final class ${map.name}_${className}
+private static final class ${map.name}_${instanceName; format=ucfirst}
     extends ${map.name}_Default
 {
 //-------------------------------------------------------
@@ -397,7 +398,7 @@ private static final class ${map.name}_${className}
 //
     ${generator.reflectFlag?_state_reflect()}
 
-    private ${map.name}_${className}(String name, int id)
+    private ${map.name}_${instanceName; format=ucfirst}(String name, int id)
     {
         super (name, id);
     }

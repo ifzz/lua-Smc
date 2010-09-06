@@ -75,6 +75,7 @@ class ${fsm.fsmClassname} extends statemap.FSMContext${generator.serialFlag?_ser
 }
 ]],
             scoped = function (str) return str:gsub('::','.') end,
+            ucfirst = function (str) return str:sub(1,1):upper() .. str:sub(2) end,
             _serializable = " implements Serializable",
             _transition_context = "${isntDefault?_transition_context_if()}\n",
             _transition_context_if = [[
@@ -102,7 +103,7 @@ final transitions = [
 ]],
                 _map_context_reflect = '${states:_state_context_reflect(); separator=",\\n"}',
                      _state_context_reflect = [[
-${map.name}.${className}
+${map.name}.${instanceName; format=ucfirst}
 ]],
                 _transition_context_reflect = [[
 '${name}'
@@ -157,11 +158,11 @@ def transitions = [
 ]
 ]],
             _state_init = [[
-static final ${instanceName} = new ${map.name}_${className}(name:'${map.name}.${className}', id:${map.nextStateId})
+static final ${instanceName} = new ${map.name}_${instanceName; format=ucfirst}(name:'${map.name}.${instanceName; format=ucfirst}', id:${map.nextStateId})
 ]],
         _state = [[
 
-private class ${map.name}_${className} extends ${map.name}_Default {
+private class ${map.name}_${instanceName; format=ucfirst} extends ${map.name}_Default {
     ${entryActions?_state_entry()}
     ${exitActions?_state_exit()}
     ${transitions:_transition()}

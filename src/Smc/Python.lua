@@ -93,11 +93,11 @@ class ${name}(object):
 ]],
             _map_default_state = "${defaultState.transitions:_transition()}",
             _state_init = [[
-${instanceName} = ${map.name}_${className}('${map.name}.${className}', ${map.nextStateId})
+${instanceName} = ${map.name}_${instanceName}('${map.name}.${instanceName}', ${map.nextStateId})
 ]],
         _state = [[
 
-class ${map.name}_${className}(${map.name}_Default):
+class ${map.name}_${instanceName}(${map.name}_Default):
     pass
     ${entryActions?_state_entry()}
     ${exitActions?_state_exit()}
@@ -303,7 +303,7 @@ def getTransitions(self):
 ]],
                 _map_context_reflect = "${states:_state_context_reflect()}\n",
                      _state_context_reflect = [[
-${map.name}.${className},
+${map.name}.${instanceName},
 ]],
                 _transition_context_reflect = [[
 '${name}',
