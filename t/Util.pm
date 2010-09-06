@@ -64,7 +64,9 @@ sub test_smc_table {
     unlink("t/${lang}/TestClassContext.html");
     do_fsm($lang, $test);
     system("${smc} -table t/${lang}/TestClass.sm");
-    system("xmllint -noout -valid t/${lang}/TestClassContext.html");
+    unless ($smc =~ /\.jar/) {
+        system("xmllint -noout -valid t/${lang}/TestClassContext.html");
+    }
 }
 
 sub test_smc_with_options {
