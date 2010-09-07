@@ -139,7 +139,7 @@ def ${name} (${fsm.fsmClassname} context${parameters:_parameter_proto()}) {
 ]],
         _map = [[
 
-private class ${name}_Default extends ${fsm.context}State {
+private class ${name}_DefaultState extends ${fsm.context}State {
     ${defaultState?_map_default_state()}
     ${generator.reflectFlag?_default_state_reflect()}
 }
@@ -147,7 +147,7 @@ ${states:_state()}
 
 class ${name} {
     ${states:_state_init()}
-    static final Default = new ${name}_Default(name:'${fullName}::Default', id:-1)
+    static final Default = new ${name}_DefaultState(name:'${fullName}::DefaultState', id:-1)
 }
 ]],
             _map_default_state = "${defaultState.transitions:_transition()}",
@@ -162,7 +162,7 @@ static final ${name} = new ${map.name}_${name; format=ucfirst}(name:'${fullName}
 ]],
         _state = [[
 
-private class ${map.name}_${name; format=ucfirst} extends ${map.name}_Default {
+private class ${map.name}_${name; format=ucfirst} extends ${map.name}_DefaultState {
     ${entryActions?_state_entry()}
     ${exitActions?_state_exit()}
     ${transitions:_transition()}

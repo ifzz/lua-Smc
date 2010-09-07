@@ -146,7 +146,7 @@ if (context.getDebugFlag())
 ]],
         _map = [[
 
-private class ${name}_Default(name: String, id: Int) extends ${fsm.context}State(name, id) {
+private class ${name}_DefaultState(name: String, id: Int) extends ${fsm.context}State(name, id) {
     ${defaultState?_map_default_state()}
     ${generator.reflectFlag?_default_state_reflect()}
 }
@@ -154,7 +154,7 @@ ${states:_state()}
 
 private object ${name} {
     ${states:_state_init()}
-    val Default = new ${name}_Default("${fullName}::Default", -1)
+    val DefaultState = new ${name}_DefaultState("${fullName}::DefaultState", -1)
 }
 ]],
             _map_default_state = "${defaultState.transitions:_transition()}",
@@ -169,7 +169,7 @@ val ${name} = new ${map.name}_${name; format=ucfirst}("${fullName}", ${map.nextS
 ]],
         _state = [[
 
-private class ${map.name}_${name; format=ucfirst}(name: String, id: Int) extends ${map.name}_Default(name, id) {
+private class ${map.name}_${name; format=ucfirst}(name: String, id: Int) extends ${map.name}_DefaultState(name, id) {
     ${entryActions?_state_entry()}
     ${exitActions?_state_exit()}
     ${transitions:_transition()}

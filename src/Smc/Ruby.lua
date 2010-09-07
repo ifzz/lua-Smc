@@ -76,7 +76,7 @@ end
 ]],
         _map = [[
 
-class ${name}_Default < ${fsm.context}State
+class ${name}_DefaultState < ${fsm.context}State
     ${defaultState?_map_default_state()}
     ${generator.reflectFlag?_state_reflect()}
 
@@ -85,7 +85,7 @@ ${states:_state()}
 
 module ${name}
     ${states:_state_init()}
-    Default = ${name}_Default::new('${fullName}::Default', -1).freeze
+    DefaultState = ${name}_DefaultState::new('${fullName}::DefaultState', -1).freeze
 end
 ]],
             _map_default_state = "${defaultState.transitions:_transition()}",
@@ -94,7 +94,7 @@ ${name} = ${map.name}_${name}::new('${fullName}', ${map.nextStateId}).freeze
 ]],
         _state = [[
 
-class ${map.name}_${name} < ${map.name}_Default
+class ${map.name}_${name} < ${map.name}_DefaultState
     ${entryActions?_state_entry()}
     ${exitActions?_state_exit()}
     ${transitions:_transition()}

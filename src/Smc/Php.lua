@@ -86,7 +86,7 @@ if ($fsm->getDebugFlag() == true) {
 ]],
         _map = [[
 
-class ${name}_Default extends ${fsm.context}State {
+class ${name}_DefaultState extends ${fsm.context}State {
     ${defaultState?_map_default_state()}
     ${generator.reflectFlag?_state_reflect()}
 
@@ -95,11 +95,11 @@ ${states:_state()}
 
 class ${name} {
     ${states:_state_decl()}
-    public static $Default_;
+    public static $DefaultState;
 }
 
 ${states:_state_init()}
-${name}::$Default_ = new ${name}_Default('${fullName}::Default', -1);
+${name}::$DefaultState = new ${name}_DefaultState('${fullName}::DefaultState', -1);
 ]],
             _map_default_state = "${defaultState.transitions:_transition()}",
             _state_decl = [[
@@ -110,7 +110,7 @@ ${map.name}::$${name} = new ${map.name}_${name}('${fullName}', ${map.nextStateId
 ]],
         _state = [[
 
-class ${map.name}_${name} extends ${map.name}_Default {
+class ${map.name}_${name} extends ${map.name}_DefaultState {
     ${entryActions?_state_entry()}
     ${exitActions?_state_exit()}
     ${transitions:_transition()}

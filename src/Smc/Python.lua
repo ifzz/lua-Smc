@@ -80,7 +80,7 @@ def getTransitions (self):
 ]],
         _map = [[
 
-class ${name}_Default(${fsm.context}State):
+class ${name}_DefaultState(${fsm.context}State):
     pass
     ${defaultState?_map_default_state()}
     ${generator.reflectFlag?_state_reflect()}
@@ -89,7 +89,7 @@ ${states:_state()}
 
 class ${name}(object):
     ${states:_state_init()}
-    Default = ${name}_Default('${fullName}::Default', -1)
+    DefaultState = ${name}_DefaultState('${fullName}::DefaultState', -1)
 ]],
             _map_default_state = "${defaultState.transitions:_transition()}",
             _state_init = [[
@@ -97,7 +97,7 @@ ${name} = ${map.name}_${name}('${fullName}', ${map.nextStateId})
 ]],
         _state = [[
 
-class ${map.name}_${name}(${map.name}_Default):
+class ${map.name}_${name}(${map.name}_DefaultState):
     pass
     ${entryActions?_state_entry()}
     ${exitActions?_state_exit()}
@@ -143,7 +143,7 @@ if fsm.getDebugFlag() == True:
 ]],
             _transition_else = [[
 else:
-    ${state.map.name}_Default.${name}(self, fsm${parameters:_parameter_proto()})
+    ${state.map.name}_DefaultState.${name}(self, fsm${parameters:_parameter_proto()})
 ]],
         _guard = "${hasCondition?_guard_conditional()!_guard_unconditional()}",
             _guard_conditional = "${ifCondition?_guard_if()!_guard_no_if()}",

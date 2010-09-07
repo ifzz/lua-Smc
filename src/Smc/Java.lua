@@ -336,12 +336,12 @@ if (context.getDebugFlag() == true)
     // Constants.
     //
     ${states:_state_init()}
-    private static final ${name}_Default Default =
-        new ${name}_Default("${fullName}::Default", -1);
+    private static final ${name}_DefaultState DefaultState =
+        new ${name}_DefaultState("${fullName}::DefaultState", -1);
 
 }
 
-protected static class ${name}_Default
+protected static class ${name}_DefaultState
     extends ${fsm.context}State
 {
 //-----------------------------------------------------------
@@ -349,7 +349,7 @@ protected static class ${name}_Default
 //
     ${generator.reflectFlag?_default_state_reflect()}
 
-    protected ${name}_Default(String name, int id)
+    protected ${name}_DefaultState(String name, int id)
     {
         super (name, id);
     }
@@ -391,7 +391,7 @@ static
         _state = [[
 
 private static final class ${map.name}_${name; format=ucfirst}
-    extends ${map.name}_Default
+    extends ${map.name}_DefaultState
 {
 //-------------------------------------------------------
 // Member methods.
