@@ -89,7 +89,7 @@ function method:visitTransition (transition)
             if hash[condition] then
                 local state = transition.state
                 local mapName = state.map.name
-                local stateName = state.instanceName
+                local stateName = state.name
                 local transName = transition.name
                 self:_error("State " .. mapName .. "::" .. stateName
                          .. " has multiple transitions with same name (\""

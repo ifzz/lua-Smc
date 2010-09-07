@@ -118,10 +118,10 @@ package ${fullName};
     }
 ]],
             _state_var = [[
-$${instanceName}
+$${name}
 ]],
             _state_init = [[
-$${instanceName} = ${fullName}->new('${fullName}', ${map.nextStateId});
+$${name} = ${fullName}->new('${fullName}', ${map.nextStateId});
 ]],
             _map_default_state = "${defaultState.transitions:_transition()}",
         _state = [[

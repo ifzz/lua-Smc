@@ -103,7 +103,7 @@ final transitions = [
 ]],
                 _map_context_reflect = '${states:_state_context_reflect(); separator=",\\n"}',
                      _state_context_reflect = [[
-${map.name}.${instanceName; format=ucfirst}
+${map.name}.${name; format=ucfirst}
 ]],
                 _transition_context_reflect = [[
 '${name}'
@@ -158,11 +158,11 @@ def transitions = [
 ]
 ]],
             _state_init = [[
-static final ${instanceName} = new ${map.name}_${instanceName; format=ucfirst}(name:'${map.name}.${instanceName; format=ucfirst}', id:${map.nextStateId})
+static final ${name} = new ${map.name}_${name; format=ucfirst}(name:'${map.name}.${name; format=ucfirst}', id:${map.nextStateId})
 ]],
         _state = [[
 
-private class ${map.name}_${instanceName; format=ucfirst} extends ${map.name}_Default {
+private class ${map.name}_${name; format=ucfirst} extends ${map.name}_Default {
     ${entryActions?_state_entry()}
     ${exitActions?_state_exit()}
     ${transitions:_transition()}

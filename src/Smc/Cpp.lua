@@ -86,7 +86,7 @@ void ${fsm.context}State::Default(${fsm.fsmClassname}& context)
 ]],
             _map_base_state = "${states:_state_base_state()}\n",
             _state_base_state = [[
-${map.name}_${instanceName} ${map.name}::${instanceName}("${map.name}::${instanceName}", ${map.index});
+${map.name}_${name} ${map.name}::${name}("${map.name}::${name}", ${map.index});
 ]],
             _base_state_serial = [[
 ${fsm.context}State* ${fsm.fsmClassname}::_States[] =
@@ -108,7 +108,7 @@ ${fsm.context}State& ${fsm.fsmClassname}::valueOf(int stateId)
 ]],
                 _map_base_state_serial = "${states:_state_base_state_serial(); separator=',\\n'}",
                     _state_base_state_serial = [[
-&${map.name}::${instanceName}
+&${map.name}::${name}
 ]],
                 _assert = [[
 assert(1==0);
@@ -161,7 +161,7 @@ ${transitions:_transition()}
 ]],
             _state_entry = [[
 
-void ${map.name}_${instanceName}::Entry(${fsm.fsmClassname}& context)
+void ${map.name}_${name}::Entry(${fsm.fsmClassname}& context)
 {
     ${fsm.context}& ctxt(context.getOwner());
 
@@ -171,7 +171,7 @@ void ${map.name}_${instanceName}::Entry(${fsm.fsmClassname}& context)
 ]],
             _state_exit = [[
 
-void ${map.name}_${instanceName}::Exit(${fsm.fsmClassname}& context)
+void ${map.name}_${name}::Exit(${fsm.fsmClassname}& context)
 {
     ${fsm.context}& ctxt(context.getOwner());
 
@@ -181,7 +181,7 @@ void ${map.name}_${instanceName}::Exit(${fsm.fsmClassname}& context)
 ]],
         _transition = [[
 
-void ${state.map.name}_${state.instanceName}::${name}(${fsm.fsmClassname}& context${parameters:_parameter_proto()})
+void ${state.map.name}_${state.name}::${name}(${fsm.fsmClassname}& context${parameters:_parameter_proto()})
 {
     ${hasCtxtReference?_transition_ctxt()}
     ${generator.debugLevel0?_transition_debug()}
@@ -488,7 +488,7 @@ ${states:_state_forward_decl()}
 class ${name}_DefaultState;
 ]],
                 _state_forward_decl = [[
-class ${map.name}_${instanceName};
+class ${map.name}_${name};
 ]],
             _declare = "${it; format=declare}\n",
             declare = function (s)
@@ -548,7 +548,7 @@ public:
 ${states:_state()}
 ]],
             _state_decl = [[
-static ${map.name}_${instanceName} ${instanceName};
+static ${map.name}_${name} ${name};
 ]],
             _map_default_state = "${defaultState.transitions:_transition_default_state()}",
                 _transition_default_state = [[
@@ -556,12 +556,12 @@ virtual void ${name}(${fsm.fsmClassname}& context${parameters:_parameter_proto()
 ]],
         _state = [[
 
-class ${map.name}_${instanceName} :
+class ${map.name}_${name} :
     public ${map.name}_DefaultState
 {
 public:
 
-    ${map.name}_${instanceName}(const char *name, int stateId)
+    ${map.name}_${name}(const char *name, int stateId)
     : ${map.name}_DefaultState(name, stateId)
     {};
 

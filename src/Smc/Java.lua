@@ -259,7 +259,7 @@ transient private static ${fsm.context}State[] _States =
             _context_data_states_or = "${generator.serialFlag?_context_data_states()}",
             _map_context_reflect = '${states:_state_context_reflect(); separator=",\\n"}',
                 _state_context_reflect = [[
-${map.name}.${instanceName; format=ucfirst}
+${map.name}.${name; format=ucfirst}
 ]],
         _base_state = [[
 
@@ -364,8 +364,8 @@ protected static class ${name}_Default
 ${states:_state()}
 ]],
             _state_init = [[
-public static final ${map.name}_${instanceName; format=ucfirst} ${instanceName} =
-    new ${map.name}_${instanceName; format=ucfirst}("${map.name}.${instanceName; format=ucfirst}", ${map.nextStateId});
+public static final ${map.name}_${name; format=ucfirst} ${name} =
+    new ${map.name}_${name; format=ucfirst}("${map.name}.${name; format=ucfirst}", ${map.nextStateId});
 ]],
             _map_default_state = "${defaultState.transitions:_transition()}",
             _default_state_reflect = [[
@@ -390,7 +390,7 @@ static
 ]],
         _state = [[
 
-private static final class ${map.name}_${instanceName; format=ucfirst}
+private static final class ${map.name}_${name; format=ucfirst}
     extends ${map.name}_Default
 {
 //-------------------------------------------------------
@@ -398,7 +398,7 @@ private static final class ${map.name}_${instanceName; format=ucfirst}
 //
     ${generator.reflectFlag?_state_reflect()}
 
-    private ${map.name}_${instanceName; format=ucfirst}(String name, int id)
+    private ${map.name}_${name; format=ucfirst}(String name, int id)
     {
         super (name, id);
     }

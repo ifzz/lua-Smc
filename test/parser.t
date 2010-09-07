@@ -218,12 +218,12 @@ ok( map.defaultState )
 is( #map.states, 2 )
 local state = map.states[1]
 is( state.map, map )
-is( state.instanceName, 'StartState' )
+is( state.name, 'StartState' )
 is( state.entryActions, nil )
 is( state.exitActions, nil )
 is( #state.transitions, 0 )
 state = map.states[2]
-is( state.instanceName, 'IdleState' )
+is( state.name, 'IdleState' )
 is( #state.entryActions, 2 )
 local action = state.entryActions[1]
 is( action.name, 'action1' )
@@ -233,7 +233,7 @@ is( #state.exitActions, 1 )
 action = state.exitActions[1]
 is( action.name, 'action3' )
 state = map.defaultState
-is( state.instanceName, 'DefaultState' )
+is( state.name, 'DefaultState' )
 
 
 parser, fsm = do_parse([===[
@@ -335,7 +335,7 @@ is( #fsm.maps, 1 )
 local map = fsm.maps[1]
 is( #map.states, 1 )
 local state = map.states[1]
-is( state.instanceName, 'StartState' )
+is( state.name, 'StartState' )
 is( #state.transitions, 5 )
 local transition = state.transitions[1]
 is( transition.state, state )
@@ -411,7 +411,7 @@ is( #fsm.maps, 1 )
 local map = fsm.maps[1]
 is( #map.states, 1 )
 local state = map.states[1]
-is( state.instanceName, 'StartState' )
+is( state.name, 'StartState' )
 is( #state.transitions, 2 )
 local transition = state.transitions[1]
 is( transition.name, 'event' )
@@ -534,7 +534,7 @@ local map = fsm.maps[1]
 is( map.name, 'Map1' )
 is( #map.states, 2 )
 local state = map.states[1]
-is( state.instanceName, 'StartState' )
+is( state.name, 'StartState' )
 is( #state.transitions, 6 )
 local transition = state.transitions[1]
 is( transition.name, 'event1' )
@@ -582,7 +582,7 @@ map = fsm.maps[2]
 is( map.name, 'Map2' )
 is( #map.states, 1 )
 state = map.states[1]
-is( state.instanceName, 'Start' )
+is( state.name, 'Start' )
 is( #state.transitions, 3 )
 transition = state.transitions[1]
 is( transition.name, 'event1' )

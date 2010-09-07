@@ -147,7 +147,7 @@ function method:visitState (state)
     local stream = self.stream
 
     stream:write "        <td>\n"
-    stream:write("          ", state.instanceName, "\n")
+    stream:write("          ", state.name, "\n")
     stream:write "        </td>\n"
 
     local actions = state.entryActions
@@ -215,7 +215,7 @@ function method:visitGuard (guard)
         stream:write "  "
         if endState == 'nil' then
             local state = guard.transition.state
-            stream:write(state.instanceName)
+            stream:write(state.name)
         else
             stream:write(endState)
         end

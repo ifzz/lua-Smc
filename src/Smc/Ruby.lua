@@ -90,11 +90,11 @@ end
 ]],
             _map_default_state = "${defaultState.transitions:_transition()}",
             _state_init = [[
-${instanceName} = ${map.name}_${instanceName}::new('${map.name}.${instanceName}', ${map.nextStateId}).freeze
+${name} = ${map.name}_${name}::new('${map.name}.${name}', ${map.nextStateId}).freeze
 ]],
         _state = [[
 
-class ${map.name}_${instanceName} < ${map.name}_Default
+class ${map.name}_${name} < ${map.name}_Default
     ${entryActions?_state_entry()}
     ${exitActions?_state_exit()}
     ${transitions:_transition()}
@@ -328,7 +328,7 @@ end
 ]],
                 _map_context_reflect = "${states:_state_context_reflect()}\n",
                      _state_context_reflect = [[
-${map.name}::${instanceName},
+${map.name}::${name},
 ]],
                 _transition_context_reflect = [[
 '${name}',

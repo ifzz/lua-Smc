@@ -185,7 +185,7 @@ function _get_index ()
 end
 
 function method:addState (state)
-    if state.instanceName == 'DefaultState' then
+    if state.name == 'DefaultState' then
         self.defaultState = state
     else
         table.insert(self.states, state)
@@ -193,11 +193,11 @@ function method:addState (state)
 end
 
 function method:isKnownState (name)
-    if name:lower() == 'default' then
+    if name == 'DefaultState' then
         return self.defaultState
     else
         for _, state in ipairs(self.states) do
-            if state.instanceName == name then
+            if state.name == name then
                 return true
             end
         end
@@ -209,8 +209,6 @@ end
 class 'Smc.State'
 extends 'Smc.Element'
 
-has.name            = { '+', lazy_build = true }
-has.instanceName    = { is = 'rw', isa = 'string', required = true }
 has.map             = { is = 'ro', isa = 'Smc.Map', required = true }
 has.entryActions    = { is = 'rw', isa = 'table<Smc.Action>' }
 has.exitActions     = { is = 'rw', isa = 'table<Smc.Action>' }
@@ -219,23 +217,12 @@ has.transitions     = { is = 'rw', isa = 'table<Smc.Transition>',
 has.fullName        = { is = 'ro', lazy_build = true }
 has.reflect         = { is = 'ro', lazy_build = true }
 
-function method:BUILD ()
-    local name = self.instanceName
-    if name:lower() == 'default' then
-        self.instanceName = 'DefaultState'
-    end
-end
-
-function method:_build_name ()
-    error "use instanceName"
-end
-
 function method:_build_fullName ()
     local packageName = self.map.fsm._package
     if packageName then
-        return packageName .. '::' .. self.map.name .. '::' .. self.instanceName
+        return packageName .. '::' .. self.map.name .. '::' .. self.name
     else
-        return self.map.name .. '::' .. self.instanceName
+        return self.map.name .. '::' .. self.name
     end
 end
 

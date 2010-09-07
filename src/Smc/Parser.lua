@@ -489,12 +489,15 @@ end
 
 function method:createState (token)
     local name = token.value
+    if name:lower() == 'default' then
+        name = 'DefaultState'
+    end
     if self.mapInProgress:isKnownState(name) then
         self:_error("Duplicate state name.", token.lineno)
     end
     local lexer = self.lexer
     self.stateInProgress = Smc.State.new{
-        instanceName = name,
+        name = name,
         filename = lexer.filename,
         lineno = lexer.lineno,
         map = self.mapInProgress,

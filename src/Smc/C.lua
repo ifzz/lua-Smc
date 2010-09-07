@@ -147,7 +147,7 @@ const struct ${fsm._package?_package()}${fsm.context}State ${fullName; format=sc
 ]],
             _transition_def = "${isntDefault?_transition_def_if()}\n",
             _transition_def_if = [[
-#define ${map.fullName; format=scoped}_${instanceName}_${name} ${map.defaultState?_default_state_name()!_base_state_name()}_${name}
+#define ${fullName; format=scoped}_${name} ${map.defaultState?_default_state_name()!_base_state_name()}_${name}
 ]],
                 _default_state_name = "${map.fullName; format=scoped}_DefaultState",
                 _base_state_name = "${fsm._package?_package()}${fsm.context}State",

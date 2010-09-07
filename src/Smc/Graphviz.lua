@@ -105,7 +105,7 @@ function method:visitMap (map)
     local function putPushState (guard, state)
         local endStateName = guard.endState
         if endStateName == 'nil' then
-            endStateName = state.instanceName
+            endStateName = state.name
         end
         local pushStateName = guard.pushState
         local pushMapName;
@@ -254,9 +254,9 @@ function method:visitState (state)
 
     local map = state.map
     local mapName = map.name
-    local instanceName = state.instanceName
-    stream:write("        \"", mapName, "::", instanceName, "\"\n")
-    stream:write("            [label=\"{", instanceName)
+    local stateName = state.name
+    stream:write("        \"", mapName, "::", stateName, "\"\n")
+    stream:write("            [label=\"{", stateName)
 
     if self.graphLevel >= 1 then
         local defaultState = map.defaultState
@@ -379,7 +379,7 @@ function method:visitGuard (guard)
     local state = self.state
     local map = state.map
     local mapName = map.name
-    local stateName = state.instanceName
+    local stateName = state.name
     local pushStateName = guard.pushState
     stream:write "\n"
     stream:write("        \"", mapName, "::", stateName, "\" -> ")
