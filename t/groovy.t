@@ -41,7 +41,7 @@ $Util::config = {
 };
 
 my %re = (
-    TransUndef  => 'statemap\.TransitionUndefinedException: State: Map_1\.State_1, Transition: Evt_1',
+    TransUndef  => 'statemap\.TransitionUndefinedException: State: Map_1(::|\.)State_1, Transition: Evt_1',
 );
 
 sub test_smc_groovy {

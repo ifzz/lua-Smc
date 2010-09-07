@@ -99,14 +99,14 @@ class ${name} {
 }
 
 ${states:_state_init()}
-${name}::$Default_ = new ${name}_Default('${name}.Default_', -1);
+${name}::$Default_ = new ${name}_Default('${fullName}::Default', -1);
 ]],
             _map_default_state = "${defaultState.transitions:_transition()}",
             _state_decl = [[
 public static $${name};
 ]],
             _state_init = [[
-${map.name}::$${name} = new ${map.name}_${name}('${map.name}.${name}', ${map.nextStateId});
+${map.name}::$${name} = new ${map.name}_${name}('${fullName}', ${map.nextStateId});
 ]],
         _state = [[
 

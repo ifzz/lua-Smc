@@ -104,7 +104,7 @@ local ${name} = {}
 ]],
         _map = [[
 
-${name}.DefaultState = ${fsm.context}State:new('${name}.DefaultState', -1)
+${name}.DefaultState = ${fsm.context}State:new('${fullName}::DefaultState', -1)
 ${defaultState?_map_default_state()}
 ${generator.reflectFlag?_default_state_reflect()}
 ${states:_state()}
@@ -118,7 +118,7 @@ ${name}.DefaultState._transitions = {
 ]],
         _state = [[
 
-${map.name}.${name} = ${map.name}.DefaultState:new('${map.name}.${name}', ${map.nextStateId})
+${map.name}.${name} = ${map.name}.DefaultState:new('${fullName}', ${map.nextStateId})
 ${entryActions?_state_entry()}
 ${exitActions?_state_exit()}
 ${transitions:_transition()}

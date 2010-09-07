@@ -89,11 +89,11 @@ ${states:_state()}
 
 class ${name}(object):
     ${states:_state_init()}
-    Default = ${name}_Default('${name}.Default', -1)
+    Default = ${name}_Default('${fullName}::Default', -1)
 ]],
             _map_default_state = "${defaultState.transitions:_transition()}",
             _state_init = [[
-${name} = ${map.name}_${name}('${map.name}.${name}', ${map.nextStateId})
+${name} = ${map.name}_${name}('${fullName}', ${map.nextStateId})
 ]],
         _state = [[
 

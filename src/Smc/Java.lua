@@ -337,7 +337,7 @@ if (context.getDebugFlag() == true)
     //
     ${states:_state_init()}
     private static final ${name}_Default Default =
-        new ${name}_Default("$name}.Default", -1);
+        new ${name}_Default("${fullName}::Default", -1);
 
 }
 
@@ -365,7 +365,7 @@ ${states:_state()}
 ]],
             _state_init = [[
 public static final ${map.name}_${name; format=ucfirst} ${name} =
-    new ${map.name}_${name; format=ucfirst}("${map.name}.${name; format=ucfirst}", ${map.nextStateId});
+    new ${map.name}_${name; format=ucfirst}("${fullName}", ${map.nextStateId});
 ]],
             _map_default_state = "${defaultState.transitions:_transition()}",
             _default_state_reflect = [[

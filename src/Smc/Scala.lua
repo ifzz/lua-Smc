@@ -154,7 +154,7 @@ ${states:_state()}
 
 private object ${name} {
     ${states:_state_init()}
-    val Default = new ${name}_Default("${name}.Default", -1)
+    val Default = new ${name}_Default("${fullName}::Default", -1)
 }
 ]],
             _map_default_state = "${defaultState.transitions:_transition()}",
@@ -165,7 +165,7 @@ def getTransitions(): Map[String, Int] = Map(
 )
 ]],
             _state_init = [[
-val ${name} = new ${map.name}_${name; format=ucfirst}("${map.name}.${name; format=ucfirst}", ${map.nextStateId})
+val ${name} = new ${map.name}_${name; format=ucfirst}("${fullName}", ${map.nextStateId})
 ]],
         _state = [[
 

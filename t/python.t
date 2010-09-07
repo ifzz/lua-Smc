@@ -39,7 +39,7 @@ $Util::config = {
 };
 
 my %re = (
-    TransUndef  => 'statemap\.TransitionUndefinedException: \n\tState: Map_1\.State_1\n\tTransition: Evt_1',
+    TransUndef  => 'statemap\.TransitionUndefinedException: \n\tState: Map_1(::|\.)State_1\n\tTransition: Evt_1',
 );
 
 sub test_smc_python {

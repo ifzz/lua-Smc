@@ -85,12 +85,12 @@ ${states:_state()}
 
 module ${name}
     ${states:_state_init()}
-    Default = ${name}_Default::new('${name}.Default', -1).freeze
+    Default = ${name}_Default::new('${fullName}::Default', -1).freeze
 end
 ]],
             _map_default_state = "${defaultState.transitions:_transition()}",
             _state_init = [[
-${name} = ${map.name}_${name}::new('${map.name}.${name}', ${map.nextStateId}).freeze
+${name} = ${map.name}_${name}::new('${fullName}', ${map.nextStateId}).freeze
 ]],
         _state = [[
 

@@ -147,7 +147,7 @@ ${states:_state()}
 
 class ${name} {
     ${states:_state_init()}
-    static final Default = new ${name}_Default(name:'${name}.Default', id:-1)
+    static final Default = new ${name}_Default(name:'${fullName}::Default', id:-1)
 }
 ]],
             _map_default_state = "${defaultState.transitions:_transition()}",
@@ -158,7 +158,7 @@ def transitions = [
 ]
 ]],
             _state_init = [[
-static final ${name} = new ${map.name}_${name; format=ucfirst}(name:'${map.name}.${name; format=ucfirst}', id:${map.nextStateId})
+static final ${name} = new ${map.name}_${name; format=ucfirst}(name:'${fullName}', id:${map.nextStateId})
 ]],
         _state = [[
 

@@ -39,7 +39,7 @@ $Util::config = {
 };
 
 my %re = (
-    TransUndef  => '\(Statemap::TransitionUndefinedException\)\nState: Map_1\.State_1\nTransition: Evt_1',
+    TransUndef  => '\(Statemap::TransitionUndefinedException\)\nState: Map_1(::|\.)State_1\nTransition: Evt_1',
 );
 
 sub test_smc_ruby {

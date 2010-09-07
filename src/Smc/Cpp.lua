@@ -86,7 +86,7 @@ void ${fsm.context}State::Default(${fsm.fsmClassname}& context)
 ]],
             _map_base_state = "${states:_state_base_state()}\n",
             _state_base_state = [[
-${map.name}_${name} ${map.name}::${name}("${map.name}::${name}", ${map.index});
+${map.name}_${name} ${map.name}::${name}("${fullName}", ${map.index});
 ]],
             _base_state_serial = [[
 ${fsm.context}State* ${fsm.fsmClassname}::_States[] =
