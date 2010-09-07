@@ -11,6 +11,10 @@ public class TestClass
         // _fsm.setDebugFlag(true);
     }
 
+    public void NoArg() {
+        System.out.println("No arg");
+    }
+
     public void Output(String str) {
         System.out.println(str);
     }

@@ -16,6 +16,10 @@ function new (self)
     return o
 end
 
+function NoArg (self)
+    print "No arg"
+end
+
 function Output (self, str)
     print(str)
 end

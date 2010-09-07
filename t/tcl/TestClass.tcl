@@ -12,6 +12,10 @@ class TestClass {
         # $_fsm setDebugFlag 1;
     }
 
+    public method NoArg {} {
+         puts "No arg"
+    }
+
     public method Output {str} {
          puts $str
     }

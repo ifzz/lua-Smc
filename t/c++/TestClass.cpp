@@ -9,6 +9,11 @@ TestClass::TestClass(): _fsm(*this)
     // _fsm.setDebugFlag(true);
 }
 
+void TestClass::NoArg()
+{
+    cout << "No arg" << endl;
+}
+
 void TestClass::Output(const char* str)
 {
     cout << str << endl;

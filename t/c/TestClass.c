@@ -14,6 +14,11 @@ void TestClass_Init(struct TestClass *this)
     /* setDebugFlag(&this->_fsm, 1); */
 }
 
+void TestClass_NoArg(struct TestClass *this)
+{
+    printf("No arg\n");
+}
+
 void TestClass_Output(struct TestClass *this, const char* str)
 {
     printf("%s\n", str);

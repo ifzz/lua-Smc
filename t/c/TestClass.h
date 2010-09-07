@@ -7,6 +7,7 @@ struct TestClass
 };
 
 extern void TestClass_Init(struct TestClass *);
+extern void TestClass_NoArg(struct TestClass *this);
 extern void TestClass_Output(struct TestClass *this, const char* str);
 extern void TestClass_Output_n(struct TestClass *this, const char* str1, int n, const char *str2);
 extern int  TestClass_isOk(struct TestClass *this);

@@ -11,6 +11,10 @@ class TestClass
         #@_fsm.setDebugFlag(true)
     end
 
+    def NoArg()
+        printf "No arg\n"
+    end
+
     def Output(str)
         printf "%s\n", str
     end

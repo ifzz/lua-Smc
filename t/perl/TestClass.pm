@@ -19,6 +19,11 @@ sub new {
     return $self;
 }
 
+sub NoArg {
+    my $self = shift;
+    print "No arg\n";
+}
+
 sub Output {
     my $self = shift;
     print shift, "\n";

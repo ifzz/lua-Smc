@@ -18,7 +18,7 @@
 // State        Transition      End State       Action
 State_1
 {
-                Evt_1           State_2         { Output("State_1:Evt_1"); }
+                Evt_1           State_2         { Output("State_1:Evt_1"); NoArg(); }
 }
 
 State_2

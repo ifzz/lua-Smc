@@ -6,6 +6,10 @@ class TestClass() {
     // Uncomment to see debug output.
     // _fsm.setDebugFlag(true)
 
+    def NoArg() {
+        System.out.println("No arg")
+    }
+
     def Output(str: String) {
         System.out.println(str)
     }

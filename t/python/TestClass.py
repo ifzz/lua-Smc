@@ -8,6 +8,9 @@ class TestClass:
         # Uncomment to see debug output.
         # self._fsm.setDebugFlag(True)
 
+    def NoArg(self):
+        print "No arg"
+
     def Output(self, s):
         print s
 

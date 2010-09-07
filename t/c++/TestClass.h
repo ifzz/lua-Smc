@@ -11,6 +11,7 @@ public:
 
     ~TestClass() {};
 
+    void NoArg();
     void Output(const char* str);
     void Output_n(const char* str1, int n, const char *str2);
     bool isOk();
