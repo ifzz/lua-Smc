@@ -59,6 +59,7 @@ function method:_build_transitions ()
     for _, v in pairs(hash) do
         table.insert(all, v)
     end
+    table.sort(all, function (a, b) return a.name < b.name end)
     return all
 end
 
@@ -137,6 +138,7 @@ function method:_build_transitions ()
     for _, v in pairs(hash) do
         table.insert(all, v)
     end
+    table.sort(all, function (a, b) return a.name < b.name end)
     return all
 end
 
