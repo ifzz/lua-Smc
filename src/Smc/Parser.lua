@@ -533,6 +533,9 @@ end
 
 function method:createTransition ()
     local name = self.transitionName
+    if name:lower() == 'default' then
+        name = 'Default'
+    end
     local params = self.paramList or {}
     local lexer = self.lexer
     self.transitionInProgress =
