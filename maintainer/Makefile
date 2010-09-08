@@ -30,7 +30,8 @@ templates: \
     Php_template.png \
     Python_template.png \
     Ruby_template.png \
-    Scala_template.png
+    Scala_template.png \
+    Table_template.png
 
 clean:
 	rm *.dot *.png
@@ -88,6 +89,9 @@ Ruby_template.dot: ../src/Smc/Ruby.lua
 
 Scala_template.dot: ../src/Smc/Scala.lua
 	$(LUA) -l CodeGen.Graph -l Smc.Scala -e "print(CodeGen.Graph.to_dot(require 'Smc.Scala.Generator'{srcfileBase='', targetfileBase=''}.template))" > $@
+
+Table_template.dot: ../src/Smc/Table.lua
+	$(LUA) -l CodeGen.Graph -l Smc.Table -e "print(CodeGen.Graph.to_dot(require 'Smc.Table.Generator'{srcfileBase='', targetfileBase=''}.template))" > $@
 
 
 %_sm.dot : ../src/Smc/Parser/%.sm
