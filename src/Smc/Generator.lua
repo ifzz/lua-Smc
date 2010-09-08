@@ -31,6 +31,8 @@ has.guardIndex      = { is = 'rw', isa = 'number' }
 
 has.debugLevel0     = { is = 'ro', lazy_build = true }
 has.debugLevel1     = { is = 'ro', lazy_build = true }
+has.graphLevel1     = { is = 'ro', lazy_build = true }
+has.graphLevel2     = { is = 'ro', lazy_build = true }
 has.catchFlag       = { is = 'ro', lazy_build = true }
 has.template        = { is = 'ro', lazy_build = true }
 
@@ -40,6 +42,14 @@ end
 
 function method:_build_debugLevel1 ()
     return self.debugLevel >= 1
+end
+
+function method:_build_graphLevel1 ()
+    return self.graphLevel >= 1
+end
+
+function method:_build_graphLevel2 ()
+    return self.graphLevel >= 2
 end
 
 function method:_build_catchFlag ()

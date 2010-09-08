@@ -383,6 +383,10 @@ has.doesEndPop      = { is = 'ro', lazy_build = true }
 has.doesSet         = { is = 'ro', lazy_build = true }
 has.pushStateName   = { is = 'ro', lazy_build = true }
 has.needVarEndState = { is = 'ro', lazy_build = true }
+has.realEndState    = { is = 'ro', lazy_build = true }
+has.endStateMap     = { is = 'ro', lazy_build = true }
+has.pushMapName     = { is = 'ro', lazy_build = true }
+has.isInternalEvent = { is = 'ro', lazy_build = true }
 
 function method:_build_hasActions ()
     return self.actions and #self.actions > 0
@@ -442,6 +446,29 @@ function method:_build_endStateName ()
     return scopeStateName(endStateName, self.transition.state.map.name)
 end
 
+function method:_build_realEndState ()
+    local endState = self.endState
+    if endState == 'nil' then
+        return self.transition.state.name
+    end
+    local idx = endState:find "::"
+    if idx then
+        return endState:sub(idx + 2)
+    else
+        return endState
+    end
+end
+
+function method:_build_endStateMap ()
+    local endState = self.endState
+    local idx = endState:find "::"
+    if idx then
+        return endState:sub(1, idx-1)
+    else
+        return self.transition.state.map.name
+    end
+end
+
 function method:_build_isLoopback ()
     return (self.transType == 'TRANS_SET' or self.transType == 'TRANS_PUSH') and self.endState == 'nil'
 end
@@ -482,8 +509,23 @@ function method:_build_pushStateName ()
     return scopeStateName(self.pushState, self.transition.state.map.name)
 end
 
+function method:_build_pushMapName ()
+    local pushStateName = self.pushState
+    local pushMapName;
+    local idx = pushStateName:find "::"
+    if idx then
+        return pushStateName:sub(1, idx-1)
+    else
+        return self.transition.state.map.name
+    end
+end
+
 function method:_build_needVarEndState ()
     return self.isLoopback and #self.actions > 0
+end
+
+function method:_build_isInternalEvent ()
+    return self.endState == 'nil' and self.transType == 'TRANS_SET'
 end
 
 

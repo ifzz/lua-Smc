@@ -23,6 +23,7 @@ templates: \
     C_header_template.png \
     Cpp_template.png \
     Cpp_header_template.png \
+    Graphviz_template.png \
     Groovy_template.png \
     Java_template.png \
     Lua_template.png \
@@ -65,6 +66,9 @@ Cpp_template.dot: ../src/Smc/Cpp.lua
 
 Cpp_header_template.dot: ../src/Smc/Cpp.lua
 	$(LUA) -l CodeGen.Graph -l Smc.Cpp -e "print(CodeGen.Graph.to_dot(require 'Smc.Cpp.HeaderGenerator'{srcfileBase='', targetfileBase=''}.template))" > $@
+
+Graphviz_template.dot: ../src/Smc/Graphviz.lua
+	$(LUA) -l CodeGen.Graph -l Smc.Graphviz -e "print(CodeGen.Graph.to_dot(require 'Smc.Graphviz.Generator'{srcfileBase='', targetfileBase=''}.template))" > $@
 
 Groovy_template.dot: ../src/Smc/Groovy.lua
 	$(LUA) -l CodeGen.Graph -l Smc.Groovy -e "print(CodeGen.Graph.to_dot(require 'Smc.Groovy.Generator'{srcfileBase='', targetfileBase=''}.template))" > $@
