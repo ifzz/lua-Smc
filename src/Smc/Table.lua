@@ -44,7 +44,6 @@ function override:generate(fsm, stream)
                     transitions = t,
                 })
             end
-            local default
             if map.defaultState then
                 local t = {}
                 for _, trans in ipairs(map.transitions) do
@@ -54,16 +53,15 @@ function override:generate(fsm, stream)
                     end
                 end
                 table.insert(t, map.defaultState:findTransition('Default') or {})
-                default = {
+                table.insert(states, {
                     state = map.defaultState,
                     transitions = t,
-                }
+                })
             end
             table.insert(maps, {
                 map = map,
                 nbTransitions = #transitions + 1,
                 states = states,
-                defaultState = default,
             })
         end
         return maps
@@ -135,7 +133,6 @@ ${map.transitions:_transition_header()}
           </th>
         </tr>
 ${states:_state()}
-${defaultState?_default_state()}
       </table>
       <br />
     </div>
@@ -155,20 +152,6 @@ ${hasParameters?_transition_header_param()}
 ]],
                     _parameter_header = "${name}${_type?_parameter_type()}",
                     _parameter_type = ": ${_type}",
-            _default_state = [[
-            <tr>
-              <th>
-                DefaultState
-              </th>
-              <td>
-${defaultState.state.entryActions?_state_entry()}
-              </td>
-              <td>
-${defaultState.state.exitActions?_state_exit()}
-              </td>
-${defaultState.transitions:_transition()}
-            </tr>
-]],
         _state = [[
             <tr>
               <th>
