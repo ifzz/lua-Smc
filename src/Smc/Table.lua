@@ -77,6 +77,13 @@ function override:generate(fsm, stream)
 end
 
 function method:_build_template ()
+    local function escape_xml (s)
+        s = s:gsub("&", "&amp;")
+        s = s:gsub(">", "&gt;")
+        s = s:gsub("<", "&lt;")
+        return s
+    end
+
     return CodeGen{
         TOP = [[
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
@@ -192,8 +199,9 @@ ${doesPop?_guard_pop()!_guard_no_pop()}
 ${hasActions?_actions()!_no_action()}
 ]],
             _condition = [[
-[${condition}]
+[${condition; format=escape}]
 ]],
+            escape = escape_xml,
             _guard_no_pop = "${doesPush?_guard_push()!_guard_set()}",
             _guard_pop = [[
   pop(${endState}${popArgs; format=with_arg})
@@ -202,7 +210,7 @@ ${hasActions?_actions()!_no_action()}
                     if s == '' then
                         return s
                     else
-                        return ", " .. s
+                        return ", " .. escape_xml(s)
                     end
                 end,
             _guard_push = [[
@@ -221,10 +229,10 @@ ${hasActions?_actions()!_no_action()}
 ]],
         _action = "${propertyFlag?_action_prop()!_action_no_prop()}\n",
             _action_prop = [[
-${name} = ${arguments};
+${name} = ${arguments; format=escape};
 ]],
             _action_no_prop = [[
-${name}(${arguments; separator=', '});
+${name}(${arguments; separator=", "; format=escape});
 ]],
     }
 end
