@@ -4,10 +4,7 @@ require 'Coat'
 local table = require 'table'
 local ipairs = ipairs
 
-require 'Smc.Visitor'
-
 class 'Smc.Checker'
-with 'Smc.Visitor'
 
 has.name            = { is = 'ro', isa = 'string', required = true }
 has.targetLanguage  = { is = 'ro', isa = 'string', required = true }
@@ -61,23 +58,23 @@ function method:visitFSM (fsm)
     end
 
     for _, map in ipairs(fsm.maps) do
-        map:visit(self)
+        self:visitMap(map)
     end
 end
 
 function method:visitMap (map)
     for _, state in ipairs(map.states) do
-        state:visit(self)
+        self:visitState(state)
     end
     local defaultState = map.defaultState
     if defaultState then
-        defaultState:visit(self)
+        self:visitState(defaultState)
     end
 end
 
 function method:visitState (state)
     for _, trans in ipairs(state.transitions) do
-        trans:visit(self)
+        self:visitTransition(trans)
     end
 end
 
@@ -102,11 +99,11 @@ function method:visitTransition (transition)
     end
 
     for _, param in ipairs(transition.parameters) do
-        param:visit(self)
+        self:visitParameter(param)
     end
 
     for _, guard in ipairs(transition.guards) do
-        guard:visit(self)
+        self:visitGuard(guard)
     end
 end
 
@@ -154,9 +151,6 @@ function method:visitGuard (guard)
             self:_error("no such state as \"" .. endState .. "\".", guard.filename, guard.lineno)
         end
     end
-end
-
-function method:visitAction (action)
 end
 
 function method:visitParameter (parameter)

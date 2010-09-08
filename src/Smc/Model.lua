@@ -15,11 +15,6 @@ has.filename        = { is = 'ro', isa = 'string', required = true }
 has.lineno          = { is = 'ro', isa = 'number', required = true }
 has.name            = { is = 'ro', isa = 'string' }
 
-function method:visit (visitor, ...)
-    local t = self:type()
-    visitor['visit' .. t:sub(5)](visitor, self, ...)
-end
-
 
 class 'Smc.FSM'
 extends 'Smc.Element'
