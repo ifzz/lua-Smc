@@ -260,7 +260,7 @@ function method:findTransition (name)
 end
 
 function method:findGuard (name, condition)
-    condition:gsub('%s+', '')
+    condition = condition:gsub('%s+', '')
     for _, trans in ipairs(self.transitions) do
         if trans.name == name then
             for _, guard in ipairs(trans.guards) do
