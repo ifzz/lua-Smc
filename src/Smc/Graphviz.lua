@@ -63,7 +63,7 @@ function override:generate(fsm, stream)
                             if state:callDefault(transName) then
                                 for _, guard in ipairs(trans.guards) do
                                     if not state:findGuard(transName, guard.condition) then
-                                        if not guard.isInternalEvent then
+                                        if guard.isInternalEvent then
                                             table.insert(internalEvents, { guard = guard })
                                         end
                                     end
