@@ -285,7 +285,7 @@ subgraph cluster_${map.name} {
                     _node_sep = "|",
                     _node_entry = "Entry/\\l${entryActions:_indent_action()}",
                         _indent_action = "&nbsp;&nbsp;&nbsp;${_action()}",
-                    _node_exit = "Exit/\\l${entryActions:_indent_action()}",
+                    _node_exit = "Exit/\\l${exitActions:_indent_action()}",
                     _node_internal_events = "|${internalEvents:_internal_guard()}",
                         _internal_guard = "${guard.transition.name}${generator.graphLevel2?_guard_params()}${generator.graphLevel1?_guard_cond()}/\\l${guard.actions:_indent_action()}${guard.doesPush?_indent_guard_push_action()}",
                             _indent_guard_push_action = "&nbsp;&nbsp;&nbsp;${_guard_push_action()}",
