@@ -145,7 +145,7 @@ if fsm.getDebugFlag() == True:
 else:
     ${state.map.name}_DefaultState.${name}(self, fsm${parameters:_parameter_proto()})
 ]],
-        _guard = "${hasCondition?_guard_conditional()!_guard_unconditional()}",
+        _guard = "${isConditional?_guard_conditional()!_guard_unconditional()}",
             _guard_conditional = "${ifCondition?_guard_if()!_guard_no_if()}",
             _guard_no_if = "${elseifCondition?_guard_elseif()!_guard_else()}",
             _guard_unconditional = [[

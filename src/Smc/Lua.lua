@@ -173,7 +173,7 @@ end
             _transition_end = [[
 end
 ]],
-        _guard = "${hasCondition?_guard_conditional()!_guard_unconditional()}",
+        _guard = "${isConditional?_guard_conditional()!_guard_unconditional()}",
             _guard_conditional = "${ifCondition?_guard_if()!_guard_no_if()}",
             _guard_no_if = "${elseifCondition?_guard_elseif()!_guard_else()}",
             _guard_unconditional = [[
@@ -229,7 +229,7 @@ if fsm:getDebugFlag() then
 end
 ]],
                     _guard_debug_param = [[${name}=" .. tostring(${name}) .. "]],
-                _guard_no_action = "${hasCondition?_guard_no_action_if()}",
+                _guard_no_action = "${isConditional?_guard_no_action_if()}",
                     _guard_no_action_if = [[
 -- No actions.
 ]],

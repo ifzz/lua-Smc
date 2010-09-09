@@ -364,6 +364,7 @@ has.actions         = { is = 'rw', isa = 'table<Smc.Action>' }
 has.endStateName    = { is = 'ro', lazy_build = true }
 has.hasActions      = { is = 'ro', lazy_build = true }
 has.hasCondition    = { is = 'ro', lazy_build = true }
+has.isConditional   = { is = 'ro', lazy_build = true }
 has.hasCtxtReference= { is = 'ro', lazy_build = true }
 has.ifCondition     = { is = 'ro', lazy_build = true }
 has.elseifCondition = { is = 'ro', lazy_build = true }
@@ -388,6 +389,10 @@ function method:_build_hasActions ()
 end
 
 function method:_build_hasCondition ()
+    return self.condition ~= ''
+end
+
+function method:_build_isConditional ()
     return self.condition ~= '' or #self.transition.guards ~= 1
 end
 

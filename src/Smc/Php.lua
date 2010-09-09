@@ -173,7 +173,7 @@ else {
 }
 ]],
                 _parameter_call = ", ${name}",
-        _guard = "${hasCondition?_guard_conditional()!_guard_unconditional()}",
+        _guard = "${isConditional?_guard_conditional()!_guard_unconditional()}",
             _guard_conditional = "${ifCondition?_guard_if()!_guard_no_if()}",
             _guard_no_if = "${elseifCondition?_guard_elseif()!_guard_else()}",
             _guard_unconditional = [[
@@ -228,7 +228,7 @@ if ($fsm->getDebugFlag() == true) {
 ]],
                     _guard_debug_param = "${name}",
                 _guard_no_action = [[
-${hasCondition?_guard_no_action_if()}
+${isConditional?_guard_no_action_if()}
 ${_guard_final()}
 ]],
                     _guard_no_action_if = [[

@@ -36,7 +36,6 @@ local function normalize (s)
     return s
 end
 
-
 function override:generate(fsm, stream)
     local function maps4dot ()
         local maps = {}
@@ -334,14 +333,8 @@ subgraph cluster_${map.name} {
                 _guard_push = "${map.name}::${guard.realEndState}::${guard.pushMapName}",
                 _guard_params = "(${guard.transition.parameters:_parameter(); separator=', '})",
                 _guard_cond = "${guard.hasCondition?_guard_cond_if()}",
-                    _guard_cond_if = "${guard.condition; format=esc_cond}",
-                    esc_cond = function (s)
-                        if s == '' then
-                            return s
-                        else
-                            return "\\l\\[" .. escape(s) .. "\\]"
-                        end
-                    end,
+                    _guard_cond_if = "\\l\\[${guard.condition; format=escape}\\]",
+                    escape = escape,
                 _guard_push_action = "push(${guard.pushState})\\l",
             _edge_pop = [[
 
@@ -366,9 +359,8 @@ subgraph cluster_${map.name} {
         _action = "${generator.graphLevel1?_action1()}",
             _action1 = "${name}${generator.graphLevel2?_action2()};\\l",
                 _action2 = "${propertyFlag?_action_prop()!_action_no_prop()}",
-                    _action_prop = " = ${arguments; format=esc_arg}",
-                    _action_no_prop = "(${arguments; separator=', '; format=esc_arg})",
-                    esc_arg = escape,
+                    _action_prop = " = ${arguments; format=escape}",
+                    _action_no_prop = "(${arguments; separator=', '; format=escape})",
         _parameter = "${name}${_type?_parameter_type()}",
             _parameter_type = ": ${_type}",
     }

@@ -196,7 +196,7 @@ else {
 }
 ]],
                 _parameter_call = ", ${name}",
-        _guard = "${hasCondition?_guard_conditional()!_guard_unconditional()}",
+        _guard = "${isConditional?_guard_conditional()!_guard_unconditional()}",
             _guard_conditional = "${ifCondition?_guard_if()!_guard_no_if()}",
             _guard_no_if = "${elseifCondition?_guard_elseif()!_guard_else()}",
             _guard_unconditional = [[
@@ -255,7 +255,7 @@ if (getDebugFlag(fsm) != 0) {
     TRACE("ENTER TRANSITION: ${transition.state.fullName}.${transition.name}(${transition.parameters:_parameter_context_call(); separator=', '})\n\r");
 }
 ]],
-                _guard_no_action = "${hasCondition?_guard_no_action_if()}",
+                _guard_no_action = "${isConditional?_guard_no_action_if()}",
                     _guard_no_action_if = [[
 /* No actions. */
 ]],
