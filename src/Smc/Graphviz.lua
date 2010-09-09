@@ -24,7 +24,7 @@ has.suffix          = { '+', default = 'dot' }
 local function escape (s)
     s = s:gsub("\\", "\\\\")
     s = s:gsub("\"", "\\\"")
-    s = s:gsub("\\n", "\\\\\\l")
+    s = s:gsub("\n", "\\l")
     s = s:gsub(">", "\\>")
     s = s:gsub("<", "\\<")
     s = s:gsub("\\|", "\\\\|")
