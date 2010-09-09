@@ -91,7 +91,7 @@ function override:generate(fsm, stream)
                     for _, trans in ipairs(state.transitions) do
                         for _, guard in ipairs(trans.guards) do
                             if not guard.isInternalEvent then
-                                table.insert(t, { guard = guard })
+                                table.insert(t, { guard = guard, state = state })
                             end
                         end
                     end
@@ -102,7 +102,7 @@ function override:generate(fsm, stream)
                                 for _, guard in ipairs(trans.guards) do
                                     if not state:findGuard(transName, guard.condition) then
                                         if not guard.isInternalEvent then
-                                            table.insert(t, { guard = guard })
+                                            table.insert(t, { guard = guard, state = state })
                                         end
                                     end
                                 end
@@ -324,7 +324,7 @@ subgraph cluster_${map.name} {
 ]],
             _edge_guard = [[
 
-"${map.name}::${guard.transition.state.name}" -> "${guard.doesPop?_guard_pop()!_guard_no_pop()}"
+"${map.name}::${state.name}" -> "${guard.doesPop?_guard_pop()!_guard_no_pop()}"
     [label="${guard.transition.name}${generator.graphLevel2?_guard_params()}${generator.graphLevel1?_guard_cond()}/\l${guard.actions:_action()}${guard.doesPush?_guard_push_action()}"];
 ]],
                 _guard_no_pop = "${guard.doesPush?_guard_push()!_guard_set()}",
