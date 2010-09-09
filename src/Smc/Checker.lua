@@ -33,11 +33,7 @@ function method:_error (text, filename, lineno)
     self.isValid = false
 end
 
-function method:check (fsm)
-    self:visitFSM(fsm)
-end
-
-function method:visitFSM (fsm)
+function method:checkFSM (fsm)
     self.isValid = fsm.isValid
 
     if not fsm.startState then
@@ -58,27 +54,27 @@ function method:visitFSM (fsm)
     end
 
     for _, map in ipairs(fsm.maps) do
-        self:visitMap(map)
+        self:checkMap(map)
     end
 end
 
-function method:visitMap (map)
+function method:checkMap (map)
     for _, state in ipairs(map.states) do
-        self:visitState(state)
+        self:checkState(state)
     end
     local defaultState = map.defaultState
     if defaultState then
-        self:visitState(defaultState)
+        self:checkState(defaultState)
     end
 end
 
-function method:visitState (state)
+function method:checkState (state)
     for _, trans in ipairs(state.transitions) do
-        self:visitTransition(trans)
+        self:checkTransition(trans)
     end
 end
 
-function method:visitTransition (transition)
+function method:checkTransition (transition)
     if #transition.guards > 1 then
         local hash = {}
         for _, guard in ipairs(transition.guards) do
@@ -99,15 +95,15 @@ function method:visitTransition (transition)
     end
 
     for _, param in ipairs(transition.parameters) do
-        self:visitParameter(param)
+        self:checkParameter(param)
     end
 
     for _, guard in ipairs(transition.guards) do
-        self:visitGuard(guard)
+        self:checkGuard(guard)
     end
 end
 
-function method:visitGuard (guard)
+function method:checkGuard (guard)
     function findState (endState)
         local idx = endState:find '::'
         local transition = guard.transition
@@ -153,7 +149,7 @@ function method:visitGuard (guard)
     end
 end
 
-function method:visitParameter (parameter)
+function method:checkParameter (parameter)
     if self.targetLanguage == 'TCL' then
         local _type = parameter._type or 'value'
         if _type ~= 'value' and _type ~= 'reference' then

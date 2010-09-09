@@ -520,7 +520,7 @@ function method:main (args)
             if self.verbose then
                 print("[checking " .. filename .. "]")
             end
-            checker:check(fsm)
+            checker:checkFSM(fsm)
             for _, msg in ipairs(checker.messages) do
                 print(tostring(msg))
             end
