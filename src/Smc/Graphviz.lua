@@ -88,10 +88,43 @@ function override:generate(fsm, stream)
             local function guards ()
                 local t = {}
                 for _, state in ipairs(map.states) do
+                    local function add_guard (guard)
+                        local orig = mapName .. "::" .. state.name
+                        local dest
+                        local transType = guard.transType
+                        if transType ~= 'TRANS_POP' then
+                            local endStateName = guard.endState
+                            if endStateName == 'nil' then
+                                endStateName = state.name
+                            end
+                            if not endStateName:find "::" then
+                                endStateName = mapName .. "::" .. endStateName
+                            end
+                            dest = endStateName
+                            if transType == 'TRANS_PUSH' then
+                                local pushStateName = guard.pushState
+                                local idx = pushStateName:find "::"
+                                if idx then
+                                    dest = dest .. "::" .. pushStateName:sub(1, idx-1)
+                                else
+                                    dest = dest .. "::" .. mapName
+                                end
+                            end
+                        else
+                            local pop = guard.endState
+                            local popArgs = guard.popArgs
+                            if self.graphLevel == 2 and popArgs ~= '' then
+                                pop = pop .. ", " .. escape(normalize(popArgs))
+                            end
+                            dest = mapName .. "::pop(" .. pop .. ")"
+                        end
+                        table.insert(t, { guard = guard, orig = orig, dest = dest })
+                    end  -- add_guard
+
                     for _, trans in ipairs(state.transitions) do
                         for _, guard in ipairs(trans.guards) do
                             if not guard.isInternalEvent then
-                                table.insert(t, { guard = guard, state = state })
+                                add_guard(guard)
                             end
                         end
                     end
@@ -102,7 +135,7 @@ function override:generate(fsm, stream)
                                 for _, guard in ipairs(trans.guards) do
                                     if not state:findGuard(transName, guard.condition) then
                                         if not guard.isInternalEvent then
-                                            table.insert(t, { guard = guard, state = state })
+                                            add_guard(guard)
                                         end
                                     end
                                 end
@@ -128,7 +161,7 @@ function override:generate(fsm, stream)
                                 if guard.transType == 'TRANS_PUSH' then
                                     local pushStateName = guard.pushState
                                     if pushStateName:find(mapName) == 1 then
-                                        pushEntryMap[pushStateName] = guard
+                                        pushEntryMap[pushStateName] = true
                                     end
                                 end
                             end
@@ -136,8 +169,9 @@ function override:generate(fsm, stream)
                     end
                 end
                 local t = {}
-                for _, v in pairs(pushEntryMap) do
-                    table.insert(t, { guard = v })
+                for k in pairs(pushEntryMap) do
+                    local orig = "push(" .. k .. ")"
+                    table.insert(t, { orig = orig, dest = k })
                 end
                 return t
             end  -- pushEntry
@@ -150,24 +184,30 @@ function override:generate(fsm, stream)
                 if self.graphLevel == 2 and popArgs ~= '' then
                     popKey = popKey .. ", " .. escape(normalize(popArgs))
                 end
-                popTransMap[popKey] = guard
+                popTransMap[popKey] = true
             end -- putPopTrans
             local function popTrans ()
                 local t = {}
-                for _, v in pairs(popTransMap) do
-                    table.insert(t, { guard = v })
+                for k in pairs(popTransMap) do
+                    table.insert(t, { pop = k })
                 end
                 return t
             end  -- popTrans
 
             local pushStateMap = {}
-            local function putPushState (guard)
-                pushStateMap[mapName .. "::" .. guard.realEndState .. "::" .. guard.pushMapName] = guard
+            local function putPushState (guard, state)
+                local endStateName = guard.endState
+                if endStateName == 'nil' then
+                    endStateName = state.name
+                end
+                pushStateMap[mapName .. "::" .. endStateName .. "::" .. guard.pushMapName] = guard
             end -- putPushState
             local function pushState ()
                 local t = {}
-                for _, v in pairs(pushStateMap) do
-                    table.insert(t, { guard = v })
+                for k, v in pairs(pushStateMap) do
+                    local r = k:reverse()
+                    local s = r:sub(2 + r:find "::"):reverse()
+                    table.insert(t, { guard = v, orig = k, dest = s })
                 end
                 return t
             end  -- pushState
@@ -179,7 +219,7 @@ function override:generate(fsm, stream)
                     for _, guard in ipairs(trans.guards) do
                         local transType = guard.transType
                         if transType == 'TRANS_PUSH' then
-                            putPushState(guard)
+                            putPushState(guard, state)
                         elseif transType == 'TRANS_POP' then
                             putPopTrans(guard)
                             needEnd = true;
@@ -194,7 +234,7 @@ function override:generate(fsm, stream)
                                 if not state:findGuard(transName, guard.condition) then
                                     local transType = guard.transType
                                     if transType == 'TRANS_PUSH' then
-                                        putPushState(guard)
+                                        putPushState(guard, state)
                                     elseif transType == 'TRANS_POP' then
                                         putPopTrans(guard)
                                         needEnd = true;
@@ -291,17 +331,9 @@ subgraph cluster_${map.name} {
                             _indent_guard_push_action = "&nbsp;&nbsp;&nbsp;${_guard_push_action()}",
             _node_pop = [[
 
-"${map.name}::pop(${guard.endState}${generator.graphLevel2?_node_pop_arg()})"
+"${map.name}::pop(${pop})"
     [label="" width=1];
 ]],
-                _node_pop_arg = "${guard.popArgs; format=with_arg}",
-                with_arg = function (s)
-                    if s == '' then
-                        return s
-                    else
-                        return ", " .. escape(normalize(s))
-                    end
-                end,
             _node_end = [[
 
 "${map.name}::%end"
@@ -309,7 +341,7 @@ subgraph cluster_${map.name} {
 ]],
             _node_push_state = [[
 
-"${map.name}::${guard.realEndState}::${guard.pushMapName}"
+"${orig}"
     [label="{${guard.pushMapName}|O-O\r}"];
 ]],
             _node_start = [[
@@ -319,18 +351,14 @@ subgraph cluster_${map.name} {
 ]],
             _node_push_entry = [[
 
-"push(${guard.pushState})"
+"${orig}"
     [label="" shape=plaintext];
 ]],
             _edge_guard = [[
 
-"${map.name}::${state.name}" -> "${guard.doesPop?_guard_pop()!_guard_no_pop()}"
+"${orig}" -> "${dest}"
     [label="${guard.transition.name}${generator.graphLevel2?_guard_params()}${generator.graphLevel1?_guard_cond()}/\l${guard.actions:_action()}${guard.doesPush?_guard_push_action()}"];
 ]],
-                _guard_no_pop = "${guard.doesPush?_guard_push()!_guard_set()}",
-                _guard_pop = "${map.name}::pop(${guard.endState}${generator.graphLevel2?_node_pop_arg()})",
-                _guard_set = "${guard.endStateMap}::${guard.realEndState}",
-                _guard_push = "${map.name}::${guard.realEndState}::${guard.pushMapName}",
                 _guard_params = "(${guard.transition.parameters:_parameter(); separator=', '})",
                 _guard_cond = "${guard.hasCondition?_guard_cond_if()}",
                     _guard_cond_if = "\\l\\[${guard.condition; format=escape}\\]",
@@ -338,13 +366,12 @@ subgraph cluster_${map.name} {
                 _guard_push_action = "push(${guard.pushState})\\l",
             _edge_pop = [[
 
-"${map.name}::pop(${guard.endState}${generator.graphLevel2?_node_pop_arg()})" -> "${map.name}::%end"
-    [label="pop(${guard.endState}${generator.graphLevel2?_edge_pop_arg()});\l"];
+"${map.name}::pop(${pop})" -> "${map.name}::%end"
+    [label="pop(${pop});\l"];
 ]],
-                _edge_pop_arg = "${guard.popArgs; format=with_arg}",
             _edge_push_state = [[
 
-"${map.name}::${guard.realEndState}::${guard.pushMapName}" -> "${guard.endStateMap}::${guard.realEndState}"
+"${orig}" -> "${dest}"
     [label="pop/"]
 ]],
             _edge_start = [[
@@ -353,7 +380,7 @@ subgraph cluster_${map.name} {
 ]],
             _edge_push_entry = [[
 
-"push(${guard.pushState})" -> "${guard.pushState}"
+"${orig}" -> "${dest}"
     [arrowtail=odot];
 ]],
         _action = "${generator.graphLevel1?_action1()}",

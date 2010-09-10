@@ -379,8 +379,6 @@ has.doesEndPop      = { is = 'ro', lazy_build = true }
 has.doesSet         = { is = 'ro', lazy_build = true }
 has.pushStateName   = { is = 'ro', lazy_build = true }
 has.needVarEndState = { is = 'ro', lazy_build = true }
-has.realEndState    = { is = 'ro', lazy_build = true }
-has.endStateMap     = { is = 'ro', lazy_build = true }
 has.pushMapName     = { is = 'ro', lazy_build = true }
 has.isInternalEvent = { is = 'ro', lazy_build = true }
 
@@ -444,29 +442,6 @@ function method:_build_endStateName ()
         return endStateName
     end
     return scopeStateName(endStateName, self.transition.state.map.name)
-end
-
-function method:_build_realEndState ()
-    local endState = self.endState
-    if endState == 'nil' then
-        return self.transition.state.name
-    end
-    local idx = endState:find "::"
-    if idx then
-        return endState:sub(idx + 2)
-    else
-        return endState
-    end
-end
-
-function method:_build_endStateMap ()
-    local endState = self.endState
-    local idx = endState:find "::"
-    if idx then
-        return endState:sub(1, idx-1)
-    else
-        return self.transition.state.map.name
-    end
 end
 
 function method:_build_isLoopback ()
