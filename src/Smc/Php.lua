@@ -226,7 +226,7 @@ if ($fsm->getDebugFlag() == true) {
     fwrite($fsm->getDebugStream(), "ENTER TRANSITION: ${transition.state.fullName}.${transition.name}(${transition.parameters:_guard_debug_param(); separator=', '})\n");
 }
 ]],
-                    _guard_debug_param = "${name}",
+                    _guard_debug_param = "\\${name}",
                 _guard_no_action = [[
 ${isConditional?_guard_no_action_if()}
 ${_guard_final()}

@@ -249,7 +249,7 @@ if ($fsm->getDebugFlag()) {
     print $fh "ENTER TRANSITION: ${transition.state.fullName}.${transition.name}(${transition.parameters:_guard_debug_param(); separator=', '})\n";
 }
 ]],
-                    _guard_debug_param = "${name}",
+                    _guard_debug_param = "\\${name}",
                 _guard_no_action = "${isConditional?_guard_no_action_if()}",
                     _guard_no_action_if = [[
 # No actions.
