@@ -10,6 +10,10 @@ class TestClass() {
         System.out.println("No arg")
     }
 
+    def getFSM(): TestClassContext = {
+        return _fsm
+    }
+
     def Output(str: String) {
         System.out.println(str)
     }

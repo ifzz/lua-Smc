@@ -11,6 +11,10 @@ public class TestClass
         // _fsm.setDebugFlag(true);
     }
 
+    public TestClassContext getFSM() {
+        return _fsm;
+    }
+
     public void NoArg() {
         System.out.println("No arg");
     }

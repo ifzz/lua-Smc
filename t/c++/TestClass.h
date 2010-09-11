@@ -3,10 +3,9 @@
 
 class TestClass
 {
-private:
+public:
     TestClassContext _fsm;
 
-public:
     TestClass();
 
     ~TestClass() {};

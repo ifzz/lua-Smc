@@ -10,6 +10,10 @@ class TestClass {
         // _fsm.setDebugFlag(true)
     }
 
+    def getFSM() {
+        return _fsm
+    }
+
     def NoArg() {
         println("No arg")
     }

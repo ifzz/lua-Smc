@@ -15,6 +15,10 @@ class TestClass {
         //$this->_fsm->setDebugFlag(true);
     }
 
+    public function getFSM() {
+        return $this->_fsm;
+    }
+
     public function NoArg() {
         echo "No arg\n";
     }
