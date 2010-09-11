@@ -53,7 +53,7 @@ sub test_smc_tcl {
     unlink("t/tcl/TestClassContext.tcl");
     Util::do_fsm('tcl', $test);
     system("${Util::smc} -tcl ${options} t/tcl/TestClass.sm");
-    my $trace = $options =~ /-g0/ ? 'g0' : '';
+    my $trace = $options =~ /---g0/ ? 'g0' : '';
     my $out = Util::run('tclsh', "t/tcl/${test}.tcl", $trace);
     my $expected = $trace
                  ? Util::slurp("t/templates/${test}.g0.out")
