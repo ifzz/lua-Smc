@@ -75,7 +75,7 @@ abstract class FSMContext[State] {
     def setState(state: State): Unit = {
         val previousState = _state
         if (_debugFlag)
-            _debugStream.println("NEW STATE       : " + state)
+            _debugStream.println("ENTER STATE     : " + state)
         _state = state
         _isInTransaction = false
         // Inform all listeners about this state change
