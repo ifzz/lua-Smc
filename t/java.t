@@ -63,7 +63,8 @@ sub test_smc_java {
     unlink("t/java/TestClassContext.java");
     Util::do_fsm('java', $test);
     system("${Util::smc} -java ${options} t/java/TestClass.sm");
-    my $out = Util::run('cd t/java && javac -g -Xlint:unchecked -classpath ../../runtime/java/statemap.jar TestClass.java TestClassContext.java', "${test}.java");
+    my $lint = $options =~ /-generic/ ? '-Xlint:unchecked' : '';
+    my $out = Util::run("cd t/java && javac -g $lint -classpath ../../runtime/java/statemap.jar TestClass.java TestClassContext.java", "${test}.java");
     diag($out) if $out;
     my $trace = $options =~ /-g0/ && ${Util::smc} !~ /\.jar/ ? 'g0' : '';
     $out = Util::run('java -classpath t/java:runtime/java/statemap.jar', $test, $trace);
