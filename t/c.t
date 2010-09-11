@@ -48,8 +48,11 @@ sub test_smc_c {
     system("${Util::smc} -c ${options} -headerd t/c t/c/TestClass.sm");
     my $out = Util::run('gcc', "-I runtime/c -I . -o t/c/${test} t/c/${test}.c t/c/TestClass.c t/c/TestClassContext.c");
     diag($out) if $out;
-    $out = Util::run("t/c/${test}");
-    my $expected = Util::slurp("t/templates/${test}.out");
+    my $trace = $options =~ /-g0/ && ${Util::smc} !~ /\.jar/ ? 'g0' : '';
+    $out = Util::run("t/c/${test}", $trace);
+    my $expected = $trace
+                 ? Util::slurp("t/templates/${test}.g0.out")
+                 : Util::slurp("t/templates/${test}.out");
     if ($expected =~ /^like/) {
         like($out, qr{$re{$test}}, "$test $options");
     }

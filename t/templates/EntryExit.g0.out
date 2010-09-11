@@ -1,0 +1,36 @@
+LEAVING STATE   : Map_1::State_1
+State_1:Exit
+ENTER TRANSITION: Map_1::State_1.Evt_1()
+State_1:Evt_1
+EXIT TRANSITION : Map_1::State_1.Evt_1()
+ENTER STATE     : Map_1::State_2
+State_2:Entry
+LEAVING STATE   : Map_1::State_2
+State_2:Exit
+ENTER TRANSITION: Map_1::State_2.Evt_2()
+State_2:Evt_2
+EXIT TRANSITION : Map_1::State_2.Evt_2()
+ENTER STATE     : Map_1::State_2
+State_2:Entry
+LEAVING STATE   : Map_1::State_2
+ENTER TRANSITION: Map_1::State_2.Evt_3()
+State_2:Evt_3
+EXIT TRANSITION : Map_1::State_2.Evt_3()
+ENTER STATE     : Map_1::State_2
+LEAVING STATE   : Map_1::State_2
+State_2:Exit
+ENTER TRANSITION: Map_1::State_2.Evt_1()
+State_2:Evt_1
+EXIT TRANSITION : Map_1::State_2.Evt_1()
+ENTER STATE     : Map_1::State_1
+State_1:Entry
+LEAVING STATE   : Map_1::State_1
+ENTER TRANSITION: Map_1::State_1.Default()
+State_1:Default
+EXIT TRANSITION : Map_1::State_1.Default()
+ENTER STATE     : Map_1::State_1
+LEAVING STATE   : Map_1::State_1
+ENTER TRANSITION: Map_1::State_1.Default()
+State_1:Default
+EXIT TRANSITION : Map_1::State_1.Default()
+ENTER STATE     : Map_1::State_1

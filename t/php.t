@@ -48,12 +48,16 @@ sub test_smc_php {
     unlink("t/php/TestClassContext.pphp");
     Util::do_fsm('php', $test);
     system("${Util::smc} -php ${options} t/php/TestClass.sm");
-    my $out = Util::run('php', "-q t/php/${test}.php");
-    my $expected = Util::slurp("t/templates/${test}.out");
+    my $trace = $options =~ /-g0/ && ${Util::smc} !~ /\.jar/ ? 'g0' : '';
+    my $out = Util::run('php', "-q t/php/${test}.php", $trace);
+    my $expected = $trace
+                 ? Util::slurp("t/templates/${test}.g0.out")
+                 : Util::slurp("t/templates/${test}.out");
     if ($expected =~ /^like/) {
         like($out, qr{$re{$test}}, "$test $options");
     }
     else {
+        $out =~ s/\$n/n/gm;
         is($out, "\n\n" . $expected, "$test $options");
     }
 }

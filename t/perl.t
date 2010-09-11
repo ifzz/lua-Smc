@@ -48,12 +48,16 @@ sub test_smc_perl {
     unlink("t/perl/TestClassContext.pm");
     Util::do_fsm('perl', $test);
     system("${Util::smc} -perl ${options} t/perl/TestClass.sm");
-    my $out = Util::run('perl', "-I t/perl -I/runtime/perl t/perl/${test}.pl");
-    my $expected = Util::slurp("t/templates/${test}.out");
+    my $trace = $options =~ /-g0/ && ${Util::smc} !~ /\.jar/ ? 'g0' : '';
+    my $out = Util::run('perl', "-I t/perl -I runtime/perl t/perl/${test}.pl", $trace );
+    my $expected = $trace
+                 ? Util::slurp("t/templates/${test}.g0.out")
+                 : Util::slurp("t/templates/${test}.out");
     if ($expected =~ /^like/) {
         like($out, qr{$re{$test}}, "$test $options");
     }
     else {
+        $out =~ s/\$n/n/gm;
         is($out, $expected, "$test $options");
     }
 }

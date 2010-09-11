@@ -50,12 +50,16 @@ sub test_smc_groovy {
     unlink("t/groovy/TestClassContext.groovy");
     Util::do_fsm('groovy', $test);
     system("${Util::smc} -groovy ${options} t/groovy/TestClass.sm");
-    my $out = Util::run('cd t/groovy && groovy -classpath ../../runtime/groovy/statemap.jar', $test);
-    my $expected = Util::slurp("t/templates/${test}.out");
+    my $trace = $options =~ /-g0/ && ${Util::smc} !~ /\.jar/ ? 'g0' : '';
+    my $out = Util::run('cd t/groovy && groovy -classpath ../../runtime/groovy/statemap.jar', $test, $trace);
+    my $expected = $trace
+                 ? Util::slurp("t/templates/${test}.g0.out")
+                 : Util::slurp("t/templates/${test}.out");
     if ($expected =~ /^like/) {
         like($out, qr{$re{$test}}, "$test $options");
     }
     else {
+        $out =~ s/int n/n/gm;
         is($out, $expected, "$test $options");
     }
 }

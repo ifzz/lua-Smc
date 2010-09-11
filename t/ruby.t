@@ -48,8 +48,11 @@ sub test_smc_ruby {
     unlink("t/ruby/TestClassContext.rb");
     Util::do_fsm('ruby', $test);
     system("${Util::smc} -ruby ${options} t/ruby/TestClass.sm");
-    my $out = Util::run('ruby', "-I t/ruby -I runtime/ruby t/ruby/${test}.rb");
-    my $expected = Util::slurp("t/templates/${test}.out");
+    my $trace = $options =~ /-g0/ && ${Util::smc} !~ /\.jar/ ? 'g0' : '';
+    my $out = Util::run('ruby', "-I t/ruby -I runtime/ruby t/ruby/${test}.rb", $trace);
+    my $expected = $trace
+                 ? Util::slurp("t/templates/${test}.g0.out")
+                 : Util::slurp("t/templates/${test}.out");
     if ($expected =~ /^like/) {
         like($out, qr{$re{$test}}, "$test $options");
     }

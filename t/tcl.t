@@ -10,7 +10,7 @@ use Util;
 
 $Util::smc = 'java -jar Smc.jar';
 #$Util::test_graph = 0;
-$Util::test_table = 0;
+#$Util::test_table = 0;
 @Util::tests = qw(
     Simple
     EntryExit
@@ -53,8 +53,11 @@ sub test_smc_tcl {
     unlink("t/tcl/TestClassContext.tcl");
     Util::do_fsm('tcl', $test);
     system("${Util::smc} -tcl ${options} t/tcl/TestClass.sm");
-    my $out = Util::run('tclsh', "t/tcl/${test}.tcl");
-    my $expected = Util::slurp("t/templates/${test}.out");
+    my $trace = $options =~ /-g0/ ? 'g0' : '';
+    my $out = Util::run('tclsh', "t/tcl/${test}.tcl", $trace);
+    my $expected = $trace
+                 ? Util::slurp("t/templates/${test}.g0.out")
+                 : Util::slurp("t/templates/${test}.out");
     if ($expected =~ /^like/) {
         like($out, qr{$re{$test}}, "$test $options");
     }

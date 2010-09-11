@@ -64,12 +64,17 @@ sub test_smc_java {
     Util::do_fsm('java', $test);
     system("${Util::smc} -java ${options} t/java/TestClass.sm");
     my $out = Util::run('cd t/java && javac -g -Xlint:unchecked -classpath ../../runtime/java/statemap.jar TestClass.java TestClassContext.java', "${test}.java");
-    $out = Util::run('java -classpath t/java:runtime/java/statemap.jar', $test);
-    my $expected = Util::slurp("t/templates/${test}.out");
+    diag($out) if $out;
+    my $trace = $options =~ /-g0/ && ${Util::smc} !~ /\.jar/ ? 'g0' : '';
+    $out = Util::run('java -classpath t/java:runtime/java/statemap.jar', $test, $trace);
+    my $expected = $trace
+                 ? Util::slurp("t/templates/${test}.g0.out")
+                 : Util::slurp("t/templates/${test}.out");
     if ($expected =~ /^like/) {
         like($out, qr{$re{$test}}, "$test $options");
     }
     else {
+        $out =~ s/int n/n/gm;
         is($out, $expected, "$test $options");
     }
 }

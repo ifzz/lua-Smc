@@ -1,0 +1,11 @@
+LEAVING STATE   : Map_1::State_1
+ENTER TRANSITION: Map_1::State_1.Evt_1()
+State_1:Evt_1
+No arg
+EXIT TRANSITION : Map_1::State_1.Evt_1()
+ENTER STATE     : Map_1::State_2
+LEAVING STATE   : Map_1::State_2
+ENTER TRANSITION: Map_1::State_2.Evt_1()
+State_2:Evt_1
+EXIT TRANSITION : Map_1::State_2.Evt_1()
+ENTER STATE     : Map_1::State_1

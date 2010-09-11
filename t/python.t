@@ -49,8 +49,11 @@ sub test_smc_python {
     unlink("t/python/TestClassContext.py");
     Util::do_fsm('python', $test);
     system("${Util::smc} -python ${options} t/python/TestClass.sm");
-    my $out = Util::run('python', "t/python/${test}.py");
-    my $expected = Util::slurp("t/templates/${test}.out");
+    my $trace = $options =~ /-g0/ && ${Util::smc} !~ /\.jar/ ? 'g0' : '';
+    my $out = Util::run('python', "t/python/${test}.py", $trace);
+    my $expected = $trace
+                 ? Util::slurp("t/templates/${test}.g0.out")
+                 : Util::slurp("t/templates/${test}.out");
     if ($expected =~ /^like/) {
         like($out, qr{$re{$test}}, "$test $options");
     }

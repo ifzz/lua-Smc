@@ -52,12 +52,17 @@ sub test_smc_scala {
     Util::do_fsm('scala', $test);
     system("${Util::smc} -scala ${options} t/scala/TestClass.sm");
     my $out = Util::run('cd t/scala && scalac -g ../../runtime/scala/statemap.scala TestClass.scala TestClassContext.scala', "${test}.scala");
-    $out = Util::run('scala -classpath t/scala', $test);
-    my $expected = Util::slurp("t/templates/${test}.out");
+    diag($out) if $out;
+    my $trace = $options =~ /-g0/ && ${Util::smc} !~ /\.jar/ ? 'g0' : '';
+    $out = Util::run('scala -classpath t/scala', $test, $trace);
+    my $expected = $trace
+                 ? Util::slurp("t/templates/${test}.g0.out")
+                 : Util::slurp("t/templates/${test}.out");
     if ($expected =~ /^like/) {
         like($out, qr{$re{$test}}, "$test $options");
     }
     else {
+        $out =~ s/n: Int/n/gm;
         is($out, $expected, "$test $options");
     }
 }
