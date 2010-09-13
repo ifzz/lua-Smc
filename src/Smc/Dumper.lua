@@ -1,8 +1,6 @@
 
 require 'Coat'
 
-require 'Smc.Generator'
-
 class 'Smc.Dumper'
 extends 'Smc.Generator'
 
