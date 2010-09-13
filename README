@@ -14,6 +14,7 @@ Install
   $ luarocks install luacov
   $ luarocks install lua-coat
   $ luarocks install lua-codegen
-  $ cpan Test::Harness
+  $ sudo aptitude install libtest-harness-perl        # or cpan Test::Harness
+  $ sudo aptitude install libtest-longstring-perl     # or cpan Test::LongString
 
   $ make install
