@@ -31,7 +31,7 @@ function method:_build_template ()
 
 ${_preamble()}
 ${_base_state()}
-${fsm.maps:_map()}
+${fsm.maps/_map()}
 ${_context()}
 
 /*
@@ -44,7 +44,7 @@ ${_context()}
         _preamble = [[
 ${fsm.source}
 require_once 'StateMachine/statemap.php';
-${fsm.importList:_import()}
+${fsm.importList/_import()}
 ]],
             _import = [[
 require_once '${it}';
@@ -58,7 +58,7 @@ class ${fsm.context}State extends State {
 
     public function Exit_($fsm) {
     }
-    ${fsm.transitions:_transition_base_state()}
+    ${fsm.transitions/_transition_base_state()}
 
     public function Default_($fsm) {
         ${generator.debugLevel0?_base_state_debug()}
@@ -73,7 +73,7 @@ class ${fsm.context}State extends State {
             _transition_base_state = "${isntDefault?_transition_base_state_if()}\n",
             _transition_base_state_if = [[
 
-public function ${name}($fsm${parameters:_parameter_proto()}) {
+public function ${name}($fsm${parameters/_parameter_proto()}) {
     $this->Default_($fsm);
 }
 ]],
@@ -91,17 +91,17 @@ class ${name}_DefaultState extends ${fsm.context}State {
     ${generator.reflectFlag?_state_reflect()}
 
 }
-${states:_state()}
+${states/_state()}
 
 class ${name} {
-    ${states:_state_decl()}
+    ${states/_state_decl()}
     public static $DefaultState;
 }
 
-${states:_state_init()}
+${states/_state_init()}
 ${name}::$DefaultState = new ${name}_DefaultState('${fullName}::DefaultState', -1);
 ]],
-            _map_default_state = "${defaultState.transitions:_transition()}",
+            _map_default_state = "${defaultState.transitions/_transition()}",
             _state_decl = [[
 public static $${name};
 ]],
@@ -113,7 +113,7 @@ ${map.name}::$${name} = new ${map.name}_${name}('${fullName}', ${map.nextStateId
 class ${map.name}_${name} extends ${map.name}_DefaultState {
     ${entryActions?_state_entry()}
     ${exitActions?_state_exit()}
-    ${transitions:_transition()}
+    ${transitions/_transition()}
     ${generator.reflectFlag?_state_reflect()}
 
 }
@@ -122,21 +122,21 @@ class ${map.name}_${name} extends ${map.name}_DefaultState {
 
 public function Entry($fsm) {
     $ctxt = $fsm->getOwner();
-    ${entryActions:_action()}
+    ${entryActions/_action()}
 }
 ]],
             _state_exit = [[
 
 public function Exit_($fsm) {
     $ctxt = $fsm->getOwner();
-    ${exitActions:_action()}
+    ${exitActions/_action()}
 }
 ]],
             _state_reflect = [[
 
 public function getTransitions() {
     return array(
-        ${reflect:_reflect()}
+        ${reflect/_reflect()}
     );
 }
 ]],
@@ -145,10 +145,10 @@ public function getTransitions() {
 ]],
         _transition = [[
 
-public function ${name; format=sanitize}($fsm${parameters:_parameter_proto()}) {
+public function ${name; format=sanitize}($fsm${parameters/_parameter_proto()}) {
     ${hasCtxtReference?_transition_ctxt()}
     ${generator.debugLevel0?_transition_debug()}
-    ${guards:_guard()}
+    ${guards/_guard()}
     ${needFinalElse?_transition_else()}
 }
 ]],
@@ -169,7 +169,7 @@ if ($fsm->getDebugFlag() == true) {
 ]],
             _transition_else = [[
 else {
-    parent::${name; format=sanitize}($fsm${parameters:_parameter_call()});
+    parent::${name; format=sanitize}($fsm${parameters/_parameter_call()});
 }
 ]],
                 _parameter_call = ", ${name}",
@@ -223,7 +223,7 @@ if ($fsm->getDebugFlag() == true) {
 ]],
                 _guard_debug_enter = [[
 if ($fsm->getDebugFlag() == true) {
-    fwrite($fsm->getDebugStream(), "ENTER TRANSITION: ${transition.state.fullName}.${transition.name}(${transition.parameters:_guard_debug_param(); separator=', '})\n");
+    fwrite($fsm->getDebugStream(), "ENTER TRANSITION: ${transition.state.fullName}.${transition.name}(${transition.parameters/_guard_debug_param(); separator=', '})\n");
 }
 ]],
                     _guard_debug_param = "\\${name}",
@@ -241,7 +241,7 @@ ${generator.catchFlag?_guard_actions_protected()!_guard_actions_not_protected()}
                     _guard_actions_protected = [[
 $exception = NULL;
 try {
-    ${actions:_action()}
+    ${actions/_action()}
 }
 catch (Exception $exception) {}
 ${_guard_final()}
@@ -250,7 +250,7 @@ if ($exception != NULL) {
 }
 ]],
                     _guard_actions_not_protected = [[
-${actions:_action()}
+${actions/_action()}
 ${_guard_final()}
 ]],
                             _guard_final = [[
@@ -262,7 +262,7 @@ ${doesEntry?_guard_entry()}
 ]],
                 _guard_debug_exit = [[
 if ($fsm->getDebugFlag() == true) {
-    fwrite($fsm->getDebugStream(), "EXIT TRANSITION : ${transition.state.fullName}.${transition.name}(${transition.parameters:_guard_debug_param(); separator=', '})\n");
+    fwrite($fsm->getDebugStream(), "EXIT TRANSITION : ${transition.state.fullName}.${transition.name}(${transition.parameters/_guard_debug_param(); separator=', '})\n");
 }
 ]],
                 _guard_set = [[
@@ -312,7 +312,7 @@ class ${fsm.context}_sm extends FSMContext {
         parent::__construct(${fsm.startState; format=scoped});
         $this->_owner = $owner;
     }
-    ${fsm.transitions:_transition_context()}
+    ${fsm.transitions/_transition_context()}
 
     public function getState() {
         if ($this->_state == NULL) {
@@ -335,9 +335,9 @@ class ${fsm.context}_sm extends FSMContext {
             _transition_context = "${isntDefault?_transition_context_if()}\n",
             _transition_context_if = [[
 
-public function ${name} (${parameters:_parameter_proto_context(); separator=", "}) {
+public function ${name} (${parameters/_parameter_proto_context(); separator=", "}) {
     $this->_transition = "${name}";
-    $this->getState()->${name}($this${parameters:_parameter_call()});
+    $this->getState()->${name}($this${parameters/_parameter_call()});
     $this->_transition = NULL;
 }
 ]],
@@ -345,18 +345,18 @@ public function ${name} (${parameters:_parameter_proto_context(); separator=", "
             _context_reflect = [[
 public function getStates() {
     return array(
-        ${fsm.maps:_map_context_reflect()}
+        ${fsm.maps/_map_context_reflect()}
     );
 }
 
 public function getTransitions() {
     return array(
-        ${fsm.transitions:_transition_context_reflect()}
+        ${fsm.transitions/_transition_context_reflect()}
     );
 }
 
 ]],
-                _map_context_reflect = "${states:_state_context_reflect()}\n",
+                _map_context_reflect = "${states/_state_context_reflect()}\n",
                      _state_context_reflect = [[
 ${map.name}::$${name},
 ]],

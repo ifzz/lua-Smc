@@ -31,7 +31,7 @@ function method:_build_template ()
 ${_preamble()}
 ${_context()}
 ${_base_state()}
-${fsm.maps:_map()}
+${fsm.maps/_map()}
 
 // Local variables:
 //  buffer-read-only: t
@@ -40,7 +40,7 @@ ${fsm.maps:_map()}
         _preamble = [[
 ${fsm.source}
 ${fsm._package?__package()}
-${fsm.importList:_import()}
+${fsm.importList/_import()}
 ]],
             __package = [[
 
@@ -70,7 +70,7 @@ class ${fsm.fsmClassname} extends statemap.FSMContext${generator.serialFlag?_ser
     def enterStartState () {
         state.Entry(this)
     }
-    ${fsm.transitions:_transition_context()}
+    ${fsm.transitions/_transition_context()}
     ${generator.reflectFlag?_context_reflect()}
 }
 ]],
@@ -80,9 +80,9 @@ class ${fsm.fsmClassname} extends statemap.FSMContext${generator.serialFlag?_ser
             _transition_context = "${isntDefault?_transition_context_if()}\n",
             _transition_context_if = [[
 
-${generator.syncFlag?_def_synchronized()!_def()} ${name} (${parameters:_parameter_proto_context(); separator=", "}) {
+${generator.syncFlag?_def_synchronized()!_def()} ${name} (${parameters/_parameter_proto_context(); separator=", "}) {
     transition = '${name}'
-    state.${name}(this${parameters:_parameter_call_context()})
+    state.${name}(this${parameters/_parameter_call_context()})
     transition = ''
 }
 ]],
@@ -94,14 +94,14 @@ ${generator.syncFlag?_def_synchronized()!_def()} ${name} (${parameters:_paramete
             _context_reflect = [[
 
 final states = [
-    ${fsm.maps:_map_context_reflect(); separator=",\n"}
+    ${fsm.maps/_map_context_reflect(); separator=",\n"}
 ]
 
 final transitions = [
-    ${fsm.transitions:_transition_context_reflect(); separator=",\n"}
+    ${fsm.transitions/_transition_context_reflect(); separator=",\n"}
 ]
 ]],
-                _map_context_reflect = '${states:_state_context_reflect(); separator=",\\n"}',
+                _map_context_reflect = '${states/_state_context_reflect(); separator=",\\n"}',
                      _state_context_reflect = [[
 ${map.name}.${name; format=ucfirst}
 ]],
@@ -114,7 +114,7 @@ private class ${fsm.context}State extends statemap.State {
 
     def Entry (${fsm.fsmClassname} context) {}
     def Exit (${fsm.fsmClassname} context) {}
-    ${fsm.transitions:_transition_base_state()}
+    ${fsm.transitions/_transition_base_state()}
 
     def Default (${fsm.fsmClassname} context) {
         ${generator.debugLevel0?_base_state_debug()}
@@ -127,7 +127,7 @@ private class ${fsm.context}State extends statemap.State {
             _transition_base_state = "${isntDefault?_transition_base_state_if()}\n",
             _transition_base_state_if = [[
 
-def ${name} (${fsm.fsmClassname} context${parameters:_parameter_proto()}) {
+def ${name} (${fsm.fsmClassname} context${parameters/_parameter_proto()}) {
     Default(context)
 }
 ]],
@@ -143,18 +143,18 @@ private class ${name}_DefaultState extends ${fsm.context}State {
     ${defaultState?_map_default_state()}
     ${generator.reflectFlag?_default_state_reflect()}
 }
-${states:_state()}
+${states/_state()}
 
 class ${name} {
-    ${states:_state_init()}
+    ${states/_state_init()}
     static final Default = new ${name}_DefaultState(name:'${fullName}::DefaultState', id:-1)
 }
 ]],
-            _map_default_state = "${defaultState.transitions:_transition()}",
+            _map_default_state = "${defaultState.transitions/_transition()}",
             _default_state_reflect = [[
 
 def transitions = [
-    ${reflect:_reflect(); separator=",\n"}
+    ${reflect/_reflect(); separator=",\n"}
 ]
 ]],
             _state_init = [[
@@ -165,7 +165,7 @@ static final ${name} = new ${map.name}_${name; format=ucfirst}(name:'${fullName}
 private class ${map.name}_${name; format=ucfirst} extends ${map.name}_DefaultState {
     ${entryActions?_state_entry()}
     ${exitActions?_state_exit()}
-    ${transitions:_transition()}
+    ${transitions/_transition()}
     ${generator.reflectFlag?_state_reflect()}
 }
 ]],
@@ -174,7 +174,7 @@ private class ${map.name}_${name; format=ucfirst} extends ${map.name}_DefaultSta
 def Entry (${map.fsm.fsmClassname} context) {
     def ctxt = context.owner
 
-    ${entryActions:_action()}
+    ${entryActions/_action()}
 }
 ]],
             _state_exit = [[
@@ -182,13 +182,13 @@ def Entry (${map.fsm.fsmClassname} context) {
 def Exit (${map.fsm.fsmClassname} context) {
     def ctxt = context.owner
 
-    ${exitActions:_action()}
+    ${exitActions/_action()}
 }
 ]],
             _state_reflect = [[
 
 final transitions = [
-    ${reflect:_reflect(); separator=",\n"}
+    ${reflect/_reflect(); separator=",\n"}
 ]
 ]],
                 _reflect = [[
@@ -196,10 +196,10 @@ ${name}:${def}
 ]],
         _transition = [[
 
-def ${name}(${fsm.fsmClassname} context${parameters:_parameter_proto()}) {
+def ${name}(${fsm.fsmClassname} context${parameters/_parameter_proto()}) {
     ${hasCtxtReference?_transition_ctxt()}
     ${generator.debugLevel0?_transition_debug()}
-    ${guards:_guard()}
+    ${guards/_guard()}
     ${needFinalElse?_transition_else()}
 }
 ]],
@@ -213,7 +213,7 @@ if (context.debugFlag)
 ]],
             _transition_else = [[
 else {
-    super.${name}(context${parameters:_parameter_call()})
+    super.${name}(context${parameters/_parameter_call()})
 }
 ]],
                 _parameter_call = ", ${name}",
@@ -265,7 +265,7 @@ if (context.debugFlag)
 ]],
                     _guard_debug_enter = [[
 if (context.debugFlag)
-    context.debugStream.println('ENTER TRANSITION: ${transition.state.fullName}.${transition.name}(${transition.parameters:_parameter_proto_context(); separator=', '})')
+    context.debugStream.println('ENTER TRANSITION: ${transition.state.fullName}.${transition.name}(${transition.parameters/_parameter_proto_context(); separator=', '})')
 ]],
                     _guard_no_action = [[
 ${isConditional?_guard_no_action_if()}
@@ -280,14 +280,14 @@ ${generator.catchFlag?_guard_actions_protected()!_guard_actions_not_protected()}
 ]],
                         _guard_actions_protected = [[
 try {
-    ${actions:_action()}
+    ${actions/_action()}
 }
 finally {
     ${_guard_final()}
 }
 ]],
                         _guard_actions_not_protected = [[
-${actions:_action()}
+${actions/_action()}
 ${_guard_final()}
 ]],
                             _guard_final = [[
@@ -299,7 +299,7 @@ ${doesEntry?_guard_entry()}
 ]],
                                 _guard_debug_exit = [[
 if (context.debugFlag)
-    context.debugStream.println('EXIT TRANSITION : ${transition.state.fullName}.${transition.name}(${transition.parameters:_parameter_proto_context(); separator=', '})')
+    context.debugStream.println('EXIT TRANSITION : ${transition.state.fullName}.${transition.name}(${transition.parameters/_parameter_proto_context(); separator=', '})')
 ]],
                                 _guard_set = [[
 context.setState(${needVarEndState?_end_state_var()!_end_state_no_var()})

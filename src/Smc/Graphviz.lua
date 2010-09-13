@@ -281,7 +281,7 @@ digraph ${fsm.name} {
 
     node
         [shape=Mrecord width=1.5];
-    ${maps:_map()}
+    ${maps/_map()}
 
 }
 
@@ -298,21 +298,21 @@ subgraph cluster_${map.name} {
     //
     // States (Nodes)
     //
-    ${states:_node_state()}
-    ${popTrans:_node_pop()}
+    ${states/_node_state()}
+    ${popTrans/_node_pop()}
     ${needEnd?_node_end()}
-    ${pushState:_node_push_state()}
+    ${pushState/_node_push_state()}
     ${hasStart?_node_start()}
-    ${pushEntry:_node_push_entry()}
+    ${pushEntry/_node_push_entry()}
 
     //
     // Transitions (Edges)
     //
-    ${guards:_edge_guard()}
-    ${popTrans:_edge_pop()}
-    ${pushState:_edge_push_state()}
+    ${guards/_edge_guard()}
+    ${popTrans/_edge_pop()}
+    ${pushState/_edge_push_state()}
     ${hasStart?_edge_start()}
-    ${pushEntry:_edge_push_entry()}
+    ${pushEntry/_edge_push_entry()}
 
 }
 ]],
@@ -323,11 +323,11 @@ subgraph cluster_${map.name} {
 ]],
                 _node_state1 = "${hasEntryExit?_node_sep()}${entryActions?_node_entry()}${exitActions?_node_exit()}${internalEvents?_node_internal_events()}",
                     _node_sep = "|",
-                    _node_entry = "Entry/\\l${entryActions:_indent_action()}",
+                    _node_entry = "Entry/\\l${entryActions/_indent_action()}",
                         _indent_action = "&nbsp;&nbsp;&nbsp;${_action()}",
-                    _node_exit = "Exit/\\l${exitActions:_indent_action()}",
-                    _node_internal_events = "|${internalEvents:_internal_guard()}",
-                        _internal_guard = "${guard.transition.name}${generator.graphLevel2?_guard_params()}${generator.graphLevel1?_guard_cond()}/\\l${guard.actions:_indent_action()}${guard.doesPush?_indent_guard_push_action()}",
+                    _node_exit = "Exit/\\l${exitActions/_indent_action()}",
+                    _node_internal_events = "|${internalEvents/_internal_guard()}",
+                        _internal_guard = "${guard.transition.name}${generator.graphLevel2?_guard_params()}${generator.graphLevel1?_guard_cond()}/\\l${guard.actions/_indent_action()}${guard.doesPush?_indent_guard_push_action()}",
                             _indent_guard_push_action = "&nbsp;&nbsp;&nbsp;${_guard_push_action()}",
             _node_pop = [[
 
@@ -357,9 +357,9 @@ subgraph cluster_${map.name} {
             _edge_guard = [[
 
 "${orig}" -> "${dest}"
-    [label="${guard.transition.name}${generator.graphLevel2?_guard_params()}${generator.graphLevel1?_guard_cond()}/\l${guard.actions:_action()}${guard.doesPush?_guard_push_action()}"];
+    [label="${guard.transition.name}${generator.graphLevel2?_guard_params()}${generator.graphLevel1?_guard_cond()}/\l${guard.actions/_action()}${guard.doesPush?_guard_push_action()}"];
 ]],
-                _guard_params = "(${guard.transition.parameters:_parameter(); separator=', '})",
+                _guard_params = "(${guard.transition.parameters/_parameter(); separator=', '})",
                 _guard_cond = "${guard.hasCondition?_guard_cond_if()}",
                     _guard_cond_if = "\\l\\[${guard.condition; format=escape}\\]",
                     escape = escape,

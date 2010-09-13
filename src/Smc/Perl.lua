@@ -28,7 +28,7 @@ function method:_build_template ()
 
 ${_preamble()}
 ${_base_state()}
-${fsm.maps:_map()}
+${fsm.maps/_map()}
 ${_context()}
 1;
 
@@ -42,7 +42,7 @@ use strict;
 use warnings;
 
 use DFA::Statemap;
-${fsm.importList:_import()}
+${fsm.importList/_import()}
 ]],
             _import = [[
 use ${it};
@@ -59,7 +59,7 @@ package ${fsm._package?_package()}${fsm.context}State;
     sub Exit {}
 
     my %meth = (
-        ${fsm.transitions:_transition_base_state()}
+        ${fsm.transitions/_transition_base_state()}
     );
 
     sub AUTOLOAD {
@@ -100,7 +100,7 @@ croak "TransitionUndefinedException\n",
 package ${fullName};
 
     use vars qw(
-        ${states:_state_var()}
+        ${states/_state_var()}
         $DefaultState
     );
 
@@ -108,12 +108,12 @@ package ${fullName}::DefaultState;
     use base qw(${fsm._package?_package()}${fsm.context}State);
     ${defaultState?_map_default_state()}
     ${generator.reflectFlag?_state_reflect()}
-${states:_state()}
+${states/_state()}
 
 package ${fullName};
 
     sub BEGIN {
-        ${states:_state_init()}
+        ${states/_state_init()}
         $DefaultState = ${fullName}::DefaultState->new('${name}::DefaultState', -1);
     }
 ]],
@@ -123,14 +123,14 @@ $${name}
             _state_init = [[
 $${name} = ${fullName}->new('${fullName}', ${map.nextStateId});
 ]],
-            _map_default_state = "${defaultState.transitions:_transition()}",
+            _map_default_state = "${defaultState.transitions/_transition()}",
         _state = [[
 
 package ${fullName};
     use base qw(${map.fullName}::DefaultState);
     ${entryActions?_state_entry()}
     ${exitActions?_state_exit()}
-    ${transitions:_transition()}
+    ${transitions/_transition()}
     ${generator.reflectFlag?_state_reflect()}
 ]],
             _state_entry = [[
@@ -139,7 +139,7 @@ sub Entry {
     my $self = shift;
     my ($fsm) = @_;
     my $ctxt = $fsm->getOwner();
-    ${entryActions:_action()}
+    ${entryActions/_action()}
 }
 ]],
             _state_exit = [[
@@ -148,14 +148,14 @@ sub Exit {
     my $self = shift;
     my ($fsm) = @_;
     my $ctxt = $fsm->getOwner();
-    ${exitActions:_action()}
+    ${exitActions/_action()}
 }
 ]],
             _state_reflect = [[
 
 sub getTransitions {
     return {
-        ${reflect:_reflect()}
+        ${reflect/_reflect()}
     }
 }
 ]],
@@ -166,10 +166,10 @@ sub getTransitions {
 
 sub ${name} {
     my $self = shift;
-    my ($fsm${parameters:_parameter_proto()}) = @_;
+    my ($fsm${parameters/_parameter_proto()}) = @_;
     ${hasCtxtReference?_transition_ctxt()}
     ${generator.debugLevel0?_transition_debug()}
-    ${guards:_guard()}
+    ${guards/_guard()}
     ${needFinalElse?_transition_else()}
 }
 ]],
@@ -185,7 +185,7 @@ if ($fsm->getDebugFlag()) {
 ]],
             _transition_else = [[
 else {
-    $self->SUPER::${name}($fsm${parameters:_parameter_proto()});
+    $self->SUPER::${name}($fsm${parameters/_parameter_proto()});
 }
 ]],
         _guard = "${isConditional?_guard_conditional()!_guard_unconditional()}",
@@ -246,7 +246,7 @@ if ($fsm->getDebugFlag()) {
                 _guard_debug_enter = [[
 if ($fsm->getDebugFlag()) {
     my $fh = $fsm->getDebugStream();
-    print $fh "ENTER TRANSITION: ${transition.state.fullName}.${transition.name}(${transition.parameters:_guard_debug_param(); separator=', '})\n";
+    print $fh "ENTER TRANSITION: ${transition.state.fullName}.${transition.name}(${transition.parameters/_guard_debug_param(); separator=', '})\n";
 }
 ]],
                     _guard_debug_param = "\\${name}",
@@ -260,15 +260,15 @@ ${generator.catchFlag?_guard_actions_protected()!_guard_actions_not_protected()}
 ]],
                     _guard_actions_protected = [[
 eval {
-    ${actions:_action()}
+    ${actions/_action()}
 };
 warn $@ if ($@);
 ]],
-                    _guard_actions_not_protected = "${actions:_action()}",
+                    _guard_actions_not_protected = "${actions/_action()}",
                 _guard_debug_exit = [[
 if ($fsm->getDebugFlag()) {
     my $fh = $fsm->getDebugStream();
-    print $fh "EXIT TRANSITION : ${transition.state.fullName}.${transition.name}(${transition.parameters:_guard_debug_param(); separator=', '})\n";
+    print $fh "EXIT TRANSITION : ${transition.state.fullName}.${transition.name}(${transition.parameters/_guard_debug_param(); separator=', '})\n";
 }
 ]],
                 _guard_set = [[
@@ -355,19 +355,19 @@ package ${fsm._package?_package()}${fsm.context}_sm;
 sub getStates {
     my $self = shift;
     return (
-        ${fsm.maps:_map_context_reflect()}
+        ${fsm.maps/_map_context_reflect()}
     );
 }
 
 sub getTransitions {
     my $self = shift;
     return (
-        ${fsm.transitions:_transition_context_reflect()}
+        ${fsm.transitions/_transition_context_reflect()}
     )
 }
 
 ]],
-                _map_context_reflect = "${states:_state_context_reflect()}\n",
+                _map_context_reflect = "${states/_state_context_reflect()}\n",
                      _state_context_reflect = [[
 $${fullName},
 ]],

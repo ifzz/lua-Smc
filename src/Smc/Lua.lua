@@ -44,7 +44,7 @@ local strformat = require 'string'.format
 
 local statemap = require 'statemap'
 ${fsm.source}
-${fsm.importList:_import()}
+${fsm.importList/_import()}
 
 module(...)
 ]],
@@ -64,7 +64,7 @@ local ${fsm.context}State = statemap.State:class()
 function ${fsm.context}State:Entry (fsm) end
 
 function ${fsm.context}State:Exit (fsm) end
-${fsm.transitions:_transition_base_state()}
+${fsm.transitions/_transition_base_state()}
 
 function ${fsm.context}State:Default (fsm)
     ${generator.debugLevel0?_base_state_debug()}
@@ -78,7 +78,7 @@ ${generator.reflectFlag?_base_state_reflect()}
             _transition_base_state = "${isntDefault?_transition_base_state_if()}\n",
             _transition_base_state_if = [[
 
-function ${fsm.context}State:${name} (fsm${parameters:_parameter_proto()})
+function ${fsm.context}State:${name} (fsm${parameters/_parameter_proto()})
     self:Default(fsm)
 end
 ]],
@@ -96,8 +96,8 @@ end
 ]],
         _states = [[
 
-${fsm.maps:_map_local()}
-${fsm.maps:_map()}
+${fsm.maps/_map_local()}
+${fsm.maps/_map()}
 ]],
             _map_local = [[
 local ${name} = {}
@@ -107,13 +107,13 @@ local ${name} = {}
 ${name}.DefaultState = ${fsm.context}State:new('${fullName}::DefaultState', -1)
 ${defaultState?_map_default_state()}
 ${generator.reflectFlag?_default_state_reflect()}
-${states:_state()}
+${states/_state()}
 ]],
-            _map_default_state = "${defaultState.transitions:_transition()}",
+            _map_default_state = "${defaultState.transitions/_transition()}",
             _default_state_reflect = [[
 
 ${name}.DefaultState._transitions = {
-    ${reflect:_reflect()}
+    ${reflect/_reflect()}
 }
 ]],
         _state = [[
@@ -121,27 +121,27 @@ ${name}.DefaultState._transitions = {
 ${map.name}.${name} = ${map.name}.DefaultState:new('${fullName}', ${map.nextStateId})
 ${entryActions?_state_entry()}
 ${exitActions?_state_exit()}
-${transitions:_transition()}
+${transitions/_transition()}
 ${generator.reflectFlag?_state_reflect()}
 ]],
             _state_entry = [[
 
 function ${map.name}.${name}:Entry (fsm)
     local ctxt = fsm:getOwner()
-    ${entryActions:_action()}
+    ${entryActions/_action()}
 end
 ]],
             _state_exit = [[
 
 function ${map.name}.${name}:Exit (fsm)
     local ctxt = fsm:getOwner()
-    ${exitActions:_action()}
+    ${exitActions/_action()}
 end
 ]],
             _state_reflect = [[
 
 ${map.name}.${name}._transitions = {
-    ${reflect:_reflect()}
+    ${reflect/_reflect()}
 }
 ]],
                 _reflect = [[
@@ -149,10 +149,10 @@ ${name} = ${def},
 ]],
         _transition = [[
 
-function ${state.map.name}.${state.name}:${name} (fsm${parameters:_parameter_proto()})
+function ${state.map.name}.${state.name}:${name} (fsm${parameters/_parameter_proto()})
     ${hasCtxtReference?_transition_ctxt()}
     ${generator.debugLevel0?_transition_debug()}
-    ${guards:_guard()}
+    ${guards/_guard()}
     ${needFinalElse?_transition_else()}
     ${needFinalEnd?_transition_end()}
 end
@@ -167,7 +167,7 @@ end
 ]],
             _transition_else = [[
 else
-    ${map.name}.DefaultState:${name}(fsm${parameters:_parameter_proto()})
+    ${map.name}.DefaultState:${name}(fsm${parameters/_parameter_proto()})
 end
 ]],
             _transition_end = [[
@@ -225,7 +225,7 @@ end
 ]],
                 _guard_debug_enter = [[
 if fsm:getDebugFlag() then
-    fsm:getDebugStream():write("ENTER TRANSITION: ${transition.state.fullName}.${transition.name}(${transition.parameters:_guard_debug_param(); separator=', '})\n")
+    fsm:getDebugStream():write("ENTER TRANSITION: ${transition.state.fullName}.${transition.name}(${transition.parameters/_guard_debug_param(); separator=', '})\n")
 end
 ]],
                     _guard_debug_param = [[${name}=" .. tostring(${name}) .. "]],
@@ -240,7 +240,7 @@ ${generator.catchFlag?_guard_actions_protected()!_guard_actions_not_protected()}
                     _guard_actions_protected = [[
 local r, msg = pcall(
     function ()
-        ${actions:_action()}
+        ${actions/_action()}
     end
 )
 ${generator.debugLevel1?_guard_debug_exception()}
@@ -250,10 +250,10 @@ if not r then
     fsm:getDebugStream():write(msg)
 end
 ]],
-                    _guard_actions_not_protected = "${actions:_action()}",
+                    _guard_actions_not_protected = "${actions/_action()}",
                 _guard_debug_exit = [[
 if fsm:getDebugFlag() then
-    fsm:getDebugStream():write("EXIT TRANSITION : ${transition.state.fullName}.${transition.name}(${transition.parameters:_guard_debug_param(); separator=', '})\n")
+    fsm:getDebugStream():write("EXIT TRANSITION : ${transition.state.fullName}.${transition.name}(${transition.parameters/_guard_debug_param(); separator=', '})\n")
 end
 ]],
                 _guard_set = [[
@@ -305,7 +305,7 @@ ${fsm.fsmClassname} = statemap.FSMContext:class()
 function ${fsm.fsmClassname}:_init ()
     self:setState(${fsm.startState; format=scoped})
 end
-${fsm.transitions:_transition_context()}
+${fsm.transitions/_transition_context()}
 
 function ${fsm.fsmClassname}:enterStartState ()
     self:getState():Entry(self)
@@ -331,20 +331,20 @@ end
             _context_reflect = [[
 
 ${fsm.fsmClassname}._States = {
-    ${fsm.maps:_map_context_reflect()}
+    ${fsm.maps/_map_context_reflect()}
 }
 function ${fsm.fsmClassname}:getStates ()
     return self._States
 end
 
 ${fsm.fsmClassname}._transitions = {
-    ${fsm.transitions:_transition_context_reflect()}
+    ${fsm.transitions/_transition_context_reflect()}
 }
 function ${fsm.fsmClassname}:getTransitions ()
     return self._transitions
 end
 ]],
-                _map_context_reflect = "${states:_state_context_reflect()}\n",
+                _map_context_reflect = "${states/_state_context_reflect()}\n",
                      _state_context_reflect = [[
 ${map.name}.${name},
 ]],

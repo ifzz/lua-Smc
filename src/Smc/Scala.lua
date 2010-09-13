@@ -33,7 +33,7 @@ function method:_build_template ()
 ${_preamble()}
 ${_context()}
 ${_base_state()}
-${fsm.maps:_map()}
+${fsm.maps/_map()}
 
 // Local variables:
 //  buffer-read-only: t
@@ -44,7 +44,7 @@ ${fsm.source}
 ${fsm._package?__package()}
 ${generator.syncFlag?_concurrent()}
 
-${fsm.importList:_import()}
+${fsm.importList/_import()}
 ]],
             __package = [[
 
@@ -64,7 +64,7 @@ class ${fsm.fsmClassname}(owner: ${fsm.context}) extends statemap.FSMContext[${f
     private val _owner: ${fsm.context} = owner
 
     setState(${fsm.startState; format=scoped})
-    ${fsm.transitions:_transition_context()}
+    ${fsm.transitions/_transition_context()}
 
     override def enterStartState(): Unit = {
         getState().Entry(this)
@@ -82,9 +82,9 @@ class ${fsm.fsmClassname}(owner: ${fsm.context}) extends statemap.FSMContext[${f
             _transition_context = "${isntDefault?_transition_context_if()}\n",
             _transition_context_if = [[
 
-def ${name} (${parameters:_parameter_proto_context(); separator=", "}): Unit = ${generator.syncFlag?_synchronized()}{
+def ${name} (${parameters/_parameter_proto_context(); separator=", "}): Unit = ${generator.syncFlag?_synchronized()}{
     _transition = "${name}"
-    getState().${name}(this${parameters:_parameter_call_context()})
+    getState().${name}(this${parameters/_parameter_call_context()})
     _transition = ""
 }
 ]],
@@ -94,14 +94,14 @@ def ${name} (${parameters:_parameter_proto_context(); separator=", "}): Unit = $
             _context_reflect = [[
 
 def getStates(): List[${fsm.context}State] = List(
-    ${fsm.maps:_map_context_reflect(); separator=",\n"}
+    ${fsm.maps/_map_context_reflect(); separator=",\n"}
 )
 
 def getTransitions(): List[String] = List(
-    ${fsm.transitions:_transition_context_reflect(); separator=",\n"}
+    ${fsm.transitions/_transition_context_reflect(); separator=",\n"}
 )
 ]],
-                _map_context_reflect = '${states:_state_context_reflect(); separator=",\\n"}',
+                _map_context_reflect = '${states/_state_context_reflect(); separator=",\\n"}',
                      _state_context_reflect = [[
 ${map.name}.${name; format=ucfirst}
 ]],
@@ -121,7 +121,7 @@ class ${fsm.context}State(name: String, id: Int) {
 
     def Entry(context: ${fsm.fsmClassname}): Unit = {}
     def Exit(context: ${fsm.fsmClassname}): Unit = {}
-    ${fsm.transitions:_transition_base_state()}
+    ${fsm.transitions/_transition_base_state()}
 
     def Default(context: ${fsm.fsmClassname}): Unit = {
         ${generator.debugLevel0?_base_state_debug()}
@@ -134,7 +134,7 @@ class ${fsm.context}State(name: String, id: Int) {
             _transition_base_state = "${isntDefault?_transition_base_state_if()}\n",
             _transition_base_state_if = [[
 
-def ${name}(context: ${fsm.fsmClassname}${parameters:_parameter_proto()}): Unit = {
+def ${name}(context: ${fsm.fsmClassname}${parameters/_parameter_proto()}): Unit = {
     Default(context)
 }
 ]],
@@ -150,18 +150,18 @@ private class ${name}_DefaultState(name: String, id: Int) extends ${fsm.context}
     ${defaultState?_map_default_state()}
     ${generator.reflectFlag?_default_state_reflect()}
 }
-${states:_state()}
+${states/_state()}
 
 private object ${name} {
-    ${states:_state_init()}
+    ${states/_state_init()}
     val DefaultState = new ${name}_DefaultState("${fullName}::DefaultState", -1)
 }
 ]],
-            _map_default_state = "${defaultState.transitions:_transition()}",
+            _map_default_state = "${defaultState.transitions/_transition()}",
             _default_state_reflect = [[
 
 def getTransitions(): Map[String, Int] = Map(
-    ${reflect:_reflect(); separator=",\n"}
+    ${reflect/_reflect(); separator=",\n"}
 )
 ]],
             _state_init = [[
@@ -172,7 +172,7 @@ val ${name} = new ${map.name}_${name; format=ucfirst}("${fullName}", ${map.nextS
 private class ${map.name}_${name; format=ucfirst}(name: String, id: Int) extends ${map.name}_DefaultState(name, id) {
     ${entryActions?_state_entry()}
     ${exitActions?_state_exit()}
-    ${transitions:_transition()}
+    ${transitions/_transition()}
     ${generator.reflectFlag?_state_reflect()}
 }
 ]],
@@ -181,7 +181,7 @@ private class ${map.name}_${name; format=ucfirst}(name: String, id: Int) extends
 override def Entry (context: ${fsm.fsmClassname}): Unit = {
     val ctxt = context.getOwner()
 
-    ${entryActions:_action()}
+    ${entryActions/_action()}
 }
 ]],
             _state_exit = [[
@@ -189,22 +189,22 @@ override def Entry (context: ${fsm.fsmClassname}): Unit = {
 override def Exit (context: ${fsm.fsmClassname}): Unit = {
     val ctxt = context.getOwner()
 
-    ${exitActions:_action()}
+    ${exitActions/_action()}
 }
 ]],
             _state_reflect = [[
 
 override def getTransitions(): Map[String, Int] = Map(
-    ${reflect:_reflect(); separator=",\n"}
+    ${reflect/_reflect(); separator=",\n"}
 )
 ]],
                 _reflect = [["${name}" -> ${def}]],
         _transition = [[
 
-override def ${name}(context: ${fsm.fsmClassname}${parameters:_parameter_proto()}): Unit = {
+override def ${name}(context: ${fsm.fsmClassname}${parameters/_parameter_proto()}): Unit = {
     ${hasCtxtReference?_transition_ctxt()}
     ${generator.debugLevel0?_transition_debug()}
-    ${guards:_guard()}
+    ${guards/_guard()}
     ${needFinalElse?_transition_else()}
 }
 ]],
@@ -218,7 +218,7 @@ if (context.getDebugFlag())
 ]],
             _transition_else = [[
 else {
-    super.${name}(context${parameters:_parameter_proto()})
+    super.${name}(context${parameters/_parameter_proto()})
 }
 ]],
         _guard = "${isConditional?_guard_conditional()!_guard_unconditional()}",
@@ -269,7 +269,7 @@ if (context.getDebugFlag())
 ]],
                     _guard_debug_enter = [[
 if (context.getDebugFlag())
-    context.getDebugStream().println("ENTER TRANSITION: ${transition.state.fullName}.${transition.name}(${transition.parameters:_parameter_proto_context(); separator=', '})")
+    context.getDebugStream().println("ENTER TRANSITION: ${transition.state.fullName}.${transition.name}(${transition.parameters/_parameter_proto_context(); separator=', '})")
 ]],
                     _guard_no_action = [[
 ${isConditional?_guard_no_action_if()}
@@ -284,14 +284,14 @@ ${generator.catchFlag?_guard_actions_protected()!_guard_actions_not_protected()}
 ]],
                         _guard_actions_protected = [[
 try {
-    ${actions:_action()}
+    ${actions/_action()}
 }
 finally {
     ${_guard_final()}
 }
 ]],
                         _guard_actions_not_protected = [[
-${actions:_action()}
+${actions/_action()}
 ${_guard_final()}
 ]],
                             _guard_final = [[
@@ -303,7 +303,7 @@ ${doesEntry?_guard_entry()}
 ]],
                                 _guard_debug_exit = [[
 if (context.getDebugFlag())
-    context.getDebugStream().println("EXIT TRANSITION : ${transition.state.fullName}.${transition.name}(${transition.parameters:_parameter_proto_context(); separator=', '})")
+    context.getDebugStream().println("EXIT TRANSITION : ${transition.state.fullName}.${transition.name}(${transition.parameters/_parameter_proto_context(); separator=', '})")
 ]],
                                 _guard_set = [[
 context.setState(${needVarEndState?_end_state_var()!_end_state_no_var()})

@@ -106,7 +106,7 @@ function method:_build_template ()
   </head>
 
   <body>
-${maps:_map()}
+${maps/_map()}
   </body>
 </html>
 ]],
@@ -134,12 +134,12 @@ ${maps:_map()}
           <th>
             Exit
           </th>
-${map.transitions:_transition_header()}
+${map.transitions/_transition_header()}
           <th>
             <b>Default</b>
           </th>
         </tr>
-${states:_state()}
+${states/_state()}
       </table>
       <br />
     </div>
@@ -154,7 +154,7 @@ ${hasParameters?_transition_header_param()}
                 _transition_header_param = [[
             <br />
               (
-              ${parameters:_parameter_header(); separator=",\n<br />"}
+              ${parameters/_parameter_header(); separator=",\n<br />"}
               )
 ]],
                     _parameter_header = "${name}${_type?_parameter_type()}",
@@ -170,17 +170,17 @@ ${state.entryActions?_state_entry()}
               <td>
 ${state.exitActions?_state_exit()}
               </td>
-${transitions:_transition()}
+${transitions/_transition()}
             </tr>
 ]],
             _state_entry = [[
 <pre>
-${state.entryActions:_action()}
+${state.entryActions/_action()}
 </pre>
 ]],
             _state_exit = [[
 <pre>
-${state.exitActions:_action()}
+${state.exitActions/_action()}
 </pre>
 ]],
         _transition = [[
@@ -190,7 +190,7 @@ ${name?_transition_if()}
 ]],
             _transition_if = [[
 <pre>
-${guards:_guard(); separator="\n"}
+${guards/_guard(); separator="\n"}
 </pre>
 ]],
         _guard = [[
@@ -221,7 +221,7 @@ ${hasActions?_actions()!_no_action()}
 ]],
             _actions = [[
   {
-    ${actions:_action()}
+    ${actions/_action()}
   }
 ]],
             _no_action = [[

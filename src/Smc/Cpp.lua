@@ -41,7 +41,7 @@ function method:_build_template ()
 ${_preamble()}
 ${fsm._package; format=open_pkg}
 ${_base_state()}
-${fsm.maps:_map()}
+${fsm.maps/_map()}
 ${fsm._package; format=close_pkg}
 
 /*
@@ -54,11 +54,11 @@ ${fsm._package; format=close_pkg}
         close_pkg = function (s) return s:gsub("([%w_]+):?:?","\n}\n") end,
         _preamble = [[
 ${fsm.source}
-${fsm.includeList:_include()}
+${fsm.includeList/_include()}
 #include "${generator.headerDirectory?_headerDirectory()!_srcDirectory()}${generator.targetfileBase}.h"
 
 using namespace statemap;
-${fsm.importList:_import()}
+${fsm.importList/_import()}
 
 ]],
             _include = [[
@@ -71,10 +71,10 @@ using namespace ${it};
 ]],
         _base_state = [[
 // Static class declarations.
-${fsm.maps:_map_base_state()}
+${fsm.maps/_map_base_state()}
 
 ${generator.serialFlag?_base_state_serial()}
-${fsm.transitions:_transition_base_state()}
+${fsm.transitions/_transition_base_state()}
 
 void ${fsm.context}State::Default(${fsm.fsmClassname}& context)
 {
@@ -84,14 +84,14 @@ void ${fsm.context}State::Default(${fsm.fsmClassname}& context)
     return;
 }
 ]],
-            _map_base_state = "${states:_state_base_state()}\n",
+            _map_base_state = "${states/_state_base_state()}\n",
             _state_base_state = [[
 ${map.name}_${name} ${map.name}::${name}("${fullName}", ${map.index});
 ]],
             _base_state_serial = [[
 ${fsm.context}State* ${fsm.fsmClassname}::_States[] =
 {
-    ${fsm.maps:_map_base_state_serial(); separator=",\n"}
+    ${fsm.maps/_map_base_state_serial(); separator=",\n"}
 };
 const int ${fsm.fsmClassname}::MIN_INDEX = 0;
 const int ${fsm.fsmClassname}::MAX_INDEX = sizeof(${fsm.fsmClassname}::_States)/sizeof(${fsm.context}State*) - 1;
@@ -106,7 +106,7 @@ ${fsm.context}State& ${fsm.fsmClassname}::valueOf(int stateId)
     return (static_cast<${fsm.context}State&>(*(_States[stateId])));
 }
 ]],
-                _map_base_state_serial = "${states:_state_base_state_serial(); separator=',\\n'}",
+                _map_base_state_serial = "${states/_state_base_state_serial(); separator=',\\n'}",
                     _state_base_state_serial = [[
 &${map.name}::${name}
 ]],
@@ -121,7 +121,7 @@ throw (
             _transition_base_state = "${isntDefault?_transition_base_state_if()}\n",
             _transition_base_state_if = [[
 
-void ${fsm.context}State::${name}(${fsm.fsmClassname}& context${parameters:_parameter_proto()})
+void ${fsm.context}State::${name}(${fsm.fsmClassname}& context${parameters/_parameter_proto()})
 {
     Default(context);
     return;
@@ -151,13 +151,13 @@ throw (
 ]],
         _map = [[
 ${defaultState?_map_default_state()}
-${states:_state()}
+${states/_state()}
 ]],
-            _map_default_state = "${defaultState.transitions:_transition()}",
+            _map_default_state = "${defaultState.transitions/_transition()}",
         _state = [[
 ${entryActions?_state_entry()}
 ${exitActions?_state_exit()}
-${transitions:_transition()}
+${transitions/_transition()}
 ]],
             _state_entry = [[
 
@@ -165,7 +165,7 @@ void ${map.name}_${name}::Entry(${fsm.fsmClassname}& context)
 {
     ${fsm.context}& ctxt(context.getOwner());
 
-    ${entryActions:_action()}
+    ${entryActions/_action()}
     return;
 }
 ]],
@@ -175,17 +175,17 @@ void ${map.name}_${name}::Exit(${fsm.fsmClassname}& context)
 {
     ${fsm.context}& ctxt(context.getOwner());
 
-    ${exitActions:_action()}
+    ${exitActions/_action()}
     return;
 }
 ]],
         _transition = [[
 
-void ${state.map.name}_${state.name}::${name}(${fsm.fsmClassname}& context${parameters:_parameter_proto()})
+void ${state.map.name}_${state.name}::${name}(${fsm.fsmClassname}& context${parameters/_parameter_proto()})
 {
     ${hasCtxtReference?_transition_ctxt()}
     ${generator.debugLevel0?_transition_debug()}
-    ${guards:_guard()}
+    ${guards/_guard()}
     ${needFinalElse?_transition_else()}
 
     return;
@@ -214,7 +214,7 @@ str << "LEAVING STATE   : ${state.fullName}"
             _transition_else = [[
 else
 {
-    ${map.name}_DefaultState::${name}(context${parameters:_parameter_call()});
+    ${map.name}_DefaultState::${name}(context${parameters/_parameter_call()});
 }
 ]],
                 _parameter_call = ", ${name}",
@@ -296,13 +296,13 @@ if (context.getDebugFlag() == true)
 }
 ]],
                     _guard_debug_enter_no_stream = [[
-TRACE("ENTER TRANSITION: ${transition.state.fullName}.${transition.name}(${transition.parameters:_guard_debug_param(); separator=', '})\n");
+TRACE("ENTER TRANSITION: ${transition.state.fullName}.${transition.name}(${transition.parameters/_guard_debug_param(); separator=', '})\n");
 ]],
                         _guard_debug_param = "${name}",
                     _guard_debug_enter_stream = [[
 std::ostream& str = context.getDebugStream();
 
-str << "ENTER TRANSITION: ${transition.state.fullName}.${transition.name}(${transition.parameters:_guard_debug_param(); separator=', '})"
+str << "ENTER TRANSITION: ${transition.state.fullName}.${transition.name}(${transition.parameters/_guard_debug_param(); separator=', '})"
     << std::endl;
 ]],
                 _guard_no_action = [[
@@ -319,7 +319,7 @@ ${generator.catchFlag?_guard_actions_protected()!_guard_actions_not_protected()}
                     _guard_actions_protected = [[
 try
 {
-    ${actions:_action()}
+    ${actions/_action()}
     ${generator.debugLevel0?_guard_debug_exit()}
     ${doesSet?_guard_set()}
 }
@@ -331,7 +331,7 @@ catch (...)
 ${_guard_final()}
 ]],
                         _guard_actions_not_protected = [[
-${actions:_action()}
+${actions/_action()}
 ${generator.debugLevel0?_guard_debug_exit()}
 ${doesSet?_guard_set()}
 ${_guard_final()}
@@ -348,12 +348,12 @@ if (context.getDebugFlag() == true)
 }
 ]],
                     _guard_debug_exit_no_stream = [[
-TRACE("EXIT TRANSITION : ${transition.state.fullName}.${transition.name}(${transition.parameters:_guard_debug_param(); separator=', '})\n");
+TRACE("EXIT TRANSITION : ${transition.state.fullName}.${transition.name}(${transition.parameters/_guard_debug_param(); separator=', '})\n");
 ]],
                     _guard_debug_exit_stream = [[
 std::ostream& str = context.getDebugStream();
 
-str << "EXIT TRANSITION : ${transition.state.fullName}.${transition.name}(${transition.parameters:_guard_debug_param(); separator=', '})"
+str << "EXIT TRANSITION : ${transition.state.fullName}.${transition.name}(${transition.parameters/_guard_debug_param(); separator=', '})"
     << std::endl;
 ]],
                 _guard_set = [[
@@ -440,7 +440,7 @@ ${_preample()}
 ${fsm._package; format=open_pkg}
 ${_forward_decl()}
 ${_base_state()}
-${fsm.maps:_map()}
+${fsm.maps/_map()}
 ${_context()}
 ${fsm._package; format=close_pkg}
 
@@ -476,15 +476,15 @@ ${generator.noExceptionFlag?_def_no_exception()}
         _forward_decl = [[
 
 // Forward declarations.
-${fsm.maps:_map_forward_decl()}
+${fsm.maps/_map_forward_decl()}
 class ${fsm.context}State;
 class ${fsm.fsmClassname};
 class ${fsm.context};
-${fsm.declareList:_declare()}
+${fsm.declareList/_declare()}
 ]],
             _map_forward_decl = [[
 class ${name};
-${states:_state_forward_decl()}
+${states/_state_forward_decl()}
 class ${name}_DefaultState;
 ]],
                 _state_forward_decl = [[
@@ -512,7 +512,7 @@ public:
     virtual void Entry(${fsm.fsmClassname}&) {};
     virtual void Exit(${fsm.fsmClassname}&) {};
 
-    ${fsm.transitions:_transition_base_state()}
+    ${fsm.transitions/_transition_base_state()}
 
 protected:
 
@@ -521,7 +521,7 @@ protected:
 ]],
             _transition_base_state = "${isntDefault?_transition_base_state_if()}\n",
             _transition_base_state_if = [[
-virtual void ${name}(${fsm.fsmClassname}& context${parameters:_parameter_proto()});
+virtual void ${name}(${fsm.fsmClassname}& context${parameters/_parameter_proto()});
 ]],
                 _parameter_proto = ", ${_type} ${name}",
         _map = [[
@@ -530,7 +530,7 @@ class ${name}
 {
 public:
 
-    ${states:_state_decl()}
+    ${states/_state_decl()}
 };
 
 class ${name}_DefaultState :
@@ -545,14 +545,14 @@ public:
     ${defaultState?_map_default_state()}
 };
 
-${states:_state()}
+${states/_state()}
 ]],
             _state_decl = [[
 static ${map.name}_${name} ${name};
 ]],
-            _map_default_state = "${defaultState.transitions:_transition_default_state()}",
+            _map_default_state = "${defaultState.transitions/_transition_default_state()}",
                 _transition_default_state = [[
-virtual void ${name}(${fsm.fsmClassname}& context${parameters:_parameter_proto()});
+virtual void ${name}(${fsm.fsmClassname}& context${parameters/_parameter_proto()});
 ]],
         _state = [[
 
@@ -567,7 +567,7 @@ public:
 
     ${entryActions?_state_entry()}
     ${exitActions?_state_exit()}
-    ${transitions:_transition()}
+    ${transitions/_transition()}
 };
 ]],
             _state_entry = [[
@@ -577,7 +577,7 @@ void Entry(${fsm.fsmClassname}&);
 void Exit(${fsm.fsmClassname}&);
 ]],
         _transition = [[
-void ${name}(${fsm.fsmClassname}& context${parameters:_parameter_proto()});
+void ${name}(${fsm.fsmClassname}& context${parameters/_parameter_proto()});
 ]],
         _context = [[
 
@@ -616,7 +616,7 @@ public:
 
         return (${generator.castType}<${fsm.context}State&>(*_state));
     };
-    ${fsm.transitions:_transition_context()}
+    ${fsm.transitions/_transition_context()}
     ${generator.serialFlag?_context_serial()}
 
  private:
@@ -634,10 +634,10 @@ throw statemap::StateUndefinedException();
             _transition_context = "${isntDefault?_transition_context_if()}\n",
             _transition_context_if = [[
 
-void ${name}(${parameters:_parameter_proto_context(); separator=", "})
+void ${name}(${parameters/_parameter_proto_context(); separator=", "})
 {
     ${generator.debugLevel0?_transition_debug_set()}
-    (getState()).${name}(*this${parameters:_parameter_call_context()});
+    (getState()).${name}(*this${parameters/_parameter_call_context()});
     ${generator.debugLevel0?_transition_debug_unset()}
 };
 ]],

@@ -13,6 +13,7 @@ Install
 #   rocks_servers --> http://www.luarocks.org/repositories/rocks
   $ luarocks install luacov
   $ luarocks install lua-coat
+  $ luarocks install lua-codegen
   $ cpan Test::Harness
 
   $ make install

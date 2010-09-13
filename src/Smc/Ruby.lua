@@ -29,7 +29,7 @@ function method:_build_template ()
 ${fsm._package; format=open_pkg}
 ${_preamble()}
 ${_base_state()}
-${fsm.maps:_map()}
+${fsm.maps/_map()}
 ${_context()}
 ${fsm._package; format=close_pkg}
 
@@ -42,7 +42,7 @@ ${fsm._package; format=close_pkg}
         _preamble = [[
 ${fsm.source}
 require 'statemap'
-${fsm.importList:_import()}
+${fsm.importList/_import()}
 ]],
             _import = [[
 require '${it}'
@@ -81,14 +81,14 @@ class ${name}_DefaultState < ${fsm.context}State
     ${generator.reflectFlag?_state_reflect()}
 
 end
-${states:_state()}
+${states/_state()}
 
 module ${name}
-    ${states:_state_init()}
+    ${states/_state_init()}
     DefaultState = ${name}_DefaultState::new('${fullName}::DefaultState', -1).freeze
 end
 ]],
-            _map_default_state = "${defaultState.transitions:_transition()}",
+            _map_default_state = "${defaultState.transitions/_transition()}",
             _state_init = [[
 ${name} = ${map.name}_${name}::new('${fullName}', ${map.nextStateId}).freeze
 ]],
@@ -97,7 +97,7 @@ ${name} = ${map.name}_${name}::new('${fullName}', ${map.nextStateId}).freeze
 class ${map.name}_${name} < ${map.name}_DefaultState
     ${entryActions?_state_entry()}
     ${exitActions?_state_exit()}
-    ${transitions:_transition()}
+    ${transitions/_transition()}
     ${generator.reflectFlag?_state_reflect()}
 
 end
@@ -106,21 +106,21 @@ end
 
 def Entry(fsm)
     ctxt = fsm.getOwner
-    ${entryActions:_action()}
+    ${entryActions/_action()}
 end
 ]],
             _state_exit = [[
 
 def Exit(fsm)
     ctxt = fsm.getOwner
-    ${exitActions:_action()}
+    ${exitActions/_action()}
 end
 ]],
             _state_reflect = [[
 
 def getTransitions()
     return {
-        ${reflect:_reflect()}
+        ${reflect/_reflect()}
     }
 end
 ]],
@@ -129,10 +129,10 @@ end
 ]],
         _transition = [[
 
-def ${name}(fsm${parameters:_parameter_proto()})
+def ${name}(fsm${parameters/_parameter_proto()})
     ${hasCtxtReference?_transition_ctxt()}
     ${generator.debugLevel0?_transition_debug()}
-    ${guards:_guard()}
+    ${guards/_guard()}
     ${needFinalElse?_transition_else()}
     ${needFinalEnd?_transition_end()}
 end
@@ -201,7 +201,7 @@ end
 ]],
                 _guard_debug_enter = [[
 if fsm.getDebugFlag then
-    fsm.getDebugStream.write("ENTER TRANSITION: ${transition.state.fullName}.${transition.name}(${transition.parameters:_guard_debug_param(); separator=', '})\n")
+    fsm.getDebugStream.write("ENTER TRANSITION: ${transition.state.fullName}.${transition.name}(${transition.parameters/_guard_debug_param(); separator=', '})\n")
 end
 ]],
                     _guard_debug_param = "${name}",
@@ -218,7 +218,7 @@ ${generator.catchFlag?_guard_actions_protected()!_guard_actions_not_protected()}
 ]],
                     _guard_actions_protected = [[
 begin
-    ${actions:_action()}
+    ${actions/_action()}
 ${generator.debugLevel0?_guard_debug_exception()}
 ensure
     ${_guard_final()}
@@ -229,7 +229,7 @@ rescue RuntimeError => e
     fsm.getDebugStream.write e
 ]],
                     _guard_actions_not_protected = [[
-${actions:_action()}
+${actions/_action()}
 ${_guard_final()}
 ]],
                             _guard_final = [[
@@ -241,7 +241,7 @@ ${doesEntry?_guard_entry()}
 ]],
                 _guard_debug_exit = [[
 if fsm.getDebugFlag then
-    fsm.getDebugStream.write("EXIT TRANSITION : ${transition.state.fullName}.${transition.name}(${transition.parameters:_guard_debug_param(); separator=', '})\n")
+    fsm.getDebugStream.write("EXIT TRANSITION : ${transition.state.fullName}.${transition.name}(${transition.parameters/_guard_debug_param(); separator=', '})\n")
 end
 ]],
                 _guard_set = [[
@@ -315,18 +315,18 @@ end
             _context_reflect = [[
 def getStates()
     return [
-        ${fsm.maps:_map_context_reflect()}
+        ${fsm.maps/_map_context_reflect()}
     ]
 end
 
 def getTransitions()
     return [
-        ${fsm.transitions:_transition_context_reflect()}
+        ${fsm.transitions/_transition_context_reflect()}
     ]
 end
 
 ]],
-                _map_context_reflect = "${states:_state_context_reflect()}\n",
+                _map_context_reflect = "${states/_state_context_reflect()}\n",
                      _state_context_reflect = [[
 ${map.name}::${name},
 ]],

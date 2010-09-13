@@ -12,36 +12,36 @@ function method:_build_template ()
 Start State: ${fsm.startState}
     Context: ${fsm.context}
        Maps:
-${fsm.maps:_map()}
+${fsm.maps/_map()}
 ]],
         _map = [[
 %map ${name}
 ${defaultState?_state()}
-${states:_state()}
+${states/_state()}
 ]],
         _state = [[
 ${entryActions?_entry()}
 ${exitActions?_exit()}
-${transitions:_transition()}
+${transitions/_transition()}
 ]],
             _entry = [[
 	Entry {
-${entryActions:_action()}
+${entryActions/_action()}
 	}
 ]],
             _exit = [[
 	Exit {
-${exitActions:_action()}
+${exitActions/_action()}
 	}
 ]],
         _transition = [[
-${name}(${parameters:_param(); separator=", "})
-${guards:_guard()}
+${name}(${parameters/_param(); separator=", "})
+${guards/_guard()}
 ]],
             _param = "${name}",
         _guard = [[
 ${name}${condition; format=f_cond} ${transType; format=f_type} ${endState}${pushState?_push()} {
-    ${actions:_action(); separator=",\n"}
+    ${actions/_action(); separator=",\n"}
 }
 ]],
             _push = "/ push(${pushState})",
