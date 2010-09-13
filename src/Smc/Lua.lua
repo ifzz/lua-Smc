@@ -227,7 +227,7 @@ if fsm:getDebugFlag() then
     fsm:getDebugStream():write("ENTER TRANSITION: ${transition.state.fullName}.${transition.name}(${transition.parameters/_guard_debug_param(); separator=', '})\n")
 end
 ]],
-                    _guard_debug_param = [[${name}=" .. tostring(${name}) .. "]],
+                    _guard_debug_param = "${name}",
                 _guard_no_action = "${isConditional?_guard_no_action_if()}",
                     _guard_no_action_if = [[
 -- No actions.

@@ -57,7 +57,6 @@ sub test_smc_lua {
         like($out, qr{$re{$test}}, "$test $options");
     }
     else {
-        $out =~ s/n=\d/n/gm;
         is($out, $expected, "$test $options");
     }
 }
