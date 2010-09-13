@@ -1,6 +1,5 @@
 
 require 'Coat'
-require 'CodeGen'
 
 singleton 'Smc.Lua'
 extends 'Smc.Language'
