@@ -24,6 +24,7 @@ build = {
     modules = {
         ['Smc']                 = 'src/Smc.lua',
         ['Smc.Checker']         = 'src/Smc/Checker.lua',
+        ['Smc.Dumper']          = 'src/Smc/Dumper.lua',
         ['Smc.Generator']       = 'src/Smc/Generator.lua',
         ['Smc.Language']        = 'src/Smc/Language.lua',
         ['Smc.Model']           = 'src/Smc/Model.lua',
