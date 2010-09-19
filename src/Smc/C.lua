@@ -35,7 +35,6 @@ function method:_build_template ()
 ${_preamble()}
 ${_base_state()}
 ${fsm.maps/_map()}
-${_context()}
 
 /*
  * Local variables:
@@ -45,7 +44,6 @@ ${_context()}
 ]],
         _preamble = [[
 ${fsm.source}
-#include <assert.h>
 ${fsm.includeList/_include()}
 #include "${generator.headerDirectory?_headerDirectory()!_srcDirectory()}${generator.targetfileBase}.h"
 
@@ -316,38 +314,6 @@ emptyStateStack(fsm);
 ${fsm._package?_package()}${fsm.context}_${name}(ctxt${hasArguments?_action_arg()});
 ]],
                 _action_arg = ", ${arguments; separator=', '}",
-        _context = [[
-
-void ${fsm.fsmClassname}_Init(struct ${fsm.fsmClassname}* fsm, struct ${fsm._package?_package()}${fsm.context}* owner)
-{
-    FSM_INIT(fsm, &${fsm._package?_package()}${fsm.startState; format=scoped});
-    fsm->_owner = owner;
-}
-${fsm.hasEntryActions?_enter_start()}
-${fsm.transitions/_transition_context()}
-]],
-            _enter_start = [[
-
-void ${fsm.fsmClassname}_EnterStartState(struct ${fsm.fsmClassname}* fsm)
-{
-    ENTRY_STATE(getState(fsm));
-}
-]],
-            _transition_context = "${isntDefault?_transition_context_if()}\n",
-            _transition_context_if = [[
-
-void ${fsm.fsmClassname}_${name}(struct ${fsm.fsmClassname}* fsm${parameters/_parameter_context_proto()})
-{
-    const struct ${fsm._package?_package()}${fsm.context}State* state = getState(fsm);
-
-    assert(state != NULL);
-    setTransition(fsm, "${name}");
-    state->${name}(fsm${parameters/_parameter_context_call()});
-    setTransition(fsm, NULL);
-}
-]],
-                _parameter_context_proto = ", ${_type} ${name}",
-                _parameter_context_call = ", ${name}",
     }
 end
 
@@ -389,6 +355,7 @@ ${_context()}
             return s:upper()
         end,
         _preample = [[
+#include <assert.h>
 #include <statemap.h>
 
 ${fsm.declareList/_declare()}
@@ -441,16 +408,27 @@ struct ${fsm.fsmClassname}
     struct ${fsm._package?_package()}${fsm.context} *_owner;
 };
 
-extern void ${fsm.fsmClassname}_Init(struct ${fsm.fsmClassname}*, struct ${fsm._package?_package()}${fsm.context}*);
+#define ${fsm.fsmClassname}_Init(fsm, owner) \
+    FSM_INIT((fsm), &${fsm._package?_package()}${fsm.startState; format=scoped}); \
+    (fsm)->_owner = (owner);
 ${fsm.hasEntryActions?_enter_start()}
 ${fsm.transitions/_transition_context()}
 ]],
             _enter_start = [[
-extern void ${fsm.fsmClassname}_EnterStartState(struct ${fsm.fsmClassname}*);
+
+#define ${fsm.fsmClassname}_EnterStartState(fsm) \
+    ENTRY_STATE(getState(fsm));
 ]],
             _transition_context = "${isntDefault?_transition_context_if()}\n",
             _transition_context_if = [[
-extern void ${fsm.fsmClassname}_${name}(struct ${fsm.fsmClassname}*${parameters/_parameter_proto()});
+
+#define ${fsm.fsmClassname}_${name}(fsm${parameters/_parameter_context_def()}) \
+    assert(getState(fsm) != NULL); \
+    setTransition((fsm), "${name}"); \
+    getState(fsm)->${name}((fsm)${parameters/_parameter_context_call()}); \
+    setTransition((fsm), NULL);
 ]],
+                _parameter_context_def = ", ${name}",
+                _parameter_context_call = ", (${name})",
     }
 end
