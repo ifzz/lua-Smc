@@ -57,11 +57,13 @@ ${fsm.includeList/_include()}
             _headerDirectory = "${generator.headerDirectory}",
         _base_state = [[
 
-#define POPULATE_STATE(state) \
+#define POPULATE_STATE(state, name, id) \
     ${fsm.hasEntryActions?_populate_entry()}
     ${fsm.hasExitActions?_populate_exit()}
     ${fsm.transitions/_populate_transition()}
-    state##_Default
+    state##_Default, \
+    ${generator.debugLevel0?_populate_name()}
+    (id)
 
 ${fsm.hasEntryActions?_def_entry()!_def_no_entry()}
 
@@ -84,6 +86,9 @@ state##_Exit, \
             _populate_transition = "${isntDefault?_populate_transition_if()}\n",
             _populate_transition_if = [[
 state##_${name}, \
+]],
+            _populate_name = [[
+(name), \
 ]],
             _def_entry = [[
 #define ENTRY_STATE(state) \
@@ -141,7 +146,7 @@ ${entryActions?_state_entry()}
 ${exitActions?_state_exit()}
 ${transitions/_transition()}
 
-const struct ${fsm._package?_package()}${fsm.context}State ${fullName; format=scoped} = { POPULATE_STATE(${fullName; format=scoped}), "${fullName}", ${map.nextStateId} };
+const struct ${fsm._package?_package()}${fsm.context}State ${fullName; format=scoped} = { POPULATE_STATE(${fullName; format=scoped}, "${fullName}", ${map.nextStateId}) };
 ]],
             _transition_def = "${isntDefault?_transition_def_if()}\n",
             _transition_def_if = [[
@@ -356,9 +361,13 @@ ${_context()}
         end,
         _preample = [[
 #include <assert.h>
+${generator.debugLevel0?_define_name()}
 #include <statemap.h>
 
 ${fsm.declareList/_declare()}
+]],
+            _define_name = [[
+#define STATE_WITH_NAME 1
 ]],
             _declare = "${it; format=declare}\n",
             declare = function (s)
@@ -424,11 +433,17 @@ ${fsm.transitions/_transition_context()}
 
 #define ${fsm.fsmClassname}_${name}(fsm${parameters/_parameter_context_def()}) \
     assert(getState(fsm) != NULL); \
-    setTransition((fsm), "${name}"); \
+    ${generator.debugLevel0?_transition_debug_set()}
     getState(fsm)->${name}((fsm)${parameters/_parameter_context_call()}); \
-    setTransition((fsm), NULL);
+    ${generator.debugLevel0?_transition_debug_unset()}
 ]],
                 _parameter_context_def = ", ${name}",
                 _parameter_context_call = ", (${name})",
+                _transition_debug_set = [[
+setTransition((fsm), "${name}"); \
+]],
+                _transition_debug_unset = [[
+setTransition((fsm), NULL);
+]],
     }
 end

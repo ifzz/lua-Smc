@@ -53,17 +53,17 @@
 #define TRACE printf
 #endif
 
+#ifdef STATE_WITH_NAME
 #define STATE_MEMBERS \
     const char *_name; \
     int _id;
-
-struct State
-{
-    STATE_MEMBERS
-};
-
 #define getName(state) \
     (state)->_name
+#else
+#define STATE_MEMBERS \
+    int _id;
+#endif
+
 #define getId(state) \
     (state)->_id
 
@@ -79,11 +79,6 @@ struct State
     const char * _transition; \
     int _debug_flag;
 
-struct FSMContext
-{
-    FSM_MEMBERS(_)
-};
-
 #define FSM_INIT(fsm, state)    \
     (fsm)->_state = (state); \
     (fsm)->_previous_state = NULL; \
@@ -98,6 +93,24 @@ struct FSMContext
     (fsm)->_stack_curr = &(stack)[0]; \
     (fsm)->_stack_max = &(stack)[0] + (sizeof(stack) / sizeof(void*))
 
+#ifdef STATE_WITH_NAME
+#define setState_debug(fsm, state) \
+    if ((fsm)->_debug_flag != 0) { \
+        TRACE("ENTER STATE     : %s\n", getName(state)); \
+    }
+#define pushState_debug(fsm, state) \
+    if ((fsm)->_debug_flag != 0) { \
+        TRACE("PUSH TO STATE   : %s\n", getName(state)); \
+    }
+#define popState_debug(fsm) \
+    if ((fsm)->_debug_flag != 0) { \
+        TRACE("POP TO STATE    : %s\n", getName((fsm)->_state)); \
+    }
+#else
+#define setState_debug(fsm, state)
+#define pushState_debug(fsm, state)
+#define popState_debug(fsm)
+#endif
 
 #define getState(fsm) \
     (fsm)->_state
@@ -106,9 +119,7 @@ struct FSMContext
     (fsm)->_state = NULL
 #define setState(fsm, state) \
     (fsm)->_state = (state); \
-    if ((fsm)->_debug_flag != 0) { \
-        TRACE("ENTER STATE     : %s\n", getName(state)); \
-    }
+    setState_debug(fsm, state)
 #define pushState(fsm, state) \
     if ((fsm)->_stack_curr >= (fsm)->_stack_max) { \
         assert(0 == "STACK OVERFLOW"); \
@@ -116,15 +127,11 @@ struct FSMContext
     *((fsm)->_stack_curr) = (fsm)->_state; \
     (fsm)->_stack_curr ++; \
     (fsm)->_state = state; \
-    if ((fsm)->_debug_flag != 0) { \
-        TRACE("PUSH TO STATE   : %s\n", getName(state)); \
-    }
+    pushState_debug(fsm, state)
 #define popState(fsm) \
     (fsm)->_stack_curr --; \
     (fsm)->_state = *((fsm)->_stack_curr); \
-    if ((fsm)->_debug_flag != 0) { \
-        TRACE("POP TO STATE    : %s\n", getName((fsm)->_state)); \
-    }
+    popState_debug(fsm)
 #define emptyStateStack(fsm) \
     (fsm)->_stack_curr = (fsm)->_stack_start
 #define setTransition(fsm, transition) \
