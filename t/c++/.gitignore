@@ -2,6 +2,7 @@
 *.png
 *.dot
 *.html
+*.exe
 
 TestClass.sm
 TestClassContext.cpp
