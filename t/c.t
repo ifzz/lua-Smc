@@ -5,6 +5,7 @@ use warnings;
 use FindBin;
 use lib "$FindBin::Bin";
 
+use File::Spec::Functions;
 use Test::More;
 use Test::LongString;
 use Util;
@@ -50,7 +51,7 @@ sub test_smc_c {
     my $out = Util::run('gcc', "-I runtime/c -I . -o t/c/${test} t/c/${test}.c t/c/TestClass.c t/c/TestClassContext.c");
     diag($out) if $out;
     my $trace = $options =~ /-g0/ && ${Util::smc} !~ /\.jar/ ? 'g0' : '';
-    $out = Util::run("t/c/${test}", $trace);
+    $out = Util::run(catfile('t', 'c', ${test}), $trace);
     my $expected = $trace
                  ? Util::slurp("t/templates/${test}.g0.out")
                  : Util::slurp("t/templates/${test}.out");

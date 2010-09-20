@@ -45,7 +45,7 @@ Evt_1 set State_1 {
 ]]
 
 
-smc = "./bin/smc"
+smc = "lua ./bin/smc"
 cmd = smc .. " -version"
 f = io.popen(cmd)
 like( f:read'*l', "^Smc %d%.%d%.%d", "-version" )
