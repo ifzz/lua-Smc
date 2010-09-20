@@ -63,8 +63,8 @@
 #endif
 
 #define STATE_MEMBERS \
-    STATE_MEMBERS_DEBUG \
-    int _id;
+    int _id; \
+    STATE_MEMBERS_DEBUG
 
 #define getId(state) \
     (state)->_id

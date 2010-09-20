@@ -57,13 +57,11 @@ ${fsm.includeList/_include()}
             _headerDirectory = "${generator.headerDirectory}",
         _base_state = [[
 
-#define POPULATE_STATE(state, name, id) \
+#define POPULATE_STATE(state) \
     ${fsm.hasEntryActions?_populate_entry()}
     ${fsm.hasExitActions?_populate_exit()}
     ${fsm.transitions/_populate_transition()}
-    state##_Default, \
-    ${generator.debugLevel0?_populate_name()}
-    (id)
+    state##_Default
 
 ${fsm.hasEntryActions?_def_entry()!_def_no_entry()}
 
@@ -86,9 +84,6 @@ state##_Exit, \
             _populate_transition = "${isntDefault?_populate_transition_if()}\n",
             _populate_transition_if = [[
 state##_${name}, \
-]],
-            _populate_name = [[
-(name), \
 ]],
             _def_entry = [[
 #define ENTRY_STATE(state) \
@@ -146,8 +141,9 @@ ${entryActions?_state_entry()}
 ${exitActions?_state_exit()}
 ${transitions/_transition()}
 
-const struct ${fsm._package?_package()}${fsm.context}State ${fullName; format=scoped} = { POPULATE_STATE(${fullName; format=scoped}, "${fullName}", ${map.nextStateId}) };
+const struct ${fsm._package?_package()}${fsm.context}State ${fullName; format=scoped} = { POPULATE_STATE(${fullName; format=scoped}), ${map.nextStateId}${generator.debugLevel0?_state_init_debug()} };
 ]],
+            _state_init_debug = [[, "${fullName}"]],
             _transition_def = "${isntDefault?_transition_def_if()}\n",
             _transition_def_if = [[
 #define ${fullName; format=scoped}_${name} ${map.defaultState?_default_state_name()!_base_state_name()}_${name}
@@ -387,7 +383,6 @@ struct ${fsm._package?_package()}${fsm.context}State
     ${fsm.hasExitActions?_member_exit()}
     ${fsm.transitions/_transition_member()}
     void(*Default)(struct ${fsm.fsmClassname}*);
-
     STATE_MEMBERS
 };
 
@@ -413,8 +408,8 @@ extern const struct ${fsm._package?_package()}${fsm.context}State  ${fullName; f
 
 struct ${fsm.fsmClassname}
 {
-    FSM_MEMBERS(${fsm._package?_package()}${fsm.context})
     struct ${fsm._package?_package()}${fsm.context} *_owner;
+    FSM_MEMBERS(${fsm._package?_package()}${fsm.context})
 };
 
 #define ${fsm.fsmClassname}_Init(fsm, owner) \
@@ -434,11 +429,12 @@ ${fsm.transitions/_transition_context()}
 #define ${fsm.fsmClassname}_${name}(fsm${parameters/_parameter_context_def()}) \
     assert(getState(fsm) != NULL); \
     ${generator.debugLevel0?_transition_debug_set()}
-    getState(fsm)->${name}((fsm)${parameters/_parameter_context_call()}); \
+    getState(fsm)->${name}((fsm)${parameters/_parameter_context_call()});${generator.debugLevel0?_backslash()}
     ${generator.debugLevel0?_transition_debug_unset()}
 ]],
                 _parameter_context_def = ", ${name}",
                 _parameter_context_call = ", (${name})",
+                _backslash = [[ \]],
                 _transition_debug_set = [[
 setTransition((fsm), "${name}"); \
 ]],
