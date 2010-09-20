@@ -367,7 +367,7 @@ ${generator.debugLevel0?_define_name()}
 ${fsm.declareList/_declare()}
 ]],
             _define_name = [[
-#define STATE_WITH_NAME 1
+#define STATEMAP_DEBUG 1
 ]],
             _declare = "${it; format=declare}\n",
             declare = function (s)
