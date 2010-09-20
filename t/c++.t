@@ -52,6 +52,7 @@ my %re = (
 sub test_smc_cpp {
     my ($test, $options) = @_;
     unlink("t/c++/${test}");
+    unlink("t/c++/${test}.exe");
     unlink("t/c++/TestClass.sm");
     unlink("t/c++/TestClassContext.cpp");
     unlink("t/c++/TestClassContext.h");
