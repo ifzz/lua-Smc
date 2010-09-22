@@ -13,13 +13,12 @@ abstract 'Smc.Element'
 
 has.filename        = { is = 'ro', isa = 'string', required = true }
 has.lineno          = { is = 'ro', isa = 'number', required = true }
-has.name            = { is = 'ro', isa = 'string' }
+has.name            = { is = 'ro', isa = 'string', required = true }
 
 
 class 'Smc.FSM'
 extends 'Smc.Element'
 
-has.name            = { '+', required = true }
 has.targetFilename  = { is = 'rw', isa = 'string', required = true }
 has.source          = { is = 'rw', isa = 'string' }
 has.startState      = { is = 'rw', isa = 'string' }
@@ -92,7 +91,6 @@ end
 class 'Smc.Map'
 extends 'Smc.Element'
 
-has.name            = { '+', required = true }
 has.fsm             = { is = 'ro', isa = 'Smc.FSM', required = true }
 has.states          = { is = 'rw', isa = 'table<Smc.State>',
                         default = function () return {} end }
@@ -295,7 +293,6 @@ end
 class 'Smc.Transition'
 extends 'Smc.Element'
 
-has.name            = { '+', required = true }
 has.state           = { is = 'ro', isa = 'Smc.State', required = true }
 has.parameters      = { is = 'ro', isa = 'table<Smc.Parameter>', required = true }
 has.guards          = { is = 'rw', isa = 'table<Smc.Guard>',
@@ -353,7 +350,6 @@ enum.Smc.TransType = {
     'TRANS_POP',
 }
 
-has.name            = { '+', required = true }
 has.transition      = { is = 'ro', isa = 'Smc.Transition', required = true }
 has.condition       = { is = 'ro', isa = 'string', required = true }
 has.transType       = { is = 'rw', isa = 'Smc.TransType' }
@@ -507,7 +503,6 @@ end
 class 'Smc.Action'
 extends 'Smc.Element'
 
-has.name            = { '+', required = true }
 has.staticFlag      = { is = 'ro', isa = 'boolean', default = false }
 has.propertyFlag    = { is = 'rw', isa = 'boolean', default = false }
 has.arguments       = { is = 'rw', isa = 'table<string>',
@@ -537,6 +532,5 @@ end
 class 'Smc.Parameter'
 extends 'Smc.Element'
 
-has.name            = { '+', required = true }
 has._type           = { is = 'rw', isa = 'string' }
 
