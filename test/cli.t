@@ -36,11 +36,11 @@ Start State: Map_1::State_1
 %map Map_1
 Evt_1()
 Evt_1 set State_2 {
-    Output("State_1:Evt_1")
+    Output("State_1:Evt_1");
 }
 Evt_1()
 Evt_1 set State_1 {
-    Output("State_2:Evt_1")
+    Output("State_2:Evt_1");
 }
 ]]
 
