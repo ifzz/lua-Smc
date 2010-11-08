@@ -467,7 +467,7 @@ function method:main (args)
     local function die (msg)
         print(_NAME .. " has experienced a fatal error.")
         print(_NAME .. " " .. _VERSION .. " (" .. _G._VERSION
-           .. " & lua-Coat " .. Coat._VERSION .. ")")
+           .. " & lua-Coat " .. require 'Coat'._VERSION .. ")")
         print(msg)
         os.exit(1)
     end -- die
