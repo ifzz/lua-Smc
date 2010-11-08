@@ -1,5 +1,6 @@
 
 require 'Coat'
+local CodeGen = require 'CodeGen'
 
 class 'Smc.Dumper'
 extends 'Smc.Generator'

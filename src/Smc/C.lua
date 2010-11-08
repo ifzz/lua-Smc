@@ -1,5 +1,6 @@
 
 require 'Coat'
+local CodeGen = require 'CodeGen'
 
 singleton 'Smc.C'
 extends 'Smc.Language'

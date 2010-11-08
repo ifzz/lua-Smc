@@ -1,5 +1,6 @@
 
 require 'Coat'
+local CodeGen = require 'CodeGen'
 
 local ipairs = ipairs
 local pairs = pairs

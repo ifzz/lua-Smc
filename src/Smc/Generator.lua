@@ -1,6 +1,5 @@
 
 require 'Coat'
-require 'CodeGen'
 
 local string = require 'string'
 

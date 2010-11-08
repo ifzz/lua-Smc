@@ -56,46 +56,46 @@ Languages2.dot:
 	coat2dot --no-attr Smc.Cpp Smc.Csharp Smc.Java Smc.ObjC Smc.Php Smc.Table Smc.Tcl Smc.Vb > $@
 
 C_template.dot: ../src/Smc/C.lua
-	$(LUA) -l CodeGen.Graph -l Smc.C -e "print(CodeGen.Graph.to_dot(require 'Smc.C.Generator'{srcfileBase='', targetfileBase=''}.template))" > $@
+	$(LUA) -l Smc.C -e "print(require 'CodeGen.Graph'.to_dot(require 'Smc.C.Generator'{srcfileBase='', targetfileBase=''}.template))" > $@
 
 C_header_template.dot: ../src/Smc/C.lua
-	$(LUA) -l CodeGen.Graph -l Smc.C -e "print(CodeGen.Graph.to_dot(require 'Smc.C.HeaderGenerator'{srcfileBase='', targetfileBase=''}.template))" > $@
+	$(LUA) -l Smc.C -e "print(require 'CodeGen.Graph'.to_dot(require 'Smc.C.HeaderGenerator'{srcfileBase='', targetfileBase=''}.template))" > $@
 
 Cpp_template.dot: ../src/Smc/Cpp.lua
-	$(LUA) -l CodeGen.Graph -l Smc.Cpp -e "print(CodeGen.Graph.to_dot(require 'Smc.Cpp.Generator'{srcfileBase='', targetfileBase=''}.template))" > $@
+	$(LUA) -l Smc.Cpp -e "print(require 'CodeGen.Graph'.to_dot(require 'Smc.Cpp.Generator'{srcfileBase='', targetfileBase=''}.template))" > $@
 
 Cpp_header_template.dot: ../src/Smc/Cpp.lua
-	$(LUA) -l CodeGen.Graph -l Smc.Cpp -e "print(CodeGen.Graph.to_dot(require 'Smc.Cpp.HeaderGenerator'{srcfileBase='', targetfileBase=''}.template))" > $@
+	$(LUA) -l Smc.Cpp -e "print(require 'CodeGen.Graph'.to_dot(require 'Smc.Cpp.HeaderGenerator'{srcfileBase='', targetfileBase=''}.template))" > $@
 
 Graphviz_template.dot: ../src/Smc/Graphviz.lua
-	$(LUA) -l CodeGen.Graph -l Smc.Graphviz -e "print(CodeGen.Graph.to_dot(require 'Smc.Graphviz.Generator'{srcfileBase='', targetfileBase=''}.template))" > $@
+	$(LUA) -l Smc.Graphviz -e "print(require 'CodeGen.Graph'.to_dot(require 'Smc.Graphviz.Generator'{srcfileBase='', targetfileBase=''}.template))" > $@
 
 Groovy_template.dot: ../src/Smc/Groovy.lua
-	$(LUA) -l CodeGen.Graph -l Smc.Groovy -e "print(CodeGen.Graph.to_dot(require 'Smc.Groovy.Generator'{srcfileBase='', targetfileBase=''}.template))" > $@
+	$(LUA) -l Smc.Groovy -e "print(require 'CodeGen.Graph'.to_dot(require 'Smc.Groovy.Generator'{srcfileBase='', targetfileBase=''}.template))" > $@
 
 Java_template.dot: ../src/Smc/Java.lua
-	$(LUA) -l CodeGen.Graph -l Smc.Java -e "print(CodeGen.Graph.to_dot(require 'Smc.Java.Generator'{srcfileBase='', targetfileBase=''}.template))" > $@
+	$(LUA) -l Smc.Java -e "print(require 'CodeGen.Graph'.to_dot(require 'Smc.Java.Generator'{srcfileBase='', targetfileBase=''}.template))" > $@
 
 Lua_template.dot: ../src/Smc/Lua.lua
-	$(LUA) -l CodeGen.Graph -l Smc.Lua -e "print(CodeGen.Graph.to_dot(require 'Smc.Lua.Generator'{srcfileBase='', targetfileBase=''}.template))" > $@
+	$(LUA) -l Smc.Lua -e "print(require 'CodeGen.Graph'.to_dot(require 'Smc.Lua.Generator'{srcfileBase='', targetfileBase=''}.template))" > $@
 
 Perl_template.dot: ../src/Smc/Perl.lua
-	$(LUA) -l CodeGen.Graph -l Smc.Perl -e "print(CodeGen.Graph.to_dot(require 'Smc.Perl.Generator'{srcfileBase='', targetfileBase=''}.template))" > $@
+	$(LUA) -l Smc.Perl -e "print(require 'CodeGen.Graph'.to_dot(require 'Smc.Perl.Generator'{srcfileBase='', targetfileBase=''}.template))" > $@
 
 Php_template.dot: ../src/Smc/Php.lua
-	$(LUA) -l CodeGen.Graph -l Smc.Php -e "print(CodeGen.Graph.to_dot(require 'Smc.Php.Generator'{srcfileBase='', targetfileBase=''}.template))" > $@
+	$(LUA) -l Smc.Php -e "print(require 'CodeGen.Graph'.to_dot(require 'Smc.Php.Generator'{srcfileBase='', targetfileBase=''}.template))" > $@
 
 Python_template.dot: ../src/Smc/Python.lua
-	$(LUA) -l CodeGen.Graph -l Smc.Python -e "print(CodeGen.Graph.to_dot(require 'Smc.Python.Generator'{srcfileBase='', targetfileBase=''}.template))" > $@
+	$(LUA) -l Smc.Python -e "print(require 'CodeGen.Graph'.to_dot(require 'Smc.Python.Generator'{srcfileBase='', targetfileBase=''}.template))" > $@
 
 Ruby_template.dot: ../src/Smc/Ruby.lua
-	$(LUA) -l CodeGen.Graph -l Smc.Ruby -e "print(CodeGen.Graph.to_dot(require 'Smc.Ruby.Generator'{srcfileBase='', targetfileBase=''}.template))" > $@
+	$(LUA) -l Smc.Ruby -e "print(require 'CodeGen.Graph'.to_dot(require 'Smc.Ruby.Generator'{srcfileBase='', targetfileBase=''}.template))" > $@
 
 Scala_template.dot: ../src/Smc/Scala.lua
-	$(LUA) -l CodeGen.Graph -l Smc.Scala -e "print(CodeGen.Graph.to_dot(require 'Smc.Scala.Generator'{srcfileBase='', targetfileBase=''}.template))" > $@
+	$(LUA) -l Smc.Scala -e "print(require 'CodeGen.Graph'.to_dot(require 'Smc.Scala.Generator'{srcfileBase='', targetfileBase=''}.template))" > $@
 
 Table_template.dot: ../src/Smc/Table.lua
-	$(LUA) -l CodeGen.Graph -l Smc.Table -e "print(CodeGen.Graph.to_dot(require 'Smc.Table.Generator'{srcfileBase='', targetfileBase=''}.template))" > $@
+	$(LUA) -l Smc.Table -e "print(require 'CodeGen.Graph'.to_dot(require 'Smc.Table.Generator'{srcfileBase='', targetfileBase=''}.template))" > $@
 
 
 %_sm.dot : ../src/Smc/Parser/%.sm
