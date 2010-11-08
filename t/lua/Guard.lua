@@ -1,5 +1,5 @@
 
-require 'TestClass'
+local TestClass = require 'TestClass'
 
 local obj = TestClass:new()
 obj._fsm:setDebugStream(require 'io'.stdout)

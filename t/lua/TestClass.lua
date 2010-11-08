@@ -4,9 +4,10 @@ local require = require
 local setmetatable = setmetatable
 local table = require 'table'
 
-module(...)
+_ENV = nil
+local m = {}
 
-function new (self)
+function m:new ()
     local o = {}
     setmetatable(o, self)
     self.__index = self
@@ -16,46 +17,48 @@ function new (self)
     return o
 end
 
-function NoArg (self)
+function m:NoArg ()
     print "No arg"
 end
 
-function Output (self, str)
+function m:Output (str)
     print(str)
 end
 
-function Output_n (self, ...)
+function m:Output_n (...)
     print(table.concat({...}, ''))
 end
 
-function isOk (self)
+function m:isOk ()
     return true
 end
 
-function isNok (self)
+function m:isNok ()
     return false
 end
 
-function Evt_1 (self)
+function m:Evt_1 ()
     self._fsm:Evt_1()
 end
 
-function Evt_2 (self)
+function m:Evt_2 ()
     self._fsm:Evt_2()
 end
 
-function Evt_3 (self)
+function m:Evt_3 ()
     self._fsm:Evt_3()
 end
 
-function Evt1 (self, ...)
+function m:Evt1 (...)
     self._fsm:Evt1(...)
 end
 
-function Evt2 (self, ...)
+function m:Evt2 (...)
     self._fsm:Evt2(...)
 end
 
-function Evt3 (self, ...)
+function m:Evt3 (...)
     self._fsm:Evt3(...)
 end
+
+return m
