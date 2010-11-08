@@ -38,10 +38,10 @@ local setmetatable = setmetatable
 local type = type
 local stderr = require 'io'.stderr
 
-module(...)
+_ENV = nil
 
 -- base State class
-State = {}
+local State = {}
 
 function State:class ()
     local o = {}
@@ -51,7 +51,7 @@ function State:class ()
 end
 
 function State:new (name, id)
-    o = {_name = name, _id = id}
+    local o = {_name = name, _id = id}
     setmetatable(o, self)
     self.__index = self
     return o
@@ -76,7 +76,7 @@ end
  state of the FSM.  This must be done manually in the constructor
  of the derived class.
 ]]
-FSMContext = {}
+local FSMContext = {}
 
 function FSMContext:class ()
     local o = {}
@@ -211,3 +211,7 @@ function FSMContext:emptyStateStack ()
     self._state_stack = {}
 end
 
+return {
+    State       = State,
+    FSMContext  = FSMContext,
+}
