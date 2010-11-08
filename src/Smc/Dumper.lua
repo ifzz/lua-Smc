@@ -40,7 +40,7 @@ ${guards/_guard()}
             _param = "${name}",
         _guard = [[
 ${name}${condition; format=f_cond} ${transType; format=f_type} ${endState}${pushState?_push()} {
-    ${actions/_action(); separator=",\n"}
+    ${actions/_action()}
 }
 ]],
             _push = "/ push(${pushState})",
@@ -58,7 +58,9 @@ ${name}${condition; format=f_cond} ${transType; format=f_type} ${endState}${push
                     return "pop"
                 end
             end,
-        _action = "${propertyFlag?_action_prop()!_action_no_prop()}\n",
+        _action = [[
+${propertyFlag?_action_prop()!_action_no_prop()};
+]],
             _action_prop = "${name} = ${arguments}",
             _action_no_prop = "${name}(${arguments; separator=', '})",
     }
