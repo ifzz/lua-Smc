@@ -1,6 +1,7 @@
 
 LUA     := lua
 SMC     := $(LUA) ../bin/smc
+COAT2DOT:= coat2dot
 
 export LUA_PATH=;;../src/?.lua;../runtime/lua/?.lua
 
@@ -38,22 +39,22 @@ clean:
 	rm *.dot *.png
 
 Model.dot:
-	coat2dot Smc.Model > $@
+	$(COAT2DOT) --note="Semantic Model" Smc.Model > $@
 
 Parser.dot:
-	coat2dot Smc.Parser > $@
+	$(COAT2DOT) Smc.Parser > $@
 
 Checker.dot:
-	coat2dot Smc.Checker Smc.Dumper > $@
+	$(COAT2DOT) Smc.Checker Smc.Dumper > $@
 
 Smc.dot:
-	coat2dot --no-attr --no-meth Smc > $@
+	$(COAT2DOT) --no-attr --no-meth Smc > $@
 
 Languages1.dot:
-	coat2dot --no-attr Smc.C Smc.Graphviz Smc.Groovy Smc.Lua Smc.Perl Smc.Python Smc.Ruby Smc.Scala > $@
+	$(COAT2DOT) --no-attr Smc.C Smc.Graphviz Smc.Groovy Smc.Lua Smc.Perl Smc.Python Smc.Ruby Smc.Scala > $@
 
 Languages2.dot:
-	coat2dot --no-attr Smc.Cpp Smc.Csharp Smc.Java Smc.ObjC Smc.Php Smc.Table Smc.Tcl Smc.Vb > $@
+	$(COAT2DOT) --no-attr Smc.Cpp Smc.Csharp Smc.Java Smc.ObjC Smc.Php Smc.Table Smc.Tcl Smc.Vb > $@
 
 C_template.dot: ../src/Smc/C.lua
 	$(LUA) -l Smc.C -e "print(require 'CodeGen.Graph'.to_dot(require 'Smc.C.Generator'{srcfileBase='', targetfileBase=''}.template))" > $@
