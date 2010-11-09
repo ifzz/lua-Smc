@@ -43,13 +43,13 @@ has.hasExitActions  = { is = 'ro', lazy_build = true }
 has.isValid         = { is = 'rw', isa = 'boolean', default = true }
 
 function method:_build_transitions ()
-    hash = {}
+    local hash = {}
     for _, map in ipairs(self.maps) do
         for _, trans in ipairs(map.transitions) do
             hash[trans.name] = trans
         end
     end
-    all = {}
+    local all = {}
     for _, v in pairs(hash) do
         table.insert(all, v)
     end
@@ -121,13 +121,13 @@ function method:_build_fullName ()
 end
 
 function method:_build_transitions ()
-    hash = {}
+    local hash = {}
     for _, state in ipairs(self.allStates) do
         for _, trans in ipairs(state.transitions) do
             hash[trans.name] = trans
         end
     end
-    all = {}
+    local all = {}
     for _, v in pairs(hash) do
         table.insert(all, v)
     end

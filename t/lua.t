@@ -14,6 +14,8 @@ use Util;
 #$Util::test_table = 0;
 #@Util::tests = ( 'Simple' );
 
+my $lua = 'lua';
+
 my @opt = (
     '',
     '-g0',
@@ -50,7 +52,7 @@ sub test_smc_lua {
     Util::do_fsm('lua', $test);
     system("${Util::smc} -lua ${options} t/lua/TestClass.sm");
     my $trace = $options =~ /-g0/ && ${Util::smc} !~ /\.jar/ ? 'g0' : '';
-    my $out = Util::run('lua', "t/lua/${test}.lua", $trace);
+    my $out = Util::run($lua, "t/lua/${test}.lua", $trace);
     my $expected = $trace
                  ? Util::slurp("t/templates/${test}.g0.out")
                  : Util::slurp("t/templates/${test}.out");

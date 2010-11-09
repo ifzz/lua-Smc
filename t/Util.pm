@@ -5,7 +5,8 @@ use strict;
 use warnings;
 use Fatal qw(open close);
 
-our $smc = 'lua ./bin/smc';
+my $lua = 'lua';
+our $smc = $lua . ' ./bin/smc';
 our $test_graph = 1;
 our $test_table = 1;
 our @tests = qw(

@@ -9,7 +9,7 @@ local strformat = require 'string'.format
 
 local statemap = require 'statemap'
 
-module(...)
+_ENV = nil
 
 local ParserState = statemap.State:class()
 
@@ -3809,7 +3809,7 @@ function ArgsMap.Error:Default (fsm)
     end
 end
 
-ParserContext = statemap.FSMContext:class()
+local ParserContext = statemap.FSMContext:class()
 
 function ParserContext:_init ()
     self:setState(HeaderMap.Start)
@@ -4038,6 +4038,10 @@ end
 function ParserContext:getOwner ()
     return self._owner
 end
+
+return {
+    ParserContext = ParserContext
+}
 
 -- Local variables:
 --  buffer-read-only: t

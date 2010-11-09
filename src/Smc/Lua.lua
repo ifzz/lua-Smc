@@ -46,7 +46,7 @@ local statemap = require 'statemap'
 ${fsm.source}
 ${fsm.importList/_import()}
 
-module(...)
+_ENV = nil
 ]],
             _local_pcall = [[
 local pcall = pcall
@@ -300,7 +300,7 @@ ctxt:${name}(${arguments; separator=', '})
 ]],
         _context = [[
 
-${fsm.fsmClassname} = statemap.FSMContext:class()
+local ${fsm.fsmClassname} = statemap.FSMContext:class()
 
 function ${fsm.fsmClassname}:_init ()
     self:setState(${fsm.startState; format=scoped})
@@ -315,6 +315,10 @@ function ${fsm.fsmClassname}:getOwner ()
     return self._owner
 end
 ${generator.reflectFlag?_context_reflect()}
+
+return {
+    ${fsm.fsmClassname} = ${fsm.fsmClassname}
+}
 ]],
             scoped = function (str) return str:gsub('::','.') end,
             _transition_context = "${isntDefault?_transition_context_if()}\n",

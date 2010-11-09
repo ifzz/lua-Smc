@@ -9,7 +9,7 @@ local strformat = require 'string'.format
 
 local statemap = require 'statemap'
 
-module(...)
+_ENV = nil
 
 local LexerState = statemap.State:class()
 
@@ -2056,7 +2056,7 @@ function OldCommentMap.CommentEnd:Default (fsm)
     fsm:getState():Entry(fsm)
 end
 
-LexerContext = statemap.FSMContext:class()
+local LexerContext = statemap.FSMContext:class()
 
 function LexerContext:_init ()
     self:setState(TokenMap.Start)
@@ -2261,6 +2261,10 @@ end
 function LexerContext:getOwner ()
     return self._owner
 end
+
+return {
+    LexerContext = LexerContext
+}
 
 -- Local variables:
 --  buffer-read-only: t

@@ -141,8 +141,8 @@ function method:_build_percentKeyword ()
 end
 
 function method:BUILD ()
-    require 'Smc.Parser.Lexer_sm'
-    self.lexerFSM = Smc.Parser.Lexer_sm.LexerContext:new{_owner = self}
+    local sm = require 'Smc.Parser.Lexer_sm'
+    self.lexerFSM = sm.LexerContext:new{_owner = self}
 --    self.lexerFSM:setDebugFlag(self.debugFlag)
     self.token = Smc.Token.new()
 end
@@ -290,8 +290,8 @@ has.messages        = { is = 'rw', isa = 'table<Smc.Message>',
                         default = function () return {} end }
 
 function method:BUILD ()
-    require 'Smc.Parser.Parser_sm'
-    self.parserFSM = Smc.Parser.Parser_sm.ParserContext:new{_owner = self}
+    local sm = require 'Smc.Parser.Parser_sm'
+    self.parserFSM = sm.ParserContext:new{_owner = self}
     self.parserFSM:setDebugFlag(self.debugFlag)
     self.lexer = Smc.Lexer.new{
         filename = self.filename,
