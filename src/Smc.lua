@@ -21,6 +21,7 @@ _DESCRIPTION = "lua-Smc : the State Machine Compiler in lua-Coat"
 _COPYRIGHT = "Copyright (c) 2010 Francois Perrad"
 
 require 'Smc.Parser'
+require 'Smc.OperationalModel'
 require 'Smc.Checker'
 
 has.languages       = { is = 'ro', lazy_build = true }

@@ -28,6 +28,7 @@ build = {
         ['Smc.Generator']       = 'src/Smc/Generator.lua',
         ['Smc.Language']        = 'src/Smc/Language.lua',
         ['Smc.Model']           = 'src/Smc/Model.lua',
+        ['Smc.OperationalModel']= 'src/Smc/OperationalModel.lua',
         ['Smc.Parser']          = 'src/Smc/Parser.lua',
         ['Smc.Parser.Lexer_sm'] = 'src/Smc/Parser/Lexer_sm.lua',
         ['Smc.Parser.Parser_sm']= 'src/Smc/Parser/Parser_sm.lua',

@@ -39,7 +39,7 @@ clean:
 	rm *.dot *.png
 
 Model.dot:
-	$(COAT2DOT) --note="Semantic Model" Smc.Model > $@
+	$(COAT2DOT) --note="Semantic Model" Smc.Model Smc.OperationalModel > $@
 
 Parser.dot:
 	$(COAT2DOT) Smc.Parser > $@
