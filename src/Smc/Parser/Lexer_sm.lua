@@ -2262,9 +2262,7 @@ function LexerContext:getOwner ()
     return self._owner
 end
 
-return {
-    LexerContext = LexerContext
-}
+return LexerContext
 
 -- Local variables:
 --  buffer-read-only: t

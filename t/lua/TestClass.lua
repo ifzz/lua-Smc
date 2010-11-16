@@ -11,8 +11,7 @@ function m:new ()
     local o = {}
     setmetatable(o, self)
     self.__index = self
-    local m = require 'TestClassContext'
-    o._fsm = m.TestClassContext:new{_owner = o}
+    o._fsm = require 'TestClassContext':new{_owner = o}
     -- o._fsm:setDebugFlag(true)
     return o
 end

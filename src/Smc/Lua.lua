@@ -316,9 +316,7 @@ function ${fsm.fsmClassname}:getOwner ()
 end
 ${generator.reflectFlag?_context_reflect()}
 
-return {
-    ${fsm.fsmClassname} = ${fsm.fsmClassname}
-}
+return ${fsm.fsmClassname}
 ]],
             scoped = function (str) return str:gsub('::','.') end,
             _transition_context = "${isntDefault?_transition_context_if()}\n",

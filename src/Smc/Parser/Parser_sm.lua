@@ -4039,9 +4039,7 @@ function ParserContext:getOwner ()
     return self._owner
 end
 
-return {
-    ParserContext = ParserContext
-}
+return ParserContext
 
 -- Local variables:
 --  buffer-read-only: t
