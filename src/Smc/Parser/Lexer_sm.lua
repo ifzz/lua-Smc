@@ -11,7 +11,7 @@ local statemap = require 'statemap'
 
 _ENV = nil
 
-local LexerState = statemap.State:class()
+local LexerState = statemap.State.class()
 
 function LexerState:Entry (fsm) end
 
@@ -2056,7 +2056,7 @@ function OldCommentMap.CommentEnd:Default (fsm)
     fsm:getState():Entry(fsm)
 end
 
-local LexerContext = statemap.FSMContext:class()
+local LexerContext = statemap.FSMContext.class()
 
 function LexerContext:_init ()
     self:setState(TokenMap.Start)

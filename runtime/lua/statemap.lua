@@ -34,6 +34,7 @@
 
 local assert = assert
 local error = error
+local pairs = pairs
 local setmetatable = setmetatable
 local type = type
 local stderr = require 'io'.stderr
@@ -43,17 +44,13 @@ _ENV = nil
 -- base State class
 local State = {}
 
-function State:class ()
-    local o = {}
-    setmetatable(o, self)
-    self.__index = self
-    return o
+function State.class ()
+    return setmetatable({}, {__index = State})
 end
 
 function State:new (name, id)
     local o = {_name = name, _id = id}
-    setmetatable(o, self)
-    self.__index = self
+    setmetatable(o, {__index = self})
     return o
 end
 
@@ -78,19 +75,18 @@ end
 ]]
 local FSMContext = {}
 
-function FSMContext:class ()
-    local o = {}
-    setmetatable(o, self)
-    self.__index = self
-    return o
+function FSMContext.class ()
+    return setmetatable({}, {__index = FSMContext})
 end
 
-function FSMContext:new (o)
-    o = o or {}
+function FSMContext:new (args)
+    local o = {}
+    for k, v in pairs(args) do
+        o[k] = v
+    end
     o._state_stack = {}
     o._debug_stream = stderr
-    setmetatable(o, self)
-    self.__index = self
+    setmetatable(o, {__index = self})
     o:_init()
     return o
 end

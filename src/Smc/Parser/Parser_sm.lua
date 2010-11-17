@@ -11,7 +11,7 @@ local statemap = require 'statemap'
 
 _ENV = nil
 
-local ParserState = statemap.State:class()
+local ParserState = statemap.State.class()
 
 function ParserState:Entry (fsm) end
 
@@ -3809,7 +3809,7 @@ function ArgsMap.Error:Default (fsm)
     end
 end
 
-local ParserContext = statemap.FSMContext:class()
+local ParserContext = statemap.FSMContext.class()
 
 function ParserContext:_init ()
     self:setState(HeaderMap.Start)

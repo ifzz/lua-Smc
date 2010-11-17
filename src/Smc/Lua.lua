@@ -59,7 +59,7 @@ require '${it}'
 ]],
         _base_state = [[
 
-local ${fsm.context}State = statemap.State:class()
+local ${fsm.context}State = statemap.State.class()
 
 function ${fsm.context}State:Entry (fsm) end
 
@@ -300,7 +300,7 @@ ctxt:${name}(${arguments; separator=', '})
 ]],
         _context = [[
 
-local ${fsm.fsmClassname} = statemap.FSMContext:class()
+local ${fsm.fsmClassname} = statemap.FSMContext.class()
 
 function ${fsm.fsmClassname}:_init ()
     self:setState(${fsm.startState; format=scoped})
