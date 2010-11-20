@@ -13,153 +13,50 @@ _ENV = nil
 
 local ParserState = statemap.State.class()
 
-function ParserState:Entry (fsm) end
+local function _empty ()
+end
+ParserState.Entry = _empty
+ParserState.Exit = _empty
 
-function ParserState:Exit (fsm) end
-
-function ParserState:ACCESS (fsm, token)
+local function _default(self, fsm)
     self:Default(fsm)
 end
-
-function ParserState:CLASS_NAME (fsm, token)
-    self:Default(fsm)
-end
-
-function ParserState:COLON (fsm, token)
-    self:Default(fsm)
-end
-
-function ParserState:COMMA (fsm, token)
-    self:Default(fsm)
-end
-
-function ParserState:DECLARE (fsm, token)
-    self:Default(fsm)
-end
-
-function ParserState:DOLLAR (fsm, token)
-    self:Default(fsm)
-end
-
-function ParserState:ENTRY (fsm, token)
-    self:Default(fsm)
-end
-
-function ParserState:EOD (fsm, token)
-    self:Default(fsm)
-end
-
-function ParserState:EQUAL (fsm, token)
-    self:Default(fsm)
-end
-
-function ParserState:EXIT (fsm, token)
-    self:Default(fsm)
-end
-
-function ParserState:FSM_CLASS_NAME (fsm, token)
-    self:Default(fsm)
-end
-
-function ParserState:HEADER_FILE (fsm, token)
-    self:Default(fsm)
-end
-
-function ParserState:IMPORT (fsm, token)
-    self:Default(fsm)
-end
-
-function ParserState:INCLUDE_FILE (fsm, token)
-    self:Default(fsm)
-end
-
-function ParserState:JUMP (fsm, token)
-    self:Default(fsm)
-end
-
-function ParserState:LEFT_BRACE (fsm, token)
-    self:Default(fsm)
-end
-
-function ParserState:LEFT_BRACKET (fsm, token)
-    self:Default(fsm)
-end
-
-function ParserState:LEFT_PAREN (fsm, token)
-    self:Default(fsm)
-end
-
-function ParserState:MAP_NAME (fsm, token)
-    self:Default(fsm)
-end
-
-function ParserState:PACKAGE_NAME (fsm, token)
-    self:Default(fsm)
-end
-
-function ParserState:POP (fsm, token)
-    self:Default(fsm)
-end
-
-function ParserState:PUSH (fsm, token)
-    self:Default(fsm)
-end
-
-function ParserState:RIGHT_BRACE (fsm, token)
-    self:Default(fsm)
-end
-
-function ParserState:RIGHT_PAREN (fsm, token)
-    self:Default(fsm)
-end
-
-function ParserState:SEMICOLON (fsm, token)
-    self:Default(fsm)
-end
-
-function ParserState:SLASH (fsm, token)
-    self:Default(fsm)
-end
-
-function ParserState:SOURCE (fsm, token)
-    self:Default(fsm)
-end
-
-function ParserState:START_STATE (fsm, token)
-    self:Default(fsm)
-end
-
-function ParserState:WORD (fsm, token)
-    self:Default(fsm)
-end
-
-function ParserState:actionsDone (fsm)
-    self:Default(fsm)
-end
-
-function ParserState:actionsError (fsm)
-    self:Default(fsm)
-end
-
-function ParserState:argsDone (fsm)
-    self:Default(fsm)
-end
-
-function ParserState:argsError (fsm)
-    self:Default(fsm)
-end
-
-function ParserState:paramsDone (fsm)
-    self:Default(fsm)
-end
-
-function ParserState:paramsError (fsm)
-    self:Default(fsm)
-end
-
-function ParserState:transitionsDone (fsm)
-    self:Default(fsm)
-end
+ParserState.ACCESS = _default
+ParserState.CLASS_NAME = _default
+ParserState.COLON = _default
+ParserState.COMMA = _default
+ParserState.DECLARE = _default
+ParserState.DOLLAR = _default
+ParserState.ENTRY = _default
+ParserState.EOD = _default
+ParserState.EQUAL = _default
+ParserState.EXIT = _default
+ParserState.FSM_CLASS_NAME = _default
+ParserState.HEADER_FILE = _default
+ParserState.IMPORT = _default
+ParserState.INCLUDE_FILE = _default
+ParserState.JUMP = _default
+ParserState.LEFT_BRACE = _default
+ParserState.LEFT_BRACKET = _default
+ParserState.LEFT_PAREN = _default
+ParserState.MAP_NAME = _default
+ParserState.PACKAGE_NAME = _default
+ParserState.POP = _default
+ParserState.PUSH = _default
+ParserState.RIGHT_BRACE = _default
+ParserState.RIGHT_PAREN = _default
+ParserState.SEMICOLON = _default
+ParserState.SLASH = _default
+ParserState.SOURCE = _default
+ParserState.START_STATE = _default
+ParserState.WORD = _default
+ParserState.actionsDone = _default
+ParserState.actionsError = _default
+ParserState.argsDone = _default
+ParserState.argsError = _default
+ParserState.paramsDone = _default
+ParserState.paramsError = _default
+ParserState.transitionsDone = _default
 
 function ParserState:Default (fsm)
     if fsm:getDebugFlag() then

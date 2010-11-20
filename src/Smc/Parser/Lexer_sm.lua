@@ -13,137 +13,46 @@ _ENV = nil
 
 local LexerState = statemap.State.class()
 
-function LexerState:Entry (fsm) end
+local function _empty ()
+end
+LexerState.Entry = _empty
+LexerState.Exit = _empty
 
-function LexerState:Exit (fsm) end
-
-function LexerState:EOL (fsm)
+local function _default(self, fsm)
     self:Default(fsm)
 end
-
-function LexerState:alpha (fsm)
-    self:Default(fsm)
-end
-
-function LexerState:asterisk (fsm)
-    self:Default(fsm)
-end
-
-function LexerState:back_slash (fsm)
-    self:Default(fsm)
-end
-
-function LexerState:colon (fsm)
-    self:Default(fsm)
-end
-
-function LexerState:comma (fsm)
-    self:Default(fsm)
-end
-
-function LexerState:commentDone (fsm)
-    self:Default(fsm)
-end
-
-function LexerState:digit (fsm)
-    self:Default(fsm)
-end
-
-function LexerState:dollar (fsm)
-    self:Default(fsm)
-end
-
-function LexerState:double_quote (fsm)
-    self:Default(fsm)
-end
-
-function LexerState:equal (fsm)
-    self:Default(fsm)
-end
-
-function LexerState:guardDone (fsm)
-    self:Default(fsm)
-end
-
-function LexerState:left_brace (fsm)
-    self:Default(fsm)
-end
-
-function LexerState:left_bracket (fsm)
-    self:Default(fsm)
-end
-
-function LexerState:left_paren (fsm)
-    self:Default(fsm)
-end
-
-function LexerState:paramDone (fsm)
-    self:Default(fsm)
-end
-
-function LexerState:percent (fsm)
-    self:Default(fsm)
-end
-
-function LexerState:period (fsm)
-    self:Default(fsm)
-end
-
-function LexerState:raw1 (fsm)
-    self:Default(fsm)
-end
-
-function LexerState:raw2 (fsm)
-    self:Default(fsm)
-end
-
-function LexerState:raw3 (fsm)
-    self:Default(fsm)
-end
-
-function LexerState:right_brace (fsm)
-    self:Default(fsm)
-end
-
-function LexerState:right_bracket (fsm)
-    self:Default(fsm)
-end
-
-function LexerState:right_paren (fsm)
-    self:Default(fsm)
-end
-
-function LexerState:semicolon (fsm)
-    self:Default(fsm)
-end
-
-function LexerState:single_quote (fsm)
-    self:Default(fsm)
-end
-
-function LexerState:slash (fsm)
-    self:Default(fsm)
-end
-
-function LexerState:sourceDone (fsm)
-    self:Default(fsm)
-end
-
-function LexerState:stringDone (fsm)
-    self:Default(fsm)
-end
-
-function LexerState:underscore (fsm)
-    self:Default(fsm)
-end
-
-function LexerState:unicode (fsm)
-    self:Default(fsm)
-end
-
-function LexerState:whitespace (fsm)
-    self:Default(fsm)
-end
+LexerState.EOL = _default
+LexerState.alpha = _default
+LexerState.asterisk = _default
+LexerState.back_slash = _default
+LexerState.colon = _default
+LexerState.comma = _default
+LexerState.commentDone = _default
+LexerState.digit = _default
+LexerState.dollar = _default
+LexerState.double_quote = _default
+LexerState.equal = _default
+LexerState.guardDone = _default
+LexerState.left_brace = _default
+LexerState.left_bracket = _default
+LexerState.left_paren = _default
+LexerState.paramDone = _default
+LexerState.percent = _default
+LexerState.period = _default
+LexerState.raw1 = _default
+LexerState.raw2 = _default
+LexerState.raw3 = _default
+LexerState.right_brace = _default
+LexerState.right_bracket = _default
+LexerState.right_paren = _default
+LexerState.semicolon = _default
+LexerState.single_quote = _default
+LexerState.slash = _default
+LexerState.sourceDone = _default
+LexerState.stringDone = _default
+LexerState.underscore = _default
+LexerState.unicode = _default
+LexerState.whitespace = _default
 
 function LexerState:Default (fsm)
     if fsm:getDebugFlag() then

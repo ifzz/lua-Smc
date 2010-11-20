@@ -61,9 +61,14 @@ require '${it}'
 
 local ${fsm.context}State = statemap.State.class()
 
-function ${fsm.context}State:Entry (fsm) end
+local function _empty ()
+end
+${fsm.context}State.Entry = _empty
+${fsm.context}State.Exit = _empty
 
-function ${fsm.context}State:Exit (fsm) end
+local function _default(self, fsm)
+    self:Default(fsm)
+end
 ${fsm.transitions/_transition_base_state()}
 
 function ${fsm.context}State:Default (fsm)
@@ -77,10 +82,7 @@ ${generator.reflectFlag?_base_state_reflect()}
 ]],
             _transition_base_state = "${isntDefault?_transition_base_state_if()}\n",
             _transition_base_state_if = [[
-
-function ${fsm.context}State:${name} (fsm${parameters/_parameter_proto()})
-    self:Default(fsm)
-end
+${fsm.context}State.${name} = _default
 ]],
                 _parameter_proto = ", ${name}",
             _base_state_debug = [[
