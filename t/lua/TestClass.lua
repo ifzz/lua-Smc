@@ -7,13 +7,11 @@ local table = require 'table'
 _ENV = nil
 local m = {}
 
-function m:new ()
+function m.new ()
     local o = {}
-    setmetatable(o, self)
-    self.__index = self
-    o._fsm = require 'TestClassContext':new{_owner = o}
-    -- o._fsm:setDebugFlag(true)
-    return o
+    o.fsm = require 'TestClassContext':new{owner = o}
+    -- o.fsm.debugFlag = true
+    return setmetatable(o, {__index = m})
 end
 
 function m:NoArg ()
@@ -37,27 +35,27 @@ function m:isNok ()
 end
 
 function m:Evt_1 ()
-    self._fsm:Evt_1()
+    self.fsm:Evt_1()
 end
 
 function m:Evt_2 ()
-    self._fsm:Evt_2()
+    self.fsm:Evt_2()
 end
 
 function m:Evt_3 ()
-    self._fsm:Evt_3()
+    self.fsm:Evt_3()
 end
 
 function m:Evt1 (...)
-    self._fsm:Evt1(...)
+    self.fsm:Evt1(...)
 end
 
 function m:Evt2 (...)
-    self._fsm:Evt2(...)
+    self.fsm:Evt2(...)
 end
 
 function m:Evt3 (...)
-    self._fsm:Evt3(...)
+    self.fsm:Evt3(...)
 end
 
 return m

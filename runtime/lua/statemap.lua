@@ -49,21 +49,13 @@ function State.class ()
 end
 
 function State:new (name, id)
-    local o = {_name = name, _id = id}
+    local o = {
+        name = name,
+        id = id,
+    }
     setmetatable(o, {__index = self})
     return o
 end
-
-function State:getName ()
-    -- Returns the state's printable name.
-    return self._name
-end
-
-function State:getId ()
-    -- Returns the state's unique identifier.
-    return self._id
-end
-
 
 --[[
  The user can derive FSM contexts from this class and interface
@@ -85,7 +77,7 @@ function FSMContext:new (args)
         o[k] = v
     end
     o._state_stack = {}
-    o._debug_stream = stderr
+    o.debugStream = stderr
     setmetatable(o, {__index = self})
     o:_init()
     return o
@@ -97,24 +89,24 @@ end
 
 function FSMContext:getDebugFlag ()
     -- Returns the debug flag's current setting.
-    return self._debug_flag
+    return self.debugFlag
 end
 
 function FSMContext:setDebugFlag (flag)
     -- Sets the debug flag.
     --
     -- A true value means debugging is on and false means off.
-    self._debug_flag = flag
+    self.debugFlag = flag
 end
 
 function FSMContext:getDebugStream ()
     -- Returns the stream to which debug output is written.
-    return self._debug_stream
+    return self.debugStream
 end
 
 function FSMContext:setDebugStream (stream)
     -- Sets the debug output stream.
-    self._debug_stream = stream
+    self.debugStream = stream
 end
 
 function FSMContext:isInTransition ()
@@ -124,16 +116,9 @@ function FSMContext:isInTransition ()
     return self._state == nil
 end
 
-function FSMContext:getTransition ()
-    -- Returns the current transition's name.
-    --
-    -- Used only for debugging purposes.
-    return self._transition
-end
-
 function FSMContext:clearState ()
     -- Clears the current state.
-    self._previous_state = self._state
+    self.previousState = self._state
     self._state = nil
 end
 
@@ -141,7 +126,7 @@ function FSMContext:getPreviousState ()
     -- Returns the state which a transition left.
     --
     -- May be nil.
-    return self._previous_state
+    return self.previousState
 end
 
 function FSMContext:getState ()
@@ -157,8 +142,8 @@ function FSMContext:setState (state)
     assert(state ~= nil, "undefined state.")
     assert(type(state) == 'table') -- "state should be a State"
     self._state = state
-    if self._debug_flag then
-        self._debug_stream:write("ENTER STATE     : ", self._state:getName(), "\n")
+    if self.debugFlag then
+        self.debugStream:write("ENTER STATE     : ", self._state.name, "\n")
     end
 end
 
@@ -181,8 +166,8 @@ function FSMContext:pushState (state)
         local t = self._state_stack; t[#t+1] = self._state -- push
     end
     self._state = state
-    if self._debug_flag then
-        self._debug_stream:write("PUSH TO STATE   : ", self._state:getName(), "\n")
+    if self.debugFlag then
+        self.debugStream:write("PUSH TO STATE   : ", self._state.name, "\n")
     end
 end
 
@@ -190,14 +175,14 @@ function FSMContext:popState ()
     -- Make the state on top of the state stack the current state.
     local t = self._state_stack
     if #t == 0 then
-        if self._debug_flag then
-            self._debug_stream:write("POPPING ON EMPTY STATE STACK.\n")
+        if self.debugFlag then
+            self.debugStream:write("POPPING ON EMPTY STATE STACK.\n")
         end
         error("empty state stack.")
     else
         self._state = t[#t]; t[#t] = nil -- pop
-        if self._debug_flag then
-            self._debug_stream:write("POP TO STATE    : ", self._state:getName(), "\n")
+        if self.debugFlag then
+            self.debugStream:write("POP TO STATE    : ", self._state.name, "\n")
         end
     end
 end
