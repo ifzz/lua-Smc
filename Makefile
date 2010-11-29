@@ -1,5 +1,6 @@
 
 LUA     := lua
+#LUA     := luajit
 SMC     := $(LUA) bin/smc
 #SMC     := java -jar Smc.jar
 VERSION := $(shell cd src && $(LUA) -e "require [[Smc]]; print(Smc._VERSION)")
@@ -73,7 +74,7 @@ check: unit_test
 unit_test:
 	prove --exec=$(LUA) test/*.t
 
-test: unit_test
+test:
 	prove t/*.t
 
 testclean:
