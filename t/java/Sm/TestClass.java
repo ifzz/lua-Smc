@@ -1,4 +1,6 @@
 
+package Sm;
+
 public class TestClass
 {
     private TestClassContext _fsm;
@@ -11,7 +13,7 @@ public class TestClass
         // _fsm.setDebugFlag(true);
     }
 
-    public TestClassContext getFSM() {
+    public statemap.FSMContext getFSM() {
         return _fsm;
     }
 

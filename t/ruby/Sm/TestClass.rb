@@ -1,4 +1,6 @@
 
+module Sm
+
 require 'TestClassContext'
 
 class TestClass
@@ -58,5 +60,7 @@ class TestClass
     def Evt3(n)
         @_fsm.Evt3(n)
     end
+
+end
 
 end

@@ -1,8 +1,8 @@
 
 import sys
-import TestClass
+import Sm.TestClass
 
-obj = TestClass.TestClass()
+obj = Sm.TestClass.TestClass()
 obj._fsm.setDebugStream(sys.stdout)
 obj._fsm.setDebugFlag(len(sys.argv) > 1)
 obj.Evt_1()

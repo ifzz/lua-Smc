@@ -1,4 +1,6 @@
 
+import Sm.*;
+
 public class PushJump
 {
     public static void main(String[] args)

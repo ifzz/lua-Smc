@@ -1,6 +1,9 @@
 
 #include "TestClassContext.h"
 
+namespace Sm
+{
+
 class TestClass
 {
 public:
@@ -22,3 +25,5 @@ public:
     void Evt2(int n);
     void Evt3(int n);
 };
+
+}

@@ -1,5 +1,5 @@
 
-local TestClass = require 'TestClass'
+local TestClass = require 'Sm.TestClass'
 
 local obj = TestClass.new()
 obj.fsm.debugStream = require 'io'.stdout

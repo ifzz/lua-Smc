@@ -3,6 +3,9 @@
 
 using namespace std;
 
+namespace Sm
+{
+
 TestClass::TestClass(): _fsm(*this)
 {
     // Uncomment to see debug output.
@@ -62,4 +65,6 @@ void TestClass::Evt2(int n)
 void TestClass::Evt3(int n)
 {
     _fsm.Evt3(n);
+}
+
 }

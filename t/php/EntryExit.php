@@ -1,6 +1,6 @@
 
 <?php
-require_once 'TestClass.php';
+require_once 'Sm/TestClass.php';
 
 $obj = new TestClass();
 $obj->getFSM()->setDebugStream(STDOUT);

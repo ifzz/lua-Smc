@@ -40,17 +40,17 @@ $Util::config = {
 };
 
 my %re = (
-    TransUndef  => '\(Statemap::TransitionUndefinedException\)\nState: Map_1(::|\.)State_1\nTransition: Evt_1',
+    TransUndef  => '\(Statemap::TransitionUndefinedException\)\nState: (Sm::)?Map_1(::|\.)State_1\nTransition: Evt_1',
 );
 
 sub test_smc_ruby {
     my ($test, $options) = @_;
-    unlink("t/ruby/TestClass.sm");
-    unlink("t/ruby/TestClassContext.rb");
-    Util::do_fsm('ruby', $test);
-    system("${Util::smc} -ruby ${options} t/ruby/TestClass.sm");
+    unlink("t/ruby/Sm/TestClass.sm");
+    unlink("t/ruby/Sm/TestClassContext.rb");
+    Util::do_fsm('ruby/Sm', $test);
+    system("${Util::smc} -ruby ${options} t/ruby/Sm/TestClass.sm");
     my $trace = $options =~ /-g0/ && ${Util::smc} !~ /\.jar/ ? 'g0' : '';
-    my $out = Util::run('ruby', "-I t/ruby -I runtime/ruby t/ruby/${test}.rb", $trace);
+    my $out = Util::run('ruby', "-I t/ruby -I t/ruby/Sm -I runtime/ruby t/ruby/${test}.rb", $trace);
     my $expected = $trace
                  ? Util::slurp("t/templates/${test}.g0.out")
                  : Util::slurp("t/templates/${test}.out");
@@ -68,6 +68,6 @@ unless (`ruby -v` =~ /^ruby/) {
 plan tests => scalar(@Util::tests) * scalar(@opt);
 
 for my $test (@Util::tests) {
-    Util::test_smc_with_options('ruby', \&test_smc_ruby, $test, \@opt);
+    Util::test_smc_with_options('ruby/Sm', \&test_smc_ruby, $test, \@opt);
 }
 

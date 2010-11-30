@@ -8,6 +8,7 @@
 %include @include1@
 %include @include2@
 
+%package Sm
 %start Map_1::State_1
 %class TestClass
 %fsmclass TestClassContext

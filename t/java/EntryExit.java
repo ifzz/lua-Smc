@@ -1,4 +1,6 @@
 
+import Sm.*;
+
 public class EntryExit
 {
     public static void main(String[] args)

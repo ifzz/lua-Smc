@@ -40,16 +40,16 @@ $Util::config = {
 };
 
 my %re = (
-    TransUndef  => 'statemap\.TransitionUndefinedException: \n\tState: Map_1(::|\.)State_1\n\tTransition: Evt_1',
+    TransUndef  => 'statemap\.TransitionUndefinedException: \n\tState: (Sm::)?Map_1(::|\.)State_1\n\tTransition: Evt_1',
 );
 
 sub test_smc_python {
     my ($test, $options) = @_;
-    unlink(glob("t/python/*.pyc"));
-    unlink("t/python/TestClass.sm");
-    unlink("t/python/TestClassContext.py");
-    Util::do_fsm('python', $test);
-    system("${Util::smc} -python ${options} t/python/TestClass.sm");
+    unlink(glob("t/python/Sm/*.pyc"));
+    unlink("t/python/Sm/TestClass.sm");
+    unlink("t/python/Sm/TestClassContext.py");
+    Util::do_fsm('python/Sm', $test);
+    system("${Util::smc} -python ${options} t/python/Sm/TestClass.sm");
     my $trace = $options =~ /-g0/ && ${Util::smc} !~ /\.jar/ ? 'g0' : '';
     my $out = Util::run('python', "t/python/${test}.py", $trace);
     my $expected = $trace
@@ -71,6 +71,6 @@ plan tests => scalar(@Util::tests) * scalar(@opt);
 $ENV{PYTHONPATH} = './runtime/python';
 
 for my $test (@Util::tests) {
-    Util::test_smc_with_options('python', \&test_smc_python, $test, \@opt);
+    Util::test_smc_with_options('python/Sm', \&test_smc_python, $test, \@opt);
 }
 

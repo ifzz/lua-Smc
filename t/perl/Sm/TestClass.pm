@@ -2,16 +2,16 @@
 use strict;
 use warnings;
 
-use TestClassContext;
+use Sm::TestClassContext;
 
-package TestClass;
+package Sm::TestClass;
 
 sub new {
     my $proto = shift;
     my $class = ref($proto) || $proto;
     my $self = {};
     bless($self, $class);
-    $self->{_fsm} = new TestClass_sm($self);
+    $self->{_fsm} = new Sm::TestClass_sm($self);
 
     # Uncomment to see debug output.
     #$self->{_fsm}->setDebugFlag(1);

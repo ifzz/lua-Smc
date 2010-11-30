@@ -1,4 +1,6 @@
 
+import Sm.*;
+
 public class TransUndef
 {
     public static void main(String[] args)

@@ -1,8 +1,9 @@
 
-#include "TestClass.h"
+#include "Sm/TestClass.h"
 
 using namespace std;
 using namespace statemap;
+using namespace Sm;
 
 int main(int argc, char *argv[])
 {

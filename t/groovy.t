@@ -42,15 +42,15 @@ $Util::config = {
 };
 
 my %re = (
-    TransUndef  => 'statemap\.TransitionUndefinedException: State: Map_1(::|\.)State_1, Transition: Evt_1',
+    TransUndef  => 'statemap\.TransitionUndefinedException: State: (Sm::)?Map_1(::|\.)State_1, Transition: Evt_1',
 );
 
 sub test_smc_groovy {
     my ($test, $options) = @_;
-    unlink("t/groovy/TestClass.sm");
-    unlink("t/groovy/TestClassContext.groovy");
-    Util::do_fsm('groovy', $test);
-    system("${Util::smc} -groovy ${options} t/groovy/TestClass.sm");
+    unlink("t/groovy/Sm/TestClass.sm");
+    unlink("t/groovy/Sm/TestClassContext.groovy");
+    Util::do_fsm('groovy/Sm', $test);
+    system("${Util::smc} -groovy ${options} t/groovy/Sm/TestClass.sm");
     my $trace = $options =~ /-g0/ && ${Util::smc} !~ /\.jar/ ? 'g0' : '';
     my $out = Util::run('cd t/groovy && groovy -classpath ../../runtime/groovy/statemap.jar', $test, $trace);
     my $expected = $trace
@@ -71,6 +71,6 @@ unless (`groovy -v` =~ /^Groovy/) {
 plan tests => scalar(@Util::tests) * scalar(@opt);
 
 for my $test (@Util::tests) {
-    Util::test_smc_with_options('groovy', \&test_smc_groovy, $test, \@opt);
+    Util::test_smc_with_options('groovy/Sm', \&test_smc_groovy, $test, \@opt);
 }
 

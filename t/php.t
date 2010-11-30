@@ -40,15 +40,15 @@ $Util::config = {
 };
 
 my %re = (
-    TransUndef  => "'TransitionUndefinedException' with message '\n\tState: Map_1(::|\.)State_1\n\tTransition: Evt_1'",
+    TransUndef  => "'TransitionUndefinedException' with message '\n\tState: (Sm::)?Map_1(::|\.)State_1\n\tTransition: Evt_1'",
 );
 
 sub test_smc_php {
     my ($test, $options) = @_;
-    unlink("t/php/TestClass.sm");
-    unlink("t/php/TestClassContext.pphp");
-    Util::do_fsm('php', $test);
-    system("${Util::smc} -php ${options} t/php/TestClass.sm");
+    unlink("t/php/Sm/TestClass.sm");
+    unlink("t/php/Sm/TestClassContext.pphp");
+    Util::do_fsm('php/Sm', $test);
+    system("${Util::smc} -php ${options} t/php/Sm/TestClass.sm");
     my $trace = $options =~ /-g0/ && ${Util::smc} !~ /\.jar/ ? 'g0' : '';
     my $out = Util::run('php', "-q t/php/${test}.php", $trace);
     my $expected = $trace
@@ -69,6 +69,6 @@ unless (`php -v` =~ /^PHP/) {
 plan tests => scalar(@Util::tests) * scalar(@opt);
 
 for my $test (@Util::tests) {
-    Util::test_smc_with_options('php', \&test_smc_php, $test, \@opt);
+    Util::test_smc_with_options('php/Sm', \&test_smc_php, $test, \@opt);
 }
 

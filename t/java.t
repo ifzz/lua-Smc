@@ -54,18 +54,19 @@ $Util::config = {
 };
 
 my %re = (
-    TransUndef  => 'statemap\.TransitionUndefinedException: State: Map_1(::|\.)State_1, Transition: Evt_1',
+    TransUndef  => 'statemap\.TransitionUndefinedException: State: (Sm::)?Map_1(::|\.)State_1, Transition: Evt_1',
 );
 
 sub test_smc_java {
     my ($test, $options) = @_;
     unlink(glob("t/java/*.class"));
-    unlink("t/java/TestClass.sm");
-    unlink("t/java/TestClassContext.java");
-    Util::do_fsm('java', $test);
-    system("${Util::smc} -java ${options} t/java/TestClass.sm");
+    unlink(glob("t/java/Sm/*.class"));
+    unlink("t/java/Sm/TestClass.sm");
+    unlink("t/java/Sm/TestClassContext.java");
+    Util::do_fsm('java/Sm', $test);
+    system("${Util::smc} -java ${options} t/java/Sm/TestClass.sm");
     my $lint = $options =~ /-generic/ ? '-Xlint:unchecked' : '';
-    my $out = Util::run("cd t/java && javac -g $lint -classpath ../../runtime/java/statemap.jar TestClass.java TestClassContext.java", "${test}.java");
+    my $out = Util::run("cd t/java && javac -g $lint -classpath ../../runtime/java/statemap.jar Sm/TestClass.java Sm/TestClassContext.java", "${test}.java");
     diag($out) if $out;
     my $trace = $options =~ /-g0/ && ${Util::smc} !~ /\.jar/ ? 'g0' : '';
     $out = Util::run('java -classpath t/java:runtime/java/statemap.jar', $test, $trace);
@@ -87,6 +88,6 @@ unless (`javac -version 2>&1` =~ /^javac/) {
 plan tests => scalar(@Util::tests) * scalar(@opt);
 
 for my $test (@Util::tests) {
-    Util::test_smc_with_options('java', \&test_smc_java, $test, \@opt);
+    Util::test_smc_with_options('java/Sm', \&test_smc_java, $test, \@opt);
 }
 

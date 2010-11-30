@@ -1,30 +1,30 @@
-LEAVING STATE   : Map_1::State_1
-ENTER TRANSITION: Map_1::State_1.Evt1(n)
+LEAVING STATE   : Sm::Map_1::State_1
+ENTER TRANSITION: Sm::Map_1::State_1.Evt1(n)
 State_1:Evt_1(1)
-EXIT TRANSITION : Map_1::State_1.Evt1(n)
-ENTER STATE     : Map_1::State_1
-LEAVING STATE   : Map_1::State_1
-ENTER TRANSITION: Map_1::State_1.Evt1(n)
+EXIT TRANSITION : Sm::Map_1::State_1.Evt1(n)
+ENTER STATE     : Sm::Map_1::State_1
+LEAVING STATE   : Sm::Map_1::State_1
+ENTER TRANSITION: Sm::Map_1::State_1.Evt1(n)
 State_1:Evt_1(2)
-EXIT TRANSITION : Map_1::State_1.Evt1(n)
-ENTER STATE     : Map_1::State_1
-LEAVING STATE   : Map_1::State_1
-ENTER TRANSITION: Map_1::State_1.Evt1(n)
+EXIT TRANSITION : Sm::Map_1::State_1.Evt1(n)
+ENTER STATE     : Sm::Map_1::State_1
+LEAVING STATE   : Sm::Map_1::State_1
+ENTER TRANSITION: Sm::Map_1::State_1.Evt1(n)
 State_1:Evt_1(3)
-EXIT TRANSITION : Map_1::State_1.Evt1(n)
-ENTER STATE     : Map_1::State_2
-LEAVING STATE   : Map_1::State_2
-ENTER TRANSITION: Map_1::State_2.Evt_3()
+EXIT TRANSITION : Sm::Map_1::State_1.Evt1(n)
+ENTER STATE     : Sm::Map_1::State_2
+LEAVING STATE   : Sm::Map_1::State_2
+ENTER TRANSITION: Sm::Map_1::State_2.Evt_3()
 State_2:Evt_3()
-EXIT TRANSITION : Map_1::State_2.Evt_3()
-ENTER STATE     : Map_1::State_2
-LEAVING STATE   : Map_1::State_2
-ENTER TRANSITION: Map_1::State_2.Evt_2()
+EXIT TRANSITION : Sm::Map_1::State_2.Evt_3()
+ENTER STATE     : Sm::Map_1::State_2
+LEAVING STATE   : Sm::Map_1::State_2
+ENTER TRANSITION: Sm::Map_1::State_2.Evt_2()
 State_2:Evt_2() isOk
-EXIT TRANSITION : Map_1::State_2.Evt_2()
-ENTER STATE     : Map_1::State_2
-LEAVING STATE   : Map_1::State_2
-ENTER TRANSITION: Map_1::State_2.Default()
+EXIT TRANSITION : Sm::Map_1::State_2.Evt_2()
+ENTER STATE     : Sm::Map_1::State_2
+LEAVING STATE   : Sm::Map_1::State_2
+ENTER TRANSITION: Sm::Map_1::State_2.Default()
 State_2:Default()
-EXIT TRANSITION : Map_1::State_2.Default()
-ENTER STATE     : Map_1::State_1
+EXIT TRANSITION : Sm::Map_1::State_2.Default()
+ENTER STATE     : Sm::Map_1::State_1

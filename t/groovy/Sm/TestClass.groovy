@@ -1,4 +1,6 @@
 
+package Sm
+
 class TestClass {
     private def _fsm
     boolean myProp

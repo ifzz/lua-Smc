@@ -1,18 +1,18 @@
 
-#include "TestClass.h"
+#include "Sm/TestClass.h"
 
 int main(int argc, char *argv[])
 {
-    struct TestClass thisContext;
+    struct Sm_TestClass thisContext;
 
-    TestClass_Init(&thisContext);
+    Sm_TestClass_Init(&thisContext);
     if (argc > 1) {
         setDebugFlag(&thisContext._fsm, 1);
     }
-    TestClass_Evt_1(&thisContext);
-    TestClass_Evt_2(&thisContext);
-    TestClass_Evt_3(&thisContext);
-    TestClass_Evt_1(&thisContext);
-    TestClass_Evt_2(&thisContext);
-    TestClass_Evt_3(&thisContext);
+    Sm_TestClass_Evt_1(&thisContext);
+    Sm_TestClass_Evt_2(&thisContext);
+    Sm_TestClass_Evt_3(&thisContext);
+    Sm_TestClass_Evt_1(&thisContext);
+    Sm_TestClass_Evt_2(&thisContext);
+    Sm_TestClass_Evt_3(&thisContext);
 }

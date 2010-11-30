@@ -1,4 +1,6 @@
 
+package Sm
+
 class TestClass() {
     private val _fsm = new TestClassContext(this)
     var myProp: Boolean = false

@@ -45,45 +45,45 @@ sub run {
 }
 
 sub do_fsm {
-    my ($lang, $fsm) = @_;
+    my ($dest, $fsm) = @_;
     my $sm = slurp("t/templates/${fsm}.sm");
     $sm =~ s/@(\w+)@/$config->{$1}/g;
-    spew("t/${lang}/TestClass.sm", $sm);
+    spew("t/${dest}/TestClass.sm", $sm);
 }
 
 sub test_smc_graph {
-    my ($lang, $test, $level) = @_;
-    unlink("t/${lang}/TestClass.sm");
-    unlink("t/${lang}/TestClassContext.dot");
-    unlink("t/${lang}/TestClassContext${level}.png");
-    do_fsm($lang, $test);
-    system("${smc} -graph -glevel ${level} t/${lang}/TestClass.sm");
-    system("dot -T png -o t/${lang}/TestClassContext${level}.png t/${lang}/TestClassContext.dot");
+    my ($dest, $test, $level) = @_;
+    unlink("t/${dest}/TestClass.sm");
+    unlink("t/${dest}/TestClassContext.dot");
+    unlink("t/${dest}/TestClassContext${level}.png");
+    do_fsm($dest, $test);
+    system("${smc} -graph -glevel ${level} t/${dest}/TestClass.sm");
+    system("dot -T png -o t/${dest}/TestClassContext${level}.png t/${dest}/TestClassContext.dot");
 }
 
 sub test_smc_table {
-    my ($lang, $test) = @_;
-    unlink("t/${lang}/TestClass.sm");
-    unlink("t/${lang}/TestClassContext.html");
-    do_fsm($lang, $test);
-    system("${smc} -table t/${lang}/TestClass.sm");
+    my ($dest, $test) = @_;
+    unlink("t/${dest}/TestClass.sm");
+    unlink("t/${dest}/TestClassContext.html");
+    do_fsm($dest, $test);
+    system("${smc} -table t/${dest}/TestClass.sm");
     unless ($smc =~ /\.jar/) {
-        system("xmllint -noout -valid t/${lang}/TestClassContext.html");
+        system("xmllint -noout -valid t/${dest}/TestClassContext.html");
     }
 }
 
 sub test_smc_with_options {
-    my ($lang, $func, $test, $options) = @_;
+    my ($dest, $func, $test, $options) = @_;
     for my $option (@{$options}) {
         &$func($test, $option);
     }
     if ($test_graph) {
         for my $level (0..2) {
-            test_smc_graph($lang, $test, $level);
+            test_smc_graph($dest, $test, $level);
         }
     }
     if ($test_table) {
-        test_smc_table($lang, $test);
+        test_smc_table($dest, $test);
     }
 }
 

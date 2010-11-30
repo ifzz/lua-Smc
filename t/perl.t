@@ -40,15 +40,15 @@ $Util::config = {
 };
 
 my %re = (
-    TransUndef  => 'TransitionUndefinedException\nState: Map_1(::|\.)State_1\nTransition: Evt_1',
+    TransUndef  => 'TransitionUndefinedException\nState: (Sm::)?Map_1(::|\.)State_1\nTransition: Evt_1',
 );
 
 sub test_smc_perl {
     my ($test, $options) = @_;
-    unlink("t/perl/TestClass.sm");
-    unlink("t/perl/TestClassContext.pm");
-    Util::do_fsm('perl', $test);
-    system("${Util::smc} -perl ${options} t/perl/TestClass.sm");
+    unlink("t/perl/Sm/TestClass.sm");
+    unlink("t/perl/Sm/TestClassContext.pm");
+    Util::do_fsm('perl/Sm', $test);
+    system("${Util::smc} -perl ${options} t/perl/Sm/TestClass.sm");
     my $trace = $options =~ /-g0/ && ${Util::smc} !~ /\.jar/ ? 'g0' : '';
     my $out = Util::run('perl', "-I t/perl -I runtime/perl t/perl/${test}.pl", $trace );
     my $expected = $trace
@@ -69,6 +69,6 @@ unless (`perl -version` =~ /^\nThis is perl/) {
 plan tests => scalar(@Util::tests) * scalar(@opt);
 
 for my $test (@Util::tests) {
-    Util::test_smc_with_options('perl', \&test_smc_perl, $test, \@opt);
+    Util::test_smc_with_options('perl/Sm', \&test_smc_perl, $test, \@opt);
 }
 

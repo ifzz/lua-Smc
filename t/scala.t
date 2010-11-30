@@ -42,17 +42,18 @@ $Util::config = {
 };
 
 my %re = (
-    TransUndef  => 'statemap\.TransitionUndefinedException: State: Map_1(::|\.)State_1, Transition: Evt_1',
+    TransUndef  => 'statemap\.TransitionUndefinedException: State: (Sm::)?Map_1(::|\.)State_1, Transition: Evt_1',
 );
 
 sub test_smc_scala {
     my ($test, $options) = @_;
     unlink(glob("t/scala/*.class"));
-    unlink("t/scala/TestClass.sm");
-    unlink("t/scala/TestClassContext.scala");
-    Util::do_fsm('scala', $test);
-    system("${Util::smc} -scala ${options} t/scala/TestClass.sm");
-    my $out = Util::run('cd t/scala && scalac -g ../../runtime/scala/statemap.scala TestClass.scala TestClassContext.scala', "${test}.scala");
+    unlink(glob("t/scala/Sm/*.class"));
+    unlink("t/scala/Sm/TestClass.sm");
+    unlink("t/scala/Sm/TestClassContext.scala");
+    Util::do_fsm('scala/Sm', $test);
+    system("${Util::smc} -scala ${options} t/scala/Sm/TestClass.sm");
+    my $out = Util::run('cd t/scala && scalac -g ../../runtime/scala/statemap.scala Sm/TestClass.scala Sm/TestClassContext.scala', "${test}.scala");
     diag($out) if $out;
     my $trace = $options =~ /-g0/ && ${Util::smc} !~ /\.jar/ ? 'g0' : '';
     $out = Util::run('scala -classpath t/scala', $test, $trace);
@@ -74,6 +75,6 @@ unless (`scalac -version 2>&1` =~ /^Scala/) {
 plan tests => scalar(@Util::tests) * scalar(@opt);
 
 for my $test (@Util::tests) {
-    Util::test_smc_with_options('scala', \&test_smc_scala, $test, \@opt);
+    Util::test_smc_with_options('scala/Sm', \&test_smc_scala, $test, \@opt);
 }
 

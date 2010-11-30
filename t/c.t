@@ -27,8 +27,8 @@ $Util::config = {
     import2     => '',
     include1    => '<stdio.h>',
     include2    => '<stdlib.h>',
-    is_ok       => 'TestClass_isOk(ctxt)',
-    is_nok      => 'TestClass_isNok(ctxt)',
+    is_ok       => 'Sm_TestClass_isOk(ctxt)',
+    is_nok      => 'Sm_TestClass_isNok(ctxt)',
     false       => '0',
     n           => 'n',
     param       => 'n: int',
@@ -44,12 +44,12 @@ sub test_smc_c {
     my ($test, $options) = @_;
     unlink("t/c/${test}");
     unlink("t/c/${test}.exe");
-    unlink("t/c/TestClass.sm");
-    unlink("t/c/TestClassContext.c");
-    unlink("t/c/TestClassContext.h");
-    Util::do_fsm('c', $test);
-    system("${Util::smc} -c ${options} -headerd t/c t/c/TestClass.sm");
-    my $out = Util::run('gcc', "-I runtime/c -I . -o t/c/${test} t/c/${test}.c t/c/TestClass.c t/c/TestClassContext.c");
+    unlink("t/c/Sm/TestClass.sm");
+    unlink("t/c/Sm/TestClassContext.c");
+    unlink("t/c/Sm/TestClassContext.h");
+    Util::do_fsm('c/Sm', $test);
+    system("${Util::smc} -c ${options} -headerd t/c/Sm t/c/Sm/TestClass.sm");
+    my $out = Util::run('gcc', "-I runtime/c -I . -o t/c/${test} t/c/${test}.c t/c/Sm/TestClass.c t/c/Sm/TestClassContext.c");
     diag($out) if $out;
     my $trace = $options =~ /-g0/ && ${Util::smc} !~ /\.jar/ ? 'g0' : '';
     $out = Util::run(catfile('t', 'c', ${test}), $trace);
@@ -70,6 +70,6 @@ unless (`gcc --version 2>&1` =~ /^gcc/) {
 plan tests => scalar(@Util::tests) * scalar(@opt);
 
 for my $test (@Util::tests) {
-    Util::test_smc_with_options('c', \&test_smc_c, $test, \@opt);
+    Util::test_smc_with_options('c/Sm', \&test_smc_c, $test, \@opt);
 }
 

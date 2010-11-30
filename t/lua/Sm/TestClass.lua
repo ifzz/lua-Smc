@@ -9,7 +9,7 @@ local m = {}
 
 function m.new ()
     local o = {}
-    o.fsm = require 'TestClassContext':new{owner = o}
+    o.fsm = require 'Sm.TestClassContext':new{owner = o}
     -- o.fsm.debugFlag = true
     return setmetatable(o, {__index = m})
 end

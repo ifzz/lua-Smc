@@ -42,15 +42,15 @@ $Util::config = {
 };
 
 my %re = (
-    TransUndef  => 'Undefined Transition\nState: Map_1(::|\.)State_1\nTransition: Evt_1',
+    TransUndef  => 'Undefined Transition\nState: (Sm::)?Map_1(::|\.)State_1\nTransition: Evt_1',
 );
 
 sub test_smc_lua {
     my ($test, $options) = @_;
-    unlink("t/lua/TestClass.sm");
-    unlink("t/lua/TestClassContext.lua");
-    Util::do_fsm('lua', $test);
-    system("${Util::smc} -lua ${options} t/lua/TestClass.sm");
+    unlink("t/lua/Sm/TestClass.sm");
+    unlink("t/lua/Sm/TestClassContext.lua");
+    Util::do_fsm('lua/Sm', $test);
+    system("${Util::smc} -lua ${options} t/lua/Sm/TestClass.sm");
     my $trace = $options =~ /-g0/ && ${Util::smc} !~ /\.jar/ ? 'g0' : '';
     my $out = Util::run($lua, "t/lua/${test}.lua", $trace);
     my $expected = $trace
@@ -70,5 +70,5 @@ unless (`lua -v 2>&1` =~ /^Lua/) {
 plan tests => scalar(@Util::tests) * scalar(@opt);
 
 for my $test (@Util::tests) {
-    Util::test_smc_with_options('lua', \&test_smc_lua, $test, \@opt);
+    Util::test_smc_with_options('lua/Sm', \&test_smc_lua, $test, \@opt);
 }
