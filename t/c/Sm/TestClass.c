@@ -7,7 +7,7 @@ const struct Sm_TestClassState* stack[4];
 
 void Sm_TestClass_Init(struct Sm_TestClass *this)
 {
-    TestClassContext_Init(&this->_fsm, this);
+    Sm_TestClassContext_Init(&this->_fsm, this);
     FSM_STACK(&this->_fsm, stack);
 
     /* Uncomment to see debug output. */
@@ -41,30 +41,30 @@ int Sm_TestClass_isNok(struct Sm_TestClass *this)
 
 void Sm_TestClass_Evt_1(struct Sm_TestClass *this)
 {
-    TestClassContext_Evt_1(&this->_fsm);
+    Sm_TestClassContext_Evt_1(&this->_fsm);
 }
 
 void Sm_TestClass_Evt_2(struct Sm_TestClass *this)
 {
-    TestClassContext_Evt_2(&this->_fsm);
+    Sm_TestClassContext_Evt_2(&this->_fsm);
 }
 
 void Sm_TestClass_Evt_3(struct Sm_TestClass *this)
 {
-    TestClassContext_Evt_3(&this->_fsm);
+    Sm_TestClassContext_Evt_3(&this->_fsm);
 }
 
 void Sm_TestClass_Evt1(struct Sm_TestClass *this, int n)
 {
-    TestClassContext_Evt1(&this->_fsm, n);
+    Sm_TestClassContext_Evt1(&this->_fsm, n);
 }
 
 void Sm_TestClass_Evt2(struct Sm_TestClass *this, int n)
 {
-    TestClassContext_Evt2(&this->_fsm, n);
+    Sm_TestClassContext_Evt2(&this->_fsm, n);
 }
 
 void Sm_TestClass_Evt3(struct Sm_TestClass *this, int n)
 {
-    TestClassContext_Evt3(&this->_fsm, n);
+    Sm_TestClassContext_Evt3(&this->_fsm, n);
 }

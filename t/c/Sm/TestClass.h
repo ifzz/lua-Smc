@@ -3,7 +3,7 @@
 
 struct Sm_TestClass
 {
-    struct TestClassContext _fsm;
+    struct Sm_TestClassContext _fsm;
 };
 
 extern void Sm_TestClass_Init(struct Sm_TestClass *);
