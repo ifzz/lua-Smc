@@ -6,7 +6,7 @@ use FindBin;
 use lib "$FindBin::Bin";
 
 use Test::More;
-use Test::LongString;
+#use Test::LongString;
 use Util;
 
 #$Util::smc = 'java -jar Smc.jar';
@@ -56,10 +56,10 @@ sub test_smc_python {
                  ? Util::slurp("t/templates/${test}.g0.out")
                  : Util::slurp("t/templates/${test}.out");
     if ($expected =~ /^like/) {
-        like_string($out, qr{$re{$test}}, "$test $options");
+        like($out, qr{$re{$test}}, "$test $options");
     }
     else {
-        is_string($out, $expected, "$test $options");
+        is($out, $expected, "$test $options");
     }
 }
 
