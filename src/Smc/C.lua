@@ -192,7 +192,7 @@ if (getDebugFlag(fsm) != 0) {
 ]],
             _transition_else = [[
 else {
-    ${map.name}_DefaultState_${name}(fsm${parameters/_parameter_call()});
+    ${fsm._package?_package()}${map.name}_DefaultState_${name}(fsm${parameters/_parameter_call()});
 }
 ]],
                 _parameter_call = ", ${name}",
@@ -232,7 +232,7 @@ ${doesEntry?_guard_entry()}
 ${doesEndPop?_guard_end_pop()}
 ]],
                 _guard_end_state = [[
-const struct ${fsm.context}State* endState = getState(fsm);
+const struct ${fsm._package?_package()}${fsm.context}State* endState = getState(fsm);
 
 ]],
                 _guard_exit = [[
