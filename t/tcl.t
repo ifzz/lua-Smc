@@ -50,10 +50,10 @@ my %re = (
 
 sub test_smc_tcl {
     my ($test, $options) = @_;
-    unlink("t/tcl/TestClass.sm");
-    unlink("t/tcl/TestClassContext.tcl");
-    Util::do_fsm('tcl', $test);
-    system("${Util::smc} -tcl ${options} t/tcl/TestClass.sm");
+    unlink("t/tcl/Sm/TestClass.sm");
+    unlink("t/tcl/Sm/TestClassContext.tcl");
+    Util::do_fsm('tcl/Sm', $test);
+    system("${Util::smc} -tcl ${options} t/tcl/Sm/TestClass.sm");
     my $trace = $options =~ /---g0/ ? 'g0' : '';
     my $out = Util::run('tclsh', "t/tcl/${test}.tcl", $trace);
     my $expected = $trace
@@ -73,6 +73,6 @@ unless (`which tclsh` =~ /^\//) {
 plan tests => scalar(@Util::tests) * scalar(@opt);
 
 for my $test (@Util::tests) {
-    Util::test_smc_with_options('tcl', \&test_smc_tcl, $test, \@opt);
+    Util::test_smc_with_options('tcl/Sm', \&test_smc_tcl, $test, \@opt);
 }
 

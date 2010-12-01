@@ -2,7 +2,7 @@
 package require Itcl;
 namespace import ::itcl::*;
 
-source ./t/tcl/TestClass.tcl;
+source ./t/tcl/Sm/TestClass.tcl;
 
-TestClass obj;
+::Sm::TestClass obj;
 obj Evt_1;
