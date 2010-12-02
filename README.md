@@ -2,6 +2,8 @@
 lua-Smc -- EXPERIMENTAL
 =======================
 
+a port on [lua-Coat](http://fperrad.github.com/lua-Coat)
+
 Install
 -------
 
