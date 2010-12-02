@@ -3,6 +3,7 @@ MANIFEST
 Smc.jar
 *.tar.gz
 *.patch
+*.html
 
 luacov.*
 

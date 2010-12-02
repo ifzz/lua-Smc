@@ -98,9 +98,12 @@ regen: cleangen src/Smc/Parser/Parser_sm.lua src/Smc/Parser/Lexer_sm.lua
 %_sm.lua: %.sm
 	java -jar Smc.jar -lua -nocatch -g $<
 
+README.html: README.md
+	Markdown.pl README.md > README.html
+
 clean: testclean
 	make -C maintainer clean
-	-rm -f MANIFEST *.bak
+	-rm -f MANIFEST *.bak README.html
 
 .PHONY: test rockspec CHANGES
 
