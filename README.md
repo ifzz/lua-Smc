@@ -16,10 +16,10 @@ Install
 
     $ make install
 
-Delta vs SMC
-------------
+Delta vs [SMC](http://smc.sourceforge.net/)
+-------------------------------------------
 
-### Command
+### Compiler Command
 
 in the source tree :
 
