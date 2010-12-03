@@ -39,7 +39,7 @@ after install :
 
 ### Language
 
-- %source
+- %source _filename_ : inclusion directive, allows to split a FSM definition into multiple files
 
 ### Target Languages Not Currently Supported
 
