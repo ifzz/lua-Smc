@@ -43,6 +43,7 @@ function method:_build_languages ()
         require('Smc.Java').instance(),
         require('Smc.Lua').instance(),
         require('Smc.ObjC').instance(),
+        require('Smc.Ooc').instance(),
         require('Smc.Perl').instance(),
         require('Smc.Php').instance(),
         require('Smc.Python').instance(),
@@ -120,7 +121,7 @@ function method:usage ()
 	          (use with -c, -c++ only)
 	-glevel   Detail level from 0 (least) to 2 (greatest)
 	          (use with -graph only)
-	-load     Use a language for a plugin
+	-load     Use a language from a plugin
 	-dump     Ascii output
 %s
     Note: statemap_file must end in ".sm"
