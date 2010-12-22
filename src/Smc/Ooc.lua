@@ -61,8 +61,8 @@ ${fsm.fsmClassname}: class extends FSMContext {
     owner: ${fsm.context} { get set }
 
     init: func (=owner) {
-        this init()
-        this setState(_${fsm.startState; format=scoped})
+        super()
+        setState(_${fsm.startState; format=scoped})
     }
     ${fsm.transitions/_transition_context()}
 

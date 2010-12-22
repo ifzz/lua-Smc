@@ -6,7 +6,7 @@ TestClass: class {
     myProp: Bool { get set }
 
     init: func () {
-        this fsm = TestClassContext new(this)
+        fsm = TestClassContext new(this)
     }
 
     NoArg: func {
