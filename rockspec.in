@@ -41,6 +41,7 @@ build = {
         ['Smc.Java']            = 'src/Smc/Java.lua',
         ['Smc.Lua']             = 'src/Smc/Lua.lua',
         ['Smc.ObjC']            = 'src/Smc/ObjC.lua',
+        ['Smc.Ooc']             = 'src/Smc/Ooc.lua',
         ['Smc.Perl']            = 'src/Smc/Perl.lua',
         ['Smc.Php']             = 'src/Smc/Php.lua',
         ['Smc.Python']          = 'src/Smc/Python.lua',
