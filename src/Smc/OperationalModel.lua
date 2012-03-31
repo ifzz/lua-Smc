@@ -296,16 +296,10 @@ function method:_build_hasCtxtReference ()
 
     local condition = self.condition
     local popArgs = self.popArgs
-    return (condition:match'ctxt '
-         or condition:match'ctxt.'
-         or condition:match'ctxt->'
-         or condition:match'ctxt:')
+    return condition:match'ctxt[^_%w]'
         or hasRealActions()
         or (self.transType == 'TRANS_POP'
-            and (popArgs:match'ctxt '
-              or popArgs:match'ctxt.'
-              or popArgs:match'ctxt->'
-              or popArgs:match'ctxt:'))
+            and popArgs:match'ctxt[^_%w]')
 end
 
 local function scopeStateName(stateName, mapName)
