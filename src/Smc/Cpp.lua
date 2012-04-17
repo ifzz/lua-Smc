@@ -491,14 +491,7 @@ class ${name}_DefaultState;
                 _state_forward_decl = [[
 class ${map.name}_${name};
 ]],
-            _declare = "${it; format=declare}\n",
-            declare = function (s)
-                if s:match ";$" then
-                    return s
-                else
-                    return s .. ";"
-                end
-            end,
+            _declare = "${it}\n",
         _base_state = [[
 
 class ${fsm.context}State :

@@ -406,14 +406,7 @@ ${fsm.declareList/_declare()}
             _define_name = [[
 #define STATEMAP_DEBUG 1
 ]],
-            _declare = "${it; format=declare}\n",
-            declare = function (s)
-                if s:match ";$" then
-                    return s
-                else
-                    return s .. ";"
-                end
-            end,
+            _declare = "${it}\n",
         _base_state = [[
 struct ${fsm._package?_package()}${fsm.context};
 struct ${fsm._package?_package()}${fsm.fsmClassname};
