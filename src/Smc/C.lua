@@ -193,9 +193,11 @@ if (getDebugFlag(fsm) != 0) {
 ]],
             _transition_else = [[
 else {
-    ${fsm._package?_package()}${map.name}_DefaultState_${name}(fsm${parameters/_parameter_call()});
+    ${fsm._package?_package()}${state.isDefault?_super_default()!_super()}_${name}(fsm${parameters/_parameter_call()});
 }
 ]],
+                _super_default = "${fsm.context}State",
+                _super = "${map.name}_DefaultState",
                 _parameter_call = ", ${name}",
         _guard = "${isConditional?_guard_conditional()!_guard_unconditional()}",
             _guard_conditional = "${ifCondition?_guard_if()!_guard_no_if()}",

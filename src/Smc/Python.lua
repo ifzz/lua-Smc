@@ -144,8 +144,10 @@ if fsm.getDebugFlag() == True:
 ]],
             _transition_else = [[
 else:
-    ${state.map.name}_DefaultState.${name}(self, fsm${parameters/_parameter_proto()})
+    ${state.isDefault?_super_default()!_super()}.${name}(self, fsm${parameters/_parameter_proto()})
 ]],
+                _super_default = "${fsm.context}State",
+                _super = "${map.name}_DefaultState",
         _guard = "${isConditional?_guard_conditional()!_guard_unconditional()}",
             _guard_conditional = "${ifCondition?_guard_if()!_guard_no_if()}",
             _guard_no_if = "${elseifCondition?_guard_elseif()!_guard_else()}",

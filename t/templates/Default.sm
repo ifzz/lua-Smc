@@ -10,7 +10,9 @@
 State_1
 // State        Transition      End State       Action
 {
-                Evt_1           nil             { Output("State_1:Evt_1"); }
+                Evt1(@param@)
+                        [@n@ == 1]
+                                nil             { Output("State_1:Evt_1(1)"); }
 
                 Evt2(@param@)
                         [@n@ == 1]
@@ -20,11 +22,18 @@ State_1
 
 Default
 {
-                Evt_1           nil             { Output("Default:Evt_1"); }
+                Default         nil             { Output("Default:Default()"); }
+
+                Evt1(@param@)
+                        [@n@ == 0]
+                                nil             { Output("Default:Evt_1(0)"); }
+                Evt1(@param@)   nil             { Output_n("Default:Evt_1(", @n@, ")"); }
 
                 Evt2(@param@)   nil             { Output_n("Default:Evt_2(", @n@, ")"); }
 
-                Evt_3           nil             { Output("Default:Evt_3"); }
+                Evt3(@param@)
+                        [@n@ == 0]
+                                nil             { Output("Default:Evt_3(0)"); }
 }
 
 NotUsed

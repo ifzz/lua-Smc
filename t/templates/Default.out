@@ -1,4 +1,7 @@
-State_1:Evt_1
+State_1:Evt_1(1)
 State_1:Evt_2(1)
-Default:Evt_3
+Default:Evt_1(0)
+Default:Evt_1(2)
 Default:Evt_2(2)
+Default:Evt_3(0)
+Default:Default()

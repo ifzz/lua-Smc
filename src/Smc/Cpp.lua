@@ -215,9 +215,11 @@ str << "LEAVING STATE   : ${state.fullName}"
             _transition_else = [[
 else
 {
-    ${map.name}_DefaultState::${name}(context${parameters/_parameter_call()});
+    ${state.isDefault?_super_default()!_super()}::${name}(context${parameters/_parameter_call()});
 }
 ]],
+                _super_default = "${fsm.context}State",
+                _super = "${map.name}_DefaultState",
                 _parameter_call = ", ${name}",
         _guard = "${isConditional?_guard_conditional()!_guard_unconditional()}",
             _guard_conditional = "${ifCondition?_guard_if()!_guard_no_if()}",

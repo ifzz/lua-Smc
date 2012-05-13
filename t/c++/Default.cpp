@@ -15,8 +15,11 @@ int main(int argc, char *argv[])
         obj._fsm.setDebugStream(std::cout);
 #endif
     }
-    obj.Evt_1();
+    obj.Evt1(1);
     obj.Evt2(1);
-    obj.Evt_3();
+    obj.Evt1(0);
+    obj.Evt1(2);
     obj.Evt2(2);
+    obj.Evt3(0);
+    obj.Evt3(2);
 }

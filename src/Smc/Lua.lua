@@ -167,7 +167,13 @@ if fsm.debugFlag then
     fsm.debugStream:write("LEAVING STATE   : ${state.fullName}\n")
 end
 ]],
-            _transition_else = [[
+            _transition_else = "${state.isDefault?_transition_else_d()!_transition_else_o()}",
+            _transition_else_d = [[
+else
+    ${state.map.name}.DefaultState:Default(fsm)
+end
+]],
+            _transition_else_o = [[
 else
     ${map.name}.DefaultState:${name}(fsm${parameters/_parameter_proto()})
 end

@@ -138,6 +138,7 @@ augment 'Smc.State'
 
 has.fullName        = { is = 'ro', lazy_build = true }
 has.reflect         = { is = 'ro', lazy_build = true }
+has.isDefault       = { is = 'ro', lazy_build = true }
 
 function method:_build_fullName ()
     local packageName = self.map.fsm._package
@@ -164,6 +165,10 @@ function method:_build_reflect ()
         table.insert(t, { name = transName, def = def })
     end
     return t
+end
+
+function method:_build_isDefault ()
+    return self.name == 'DefaultState'
 end
 
 function method:findGuard (name, condition)

@@ -1,21 +1,39 @@
 LEAVING STATE   : Sm::Map_1::State_1
-ENTER TRANSITION: Sm::Map_1::State_1.Evt_1()
-State_1:Evt_1
-EXIT TRANSITION : Sm::Map_1::State_1.Evt_1()
+ENTER TRANSITION: Sm::Map_1::State_1.Evt1(n)
+State_1:Evt_1(1)
+EXIT TRANSITION : Sm::Map_1::State_1.Evt1(n)
 ENTER STATE     : Sm::Map_1::State_1
 LEAVING STATE   : Sm::Map_1::State_1
 ENTER TRANSITION: Sm::Map_1::State_1.Evt2(n)
 State_1:Evt_2(1)
 EXIT TRANSITION : Sm::Map_1::State_1.Evt2(n)
 ENTER STATE     : Sm::Map_1::State_1
+LEAVING STATE   : Sm::Map_1::State_1
 LEAVING STATE   : Sm::Map_1::DefaultState
-ENTER TRANSITION: Sm::Map_1::DefaultState.Evt_3()
-Default:Evt_3
-EXIT TRANSITION : Sm::Map_1::DefaultState.Evt_3()
+ENTER TRANSITION: Sm::Map_1::DefaultState.Evt1(n)
+Default:Evt_1(0)
+EXIT TRANSITION : Sm::Map_1::DefaultState.Evt1(n)
+ENTER STATE     : Sm::Map_1::State_1
+LEAVING STATE   : Sm::Map_1::State_1
+LEAVING STATE   : Sm::Map_1::DefaultState
+ENTER TRANSITION: Sm::Map_1::DefaultState.Evt1(n)
+Default:Evt_1(2)
+EXIT TRANSITION : Sm::Map_1::DefaultState.Evt1(n)
 ENTER STATE     : Sm::Map_1::State_1
 LEAVING STATE   : Sm::Map_1::State_1
 LEAVING STATE   : Sm::Map_1::DefaultState
 ENTER TRANSITION: Sm::Map_1::DefaultState.Evt2(n)
 Default:Evt_2(2)
 EXIT TRANSITION : Sm::Map_1::DefaultState.Evt2(n)
+ENTER STATE     : Sm::Map_1::State_1
+LEAVING STATE   : Sm::Map_1::DefaultState
+ENTER TRANSITION: Sm::Map_1::DefaultState.Evt3(n)
+Default:Evt_3(0)
+EXIT TRANSITION : Sm::Map_1::DefaultState.Evt3(n)
+ENTER STATE     : Sm::Map_1::State_1
+LEAVING STATE   : Sm::Map_1::DefaultState
+LEAVING STATE   : Sm::Map_1::DefaultState
+ENTER TRANSITION: Sm::Map_1::DefaultState.Default()
+Default:Default()
+EXIT TRANSITION : Sm::Map_1::DefaultState.Default()
 ENTER STATE     : Sm::Map_1::State_1
