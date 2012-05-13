@@ -42,8 +42,7 @@ class StateUndefinedException() extends RuntimeException() {
 class TransitionUndefinedException(reason: String) extends RuntimeException(reason) {
 }
 
-@serializable
-abstract class FSMContext[State] {
+abstract class FSMContext[State] extends Serializable {
     private var _state: State = _
     private var _stateStack: Stack[State] = new Stack[State]
     protected var _transition: String = ""

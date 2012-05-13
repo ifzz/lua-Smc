@@ -60,7 +60,6 @@ import ${it}
 ]],
         _context = [[
 
-${generator.serialFlag?_serializable()}
 class ${fsm.fsmClassname}(owner: ${fsm.context}) extends statemap.FSMContext[${fsm.context}State] {
     private val _owner: ${fsm.context} = owner
 
@@ -77,9 +76,6 @@ class ${fsm.fsmClassname}(owner: ${fsm.context}) extends statemap.FSMContext[${f
 ]],
             scoped = function (str) return str:gsub('::','.') end,
             ucfirst = function (str) return str:sub(1,1):upper() .. str:sub(2) end,
-            _serializable = [[
-@serializable
-]],
             _transition_context = "${isntDefault?_transition_context_if()}\n",
             _transition_context_if = [[
 
@@ -111,8 +107,7 @@ ${map.name}.${name; format=ucfirst}
 ]],
         _base_state = [[
 
-${generator.serialFlag?_serializable()}
-class ${fsm.context}State(name: String, id: Int) {
+class ${fsm.context}State(name: String, id: Int)${generator.serialFlag?_serializable()} {
     private val _name = name
     private val _id = id
 
@@ -132,6 +127,7 @@ class ${fsm.context}State(name: String, id: Int) {
     }
 }
 ]],
+            _serializable = " extends Serializable",
             _transition_base_state = "${isntDefault?_transition_base_state_if()}\n",
             _transition_base_state_if = [[
 

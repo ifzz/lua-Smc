@@ -53,7 +53,7 @@ sub test_smc_scala {
     unlink("t/scala/Sm/TestClassContext.scala");
     Util::do_fsm('scala/Sm', $test);
     system("${Util::smc} -scala ${options} t/scala/Sm/TestClass.sm");
-    my $out = Util::run('cd t/scala && scalac -g ../../runtime/scala/statemap.scala Sm/TestClass.scala Sm/TestClassContext.scala', "${test}.scala");
+    my $out = Util::run('cd t/scala && scalac ../../runtime/scala/statemap.scala Sm/TestClass.scala Sm/TestClassContext.scala', "${test}.scala");
     diag($out) if $out;
     my $trace = $options =~ /-g0/ && ${Util::smc} !~ /\.jar/ ? 'g0' : '';
     $out = Util::run('scala -classpath t/scala', $test, $trace);
