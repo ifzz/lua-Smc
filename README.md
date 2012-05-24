@@ -7,14 +7,14 @@ a port on [lua-Coat](http://fperrad.github.com/lua-Coat)
 Install
 -------
 
-    $ sudo aptitude install lua5.1
-    $ sudo aptitude install luarocks
-    $ sudo aptitude install graphviz
-    $ luarocks install luacov
-    $ luarocks install lua-coat
-    $ luarocks install lua-codegen
-    $ sudo aptitude install libtest-harness-perl        # or cpan Test::Harness
-    $ sudo aptitude install libtest-longstring-perl     # or cpan Test::LongString
+    $ sudo apt-get install lua5.1
+    $ sudo apt-get install luarocks
+    $ sudo apt-get install graphviz
+    $ sudo luarocks install luacov
+    $ sudo luarocks install lua-coat
+    $ sudo luarocks install lua-codegen
+    $ sudo apt-get install libtest-harness-perl        # or cpan Test::Harness
+    $ sudo apt-get install libtest-longstring-perl     # or cpan Test::LongString
 
     $ make install
 
