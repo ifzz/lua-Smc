@@ -5,9 +5,7 @@ SMC     := $(LUA) bin/smc
 #SMC     := java -jar Smc.jar
 VERSION := $(shell cd src && $(LUA) -e "require [[Smc]]; print(Smc._VERSION)")
 TARBALL := lua-smc-$(VERSION).tar.gz
-ifndef REV
-  REV   := 1
-endif
+REV     := 1
 
 manifest_pl := \
 use strict; \
