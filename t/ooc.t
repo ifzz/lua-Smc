@@ -67,6 +67,10 @@ sub test_smc_ooc {
     }
 }
 
+if ($Util::smc =~ /jar/) {
+    plan skip_all => 'no ooc target';
+}
+
 unless (`rock` =~ /^rock/) {
     plan skip_all => 'no rock';
 }
