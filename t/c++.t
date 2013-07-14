@@ -57,7 +57,7 @@ sub test_smc_cpp {
     unlink("t/c++/Sm/TestClassContext.cpp");
     unlink("t/c++/Sm/TestClassContext.h");
     Util::do_fsm('c++/Sm', $test);
-    system("${Util::smc} -c++ ${options} -headerd t/c++/Sm t/c++/Sm/TestClass.sm");
+    system("${Util::smc} -c++ ${options} -d t/c++/Sm t/c++/Sm/TestClass.sm");
     my $out = Util::run('g++', "-I runtime/c++ -I . -o t/c++/${test} t/c++/${test}.cpp t/c++/Sm/TestClass.cpp t/c++/Sm/TestClassContext.cpp");
     diag($out) if $out;
     my $trace = $options =~ /-g0/ && ${Util::smc} !~ /\.jar/ ? 'g0' : '';
