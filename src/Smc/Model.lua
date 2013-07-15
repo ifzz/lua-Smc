@@ -60,7 +60,7 @@ has.defaultState    = { is = 'rw', isa = 'Smc.State' }
 
 
 function method:addState (state)
-    if state.name == 'DefaultState' then
+    if state.isDefault then
         self.defaultState = state
     else
         table.insert(self.states, state)
@@ -89,6 +89,11 @@ has.entryActions    = { is = 'rw', isa = 'table<Smc.Action>' }
 has.exitActions     = { is = 'rw', isa = 'table<Smc.Action>' }
 has.transitions     = { is = 'rw', isa = 'table<Smc.Transition>',
                         default = function () return {} end }
+has.isDefault       = { is = 'ro', lazy_build = true }
+
+function method:_build_isDefault ()
+    return self.name == 'DefaultState'
+end
 
 function method:addTransition (transition)
     for _, trans in ipairs(self.transitions) do
