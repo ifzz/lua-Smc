@@ -503,21 +503,25 @@ function method:createState (token)
 end
 
 function method:setEntryAction ()
-    if self.stateInProgress.entryActions then
+    if     self.stateInProgress.isDefault then
+        self:_error("Default state may not have an entry action.", self.stateInProgress.lineno)
+    elseif self.stateInProgress.entryActions then
         self:warning "Entry action previously specified, new entry action ignored."
     else
         self.stateInProgress.entryActions = self.actionList
-        self.actionList = nil
     end
+    self.actionList = nil
 end
 
 function method:setExitAction ()
-    if self.stateInProgress.exitActions then
+    if     self.stateInProgress.isDefault then
+        self:_error("Default state may not have an exit action.", self.stateInProgress.lineno)
+    elseif self.stateInProgress.exitActions then
         self:warning "Exit action previously specified, new exit action ignored."
     else
         self.stateInProgress.exitActions = self.actionList
-        self.actionList = nil
     end
+    self.actionList = nil
 end
 
 function method:addTransition ()
