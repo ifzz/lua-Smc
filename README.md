@@ -2,6 +2,8 @@
 lua-Smc -- EXPERIMENTAL
 =======================
 
+[![Build Status](https://travis-ci.org/fperrad/lua-Smc.png)](https://travis-ci.org/fperrad/lua-Smc)
+
 a port on [lua-Coat](http://fperrad.github.com/lua-Coat)
 
 Install
