@@ -6,6 +6,9 @@ require 'os'
 
 plan(21)
 
+local lua = arg[-1]
+local smc = lua .. " ./bin/smc"
+
 f = io.open('file.sm', 'w')
 f:write([[
 
@@ -45,7 +48,6 @@ Evt_1 set State_1 {
 ]]
 
 
-smc = "lua ./bin/smc"
 cmd = smc .. " -version"
 f = io.popen(cmd)
 like( f:read'*l', "^Smc %d%.%d%.%d", "-version" )
