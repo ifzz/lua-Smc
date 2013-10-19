@@ -6,8 +6,9 @@ require 'os'
 
 plan(21)
 
-local lua = arg[-1]
+local lua = arg[-2] or arg[-1]
 local smc = lua .. " ./bin/smc"
+diag(smc)
 
 f = io.open('file.sm', 'w')
 f:write([[
