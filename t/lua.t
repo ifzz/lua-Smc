@@ -14,8 +14,6 @@ use Util;
 #$Util::test_table = 0;
 #@Util::tests = ( 'Simple' );
 
-my $lua = 'lua';
-
 my @opt = (
     '',
     '-g0',
@@ -52,7 +50,7 @@ sub test_smc_lua {
     Util::do_fsm('lua/Sm', $test);
     system("${Util::smc} -lua ${options} t/lua/Sm/TestClass.sm");
     my $trace = $options =~ /-g0/ && ${Util::smc} !~ /\.jar/ ? 'g0' : '';
-    my $out = Util::run($lua, "t/lua/${test}.lua", $trace);
+    my $out = Util::run(${Util::lua}, "t/lua/${test}.lua", $trace);
     my $expected = $trace
                  ? Util::slurp("t/templates/${test}.g0.out")
                  : Util::slurp("t/templates/${test}.out");
@@ -64,9 +62,11 @@ sub test_smc_lua {
     }
 }
 
-unless (`lua -v 2>&1` =~ /^Lua/) {
+my $version = qx{${Util::lua} -v 2>&1};
+unless ($version =~ /^Lua/) {
     plan skip_all => 'no lua';
 }
+diag($version);
 plan tests => scalar(@Util::tests) * scalar(@opt);
 
 for my $test (@Util::tests) {

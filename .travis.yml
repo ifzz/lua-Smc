@@ -1,5 +1,4 @@
-# Lua is not officially supported, but an erlang environment will do.
-language: erlang
+language: c
 
 env:
   matrix:
@@ -20,6 +19,9 @@ install:
 # Build and test.
 script:
   - make LUA="$LUA" unit_test
+  - export LUA_PATH=";;./src/?.lua;./runtime/lua/?.lua;./t/lua/?.lua"
+  - prove t/lua.t
+  - prove t/c.t t/java.t t/perl.t t/python.t t/ruby.t
 
 branches:
   only:

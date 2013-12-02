@@ -5,12 +5,12 @@ use strict;
 use warnings;
 use Fatal qw(open close);
 
-my $lua = 'lua';
-#my $lua = 'luajit';
-our $smc = $lua . ' ./bin/smc';
+our $lua = $ENV{LUA} || 'lua';
+#our $lua = 'luajit';
+our $smc = $ENV{SMC} || $lua . ' ./bin/smc';
 #our $smc = 'java -jar Smc.jar';
-our $test_graph = 1;
-our $test_table = 1;
+our $test_graph = !$ENV{TRAVIS} && 1;
+our $test_table = !$ENV{TRAVIS} && 0;
 our @tests = qw(
     Simple
     EntryExit
