@@ -82,9 +82,7 @@ ${generator.accessLevel} class ${fsm.fsmClassname}
 
     ${generator.accessLevel} ${fsm.fsmClassname}(${fsm.context} owner)
     {
-        super (${fsm.startState; format=scoped});
-        _owner = owner;
-        ${generator.reflectFlag?_context_constructor_reflect()}
+        this (owner, ${fsm.startState; format=scoped});
     }
 
     ${generator.accessLevel} ${fsm.fsmClassname}(${fsm.context} owner, ${fsm.context}State initState)
@@ -94,9 +92,10 @@ ${generator.accessLevel} class ${fsm.fsmClassname}
         ${generator.reflectFlag?_context_constructor_reflect()}
     }
 
+    @Override
     public ${generator.syncFlag?_synchronized()}void enterStartState()
     {
-        getState().Entry(this);
+        getState().entry(this);
         return;
     }
     ${fsm.transitions/_transition_context()}
@@ -144,7 +143,17 @@ ${generator.accessLevel} class ${fsm.fsmClassname}
     transient private ${fsm.context} _owner;
     ${generator.reflectFlag?_context_data_transitions()}
     ${generator.reflectFlag?_context_data_states()!_context_data_states_or()}
+
+    //-----------------------------------------------------------
+    // Constants.
+    //
+
+    private static final long serialVersionUID = 1L;
     ${_base_state()}
+
+    //-----------------------------------------------------------
+    // Member data.
+    //
     ${fsm.maps/_map()}
 }
 ]],
@@ -249,6 +258,11 @@ private void readObject(java.io.ObjectInputStream istream)
 }
 ]],
             _context_data_transitions = [[
+
+//-----------------------------------------------------------
+// Statics.
+//
+
 final Set${generator.genericFlag?_generic_string()} _transitions;
 ]],
             _context_data_states = [[
@@ -264,6 +278,10 @@ ${map.name}.${name; format=ucfirst}
 ]],
         _base_state = [[
 
+//---------------------------------------------------------------
+// Inner classes.
+//
+
 ${generator.accessLevel} static abstract class ${fsm.context}State
     extends statemap.State
 {
@@ -277,8 +295,8 @@ ${generator.accessLevel} static abstract class ${fsm.context}State
         super (name, id);
     }
 
-    protected void Entry(${fsm.fsmClassname} context) {}
-    protected void Exit(${fsm.fsmClassname} context) {}
+    protected void entry(${fsm.fsmClassname} context) {}
+    protected void exit(${fsm.fsmClassname} context) {}
     ${fsm.transitions/_transition_base_state()}
 
     protected void Default(${fsm.fsmClassname} context)
@@ -291,10 +309,6 @@ ${generator.accessLevel} static abstract class ${fsm.context}State
                 ", Transition: " +
                 context.getTransition()));
     }
-
-//-----------------------------------------------------------
-// Member data.
-//
 }
 ]],
             _base_state_reflect = [[
@@ -336,9 +350,8 @@ if (context.getDebugFlag() == true)
     //-------------------------------------------------------
     // Constants.
     //
+
     ${states/_state_init()}
-    private static final ${name}_DefaultState DefaultState =
-        new ${name}_DefaultState("${fullName}::DefaultState", -1);
 
 }
 
@@ -371,6 +384,7 @@ public static final ${map.name}_${name; format=ucfirst} ${name} =
             _map_default_state = "${defaultState.transitions/_transition()}",
             _default_state_reflect = [[
 
+@Override
 public Map${generator.genericFlag?_generic_str_int()} getTransitions()
 {
     return (_transitions);
@@ -381,6 +395,7 @@ public Map${generator.genericFlag?_generic_str_int()} getTransitions()
 //---------------------------------------------------
 // Statics.
 //
+
 private static Map${generator.genericFlag?_generic_str_int()} _transitions;
 
 static
@@ -407,15 +422,13 @@ private static final class ${map.name}_${name; format=ucfirst}
     ${exitActions?_state_exit()}
     ${transitions/_transition()}
 
-//-------------------------------------------------------
-// Member data.
-//
     ${generator.reflectFlag?_state_reflect_init()}
 }
 ]],
             _state_reflect = [[
 private static Map${generator.genericFlag?_generic_str_int()} _transitions;
 
+@Override
 public Map${generator.genericFlag?_generic_str_int()} getTransitions()
 {
     return (_transitions);
@@ -423,7 +436,8 @@ public Map${generator.genericFlag?_generic_str_int()} getTransitions()
 ]],
             _state_entry = [[
 
-protected void Entry(${fsm.fsmClassname} context)
+@Override
+protected void entry(${fsm.fsmClassname} context)
 {
     ${fsm.context} ctxt = context.getOwner();
 
@@ -433,7 +447,8 @@ protected void Entry(${fsm.fsmClassname} context)
 ]],
             _state_exit = [[
 
-protected void Exit(${fsm.fsmClassname} context)
+@Override
+protected void exit(${fsm.fsmClassname} context)
 {
     ${fsm.context} ctxt = context.getOwner();
 
@@ -442,6 +457,9 @@ protected void Exit(${fsm.fsmClassname} context)
 }
 ]],
             _state_reflect_init = [[
+//-------------------------------------------------------
+// Member data.
+//
 
 static
 {
@@ -463,6 +481,7 @@ _transitions.put("${name}", statemap.State.${def; format=trans_def});
                 end,
         _transition = [[
 
+@Override
 protected void ${name}(${fsm.fsmClassname} context${parameters/_parameter_proto()})
 {
     ${hasCtxtReference?_transition_ctxt()}
@@ -530,7 +549,7 @@ ${fsm.context}State endState = context.getState();
 ]],
                     _guard_exit = [[
 ${generator.debugLevel1?_guard_debug_before_exit()}
-(context.getState()).Exit(context);
+(context.getState()).exit(context);
 ${generator.debugLevel1?_guard_debug_after_exit()}
 ]],
                         _guard_debug_before_exit = [[
@@ -538,7 +557,7 @@ if (context.getDebugFlag() == true)
 {
     PrintStream str = context.getDebugStream();
 
-    str.println("BEFORE EXIT     : ${transition.state.fullName}.Exit()");
+    str.println("BEFORE EXIT     : ${transition.state.fullName}.exit()");
 }
 ]],
                         _guard_debug_after_exit = [[
@@ -546,7 +565,7 @@ if (context.getDebugFlag() == true)
 {
     PrintStream str = context.getDebugStream();
 
-    str.println("AFTER EXIT      : ${transition.state.fullName}.Exit()");
+    str.println("AFTER EXIT      : ${transition.state.fullName}.exit()");
 }
 ]],
                     _guard_debug_enter = [[
@@ -612,7 +631,7 @@ context.popState();
 ]],
                                 _guard_entry = [[
 ${generator.debugLevel1?_guard_debug_before_entry()}
-(context.getState()).Entry(context);
+(context.getState()).entry(context);
 ${generator.debugLevel1?_guard_debug_after_entry()}
 ]],
                                     _guard_debug_before_entry = [[
@@ -620,7 +639,7 @@ if (context.getDebugFlag() == true)
 {
     PrintStream str = context.getDebugStream();
 
-    str.println("BEFORE ENTRY    : ${transition.state.fullName}.Exit()");
+    str.println("BEFORE ENTRY    : ${transition.state.fullName}.exit()");
 }
 ]],
                                     _guard_debug_after_entry = [[
@@ -628,7 +647,7 @@ if (context.getDebugFlag() == true)
 {
     PrintStream str = context.getDebugStream();
 
-    str.println("AFTER ENTRY     : ${transition.state.fullName}.Exit()");
+    str.println("AFTER ENTRY     : ${transition.state.fullName}.exit()");
 }
 ]],
                                 _guard_end_pop = [[
