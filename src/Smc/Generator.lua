@@ -24,6 +24,7 @@ has.noStreamsFlag   = { is = 'rw', isa = 'boolean', default = false }
 has.reflectFlag     = { is = 'rw', isa = 'boolean', default = false }
 has.syncFlag        = { is = 'rw', isa = 'boolean', default = false }
 has.genericFlag     = { is = 'rw', isa = 'boolean', default = false }
+has.java7Flag       = { is = 'rw', isa = 'boolean', default = false }
 
 has.stream          = { is = 'rw', isa = 'file' }
 has.guardCount      = { is = 'rw', isa = 'number' }

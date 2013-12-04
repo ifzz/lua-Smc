@@ -114,6 +114,7 @@ function method:usage ()
 	          (use with -csharp, -groovy, -java, -lua, -perl, -php, -python, -ruby, -scala, -tcl and -vb only)
 	-generic  Use generic collections
 	          (use with -csharp, -java or -vb and -reflect only)
+	-generic7 Use Java 7 generic collections
 	-cast     Use this C++ cast type
 	          (use with -c++ only)
 	-d        Place generated files in directory
@@ -259,7 +260,15 @@ function method:parseArgs (args)
                 else
                     error( targetLanguage.name .. " does not support -header.")
                 end
-            elseif v:match'-ge' then
+            elseif v:match'-generic7' then
+                if targetLanguage.java7Flag then
+                    opt.java7Flag = true
+                    opt.genericFlag = true
+                    consumed = 1
+                else
+                    error( targetLanguage.name .. " does not support -generic7.")
+                end
+            elseif v:match'-generic' then
                 if targetLanguage.genericFlag then
                     opt.genericFlag = true
                     consumed = 1
@@ -421,6 +430,7 @@ function method:generateCode (fsm)
         reflectFlag     = option.reflectFlag,
         syncFlag        = option.syncFlag,
         genericFlag     = option.genericFlag,
+        java7Flag       = option.java7Flag,
     }
     local dir = dirname(fsm.filename) .. "/"
     local filename = generator:sourceFile(option.srcDirectory or dir, fsm.targetFilename, option.suffix)

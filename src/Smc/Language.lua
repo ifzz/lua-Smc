@@ -22,6 +22,7 @@ has.dumpFlag        = { is = 'ro', isa = 'boolean', default = true }
 has.accessFlag      = { is = 'ro', isa = 'boolean' }
 has.castFlag        = { is = 'ro', isa = 'boolean' }
 has.genericFlag     = { is = 'ro', isa = 'boolean' }
+has.java7Flag       = { is = 'ro', isa = 'boolean' }
 has.glevelFlag      = { is = 'ro', isa = 'boolean' }
 has.headerFlag      = { is = 'ro', isa = 'boolean' }
 has.noExceptionFlag = { is = 'ro', isa = 'boolean' }

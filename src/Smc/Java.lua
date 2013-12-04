@@ -13,6 +13,7 @@ has.generator       = { '+', isa = 'Smc.Java.Generator',
                         default = function () return require 'Smc.Java.Generator' end }
 has.accessFlag      = { '+', default = true }
 has.genericFlag     = { '+', default = true }
+has.java7Flag       = { '+', default = true }
 has.reflectFlag     = { '+', default = true }
 has.serialFlag      = { '+', default = true }
 has.syncFlag        = { '+', default = true }
@@ -163,10 +164,13 @@ ${generator.accessLevel} class ${fsm.fsmClassname}
 implements java.io.Serializable
 ]],
             _synchronized = "synchronized ",
+            _generic7_string = "${generator.java7Flag?_generic7_empty()!_generic_string()}",
+            _generic7_empty = "<>",
             _generic_string = "<String>",
+            _generic7_str_int = "${generator.java7Flag?_generic7_empty()!_generic_str_int()}",
             _generic_str_int = "<String, Integer>",
             _context_constructor_reflect = [[
-_transitions = new TreeSet${generator.genericFlag?_generic_string()}();
+_transitions = new TreeSet${generator.genericFlag?_generic7_string()}();
 
 ${fsm.transitions/_transition_context_reflect()}
 ]],
@@ -244,7 +248,7 @@ private void readObject(java.io.ObjectInputStream istream)
         int i;
 
         _stateStack =
-            new java.util.Stack<statemap.State>();
+            new java.util.Stack${generator.java7Flag?_generic7_empty()!_stack()}();
 
         for (i = 0; i < size; ++i)
         {
@@ -257,6 +261,7 @@ private void readObject(java.io.ObjectInputStream istream)
     return;
 }
 ]],
+                _stack = "<statemap.State>",
             _context_data_transitions = [[
 
 //-----------------------------------------------------------
@@ -400,7 +405,7 @@ private static Map${generator.genericFlag?_generic_str_int()} _transitions;
 
 static
 {
-    _transitions = new HashMap${generator.genericFlag?_generic_str_int()}();
+    _transitions = new HashMap${generator.genericFlag?_generic7_str_int()}();
     ${reflect/_reflect()}
 };
 ]],
@@ -463,7 +468,7 @@ protected void exit(${fsm.fsmClassname} context)
 
 static
 {
-    _transitions = new HashMap${generator.genericFlag?_generic_str_int()}();
+    _transitions = new HashMap${generator.genericFlag?_generic7_str_int()}();
     ${reflect/_reflect()}
 }
 ]],
