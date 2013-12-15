@@ -60,6 +60,7 @@ ParamSeparator
     COMMA(token)
       [ctxt.targetLanguage == 'TCL'
     or ctxt.targetLanguage == 'GROOVY'
+    or ctxt.targetLanguage == 'JS'
     or ctxt.targetLanguage == 'LUA'
     or ctxt.targetLanguage == 'OOC'
     or ctxt.targetLanguage == 'PERL'
@@ -76,6 +77,7 @@ ParamSeparator
     RIGHT_PAREN(token)
       [ctxt.targetLanguage == 'TCL'
     or ctxt.targetLanguage == 'GROOVY'
+    or ctxt.targetLanguage == 'JS'
     or ctxt.targetLanguage == 'LUA'
     or ctxt.targetLanguage == 'OOC'
     or ctxt.targetLanguage == 'PERL'
@@ -193,6 +195,7 @@ Name
       [ctxt.targetLanguage == 'C_SHARP'
     or ctxt.targetLanguage == 'GRAPH'
     or ctxt.targetLanguage == 'GROOVY'
+    or ctxt.targetLanguage == 'JS'
     or ctxt.targetLanguage == 'LUA'
     or ctxt.targetLanguage == 'OOC'
     or ctxt.targetLanguage == 'PERL'

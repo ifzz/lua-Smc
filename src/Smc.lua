@@ -41,6 +41,7 @@ function method:_build_languages ()
         require('Smc.Graphviz').instance(),
         require('Smc.Groovy').instance(),
         require('Smc.Java').instance(),
+        require('Smc.JavaScript').instance(),
         require('Smc.Lua').instance(),
         require('Smc.ObjC').instance(),
         require('Smc.Ooc').instance(),
@@ -111,7 +112,7 @@ function method:usage ()
 	-return   Smc.main() returns, not exits
 	          (use this option with ANT)
 	-reflect  Generate reflection code
-	          (use with -csharp, -groovy, -java, -lua, -perl, -php, -python, -ruby, -scala, -tcl and -vb only)
+	          (use with -csharp, -groovy, -java, -js, -lua, -perl, -php, -python, -ruby, -scala, -tcl and -vb only)
 	-generic  Use generic collections
 	          (use with -csharp, -java or -vb and -reflect only)
 	-generic7 Use Java 7 generic collections

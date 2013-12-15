@@ -27,6 +27,7 @@ templates: \
     Graphviz_template.png \
     Groovy_template.png \
     Java_template.png \
+    JavaScript_template.png \
     Lua_template.png \
     Perl_template.png \
     Php_template.png \
@@ -76,6 +77,9 @@ Groovy_template.dot: ../src/Smc/Groovy.lua
 
 Java_template.dot: ../src/Smc/Java.lua
 	$(LUA) -l Smc.Java -e "print(require 'CodeGen.Graph'.to_dot(require 'Smc.Java.Generator'{srcfileBase='', targetfileBase=''}.template))" > $@
+
+JavaScript_template.dot: ../src/Smc/JavaScript.lua
+	$(LUA) -l Smc.JavaScript -e "print(require 'CodeGen.Graph'.to_dot(require 'Smc.JavaScript.Generator'{srcfileBase='', targetfileBase=''}.template))" > $@
 
 Lua_template.dot: ../src/Smc/Lua.lua
 	$(LUA) -l Smc.Lua -e "print(require 'CodeGen.Graph'.to_dot(require 'Smc.Lua.Generator'{srcfileBase='', targetfileBase=''}.template))" > $@

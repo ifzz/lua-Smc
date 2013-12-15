@@ -3127,6 +3127,7 @@ function ParamsMap.ParamSeparator:COMMA (fsm, token)
     end
     if ctxt.targetLanguage == 'TCL'
         or ctxt.targetLanguage == 'GROOVY'
+        or ctxt.targetLanguage == 'JS'
         or ctxt.targetLanguage == 'LUA'
         or ctxt.targetLanguage == 'OOC'
         or ctxt.targetLanguage == 'PERL'
@@ -3168,6 +3169,7 @@ function ParamsMap.ParamSeparator:RIGHT_PAREN (fsm, token)
     end
     if ctxt.targetLanguage == 'TCL'
         or ctxt.targetLanguage == 'GROOVY'
+        or ctxt.targetLanguage == 'JS'
         or ctxt.targetLanguage == 'LUA'
         or ctxt.targetLanguage == 'OOC'
         or ctxt.targetLanguage == 'PERL'
@@ -3412,6 +3414,7 @@ function ActionsMap.Name:EQUAL (fsm, token)
     if ctxt.targetLanguage == 'C_SHARP'
         or ctxt.targetLanguage == 'GRAPH'
         or ctxt.targetLanguage == 'GROOVY'
+        or ctxt.targetLanguage == 'JS'
         or ctxt.targetLanguage == 'LUA'
         or ctxt.targetLanguage == 'OOC'
         or ctxt.targetLanguage == 'PERL'
