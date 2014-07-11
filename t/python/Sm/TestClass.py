@@ -9,13 +9,13 @@ class TestClass:
         # self._fsm.setDebugFlag(True)
 
     def NoArg(self):
-        print "No arg"
+        print("No arg")
 
     def Output(self, s):
-        print s
+        print(s)
 
     def Output_n(self, *args):
-        print ''.join(map(str,args))
+        print(''.join(map(str,args)))
 
     def isOk(self):
         return True

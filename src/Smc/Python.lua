@@ -60,7 +60,7 @@ class ${fsm.context}State(statemap.State):
         msg = "\n\tState: %s\n\tTransition: %s" % (
             fsm.getState().getName(), fsm.getTransition()
         )
-        raise statemap.TransitionUndefinedException, msg
+        raise statemap.TransitionUndefinedException(msg)
     ${generator.reflectFlag?_base_state_reflect()}
 ]],
             _transition_base_state = "${isntDefault?_transition_base_state_if()}\n",
