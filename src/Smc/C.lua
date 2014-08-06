@@ -418,7 +418,7 @@ struct ${fsm._package?_package()}${fsm.context}State
     ${fsm.hasEntryActions?_member_entry()}
     ${fsm.hasExitActions?_member_exit()}
     ${fsm.transitions/_transition_member()}
-    void(*Default)(struct ${fsm._package?_package()}${fsm.fsmClassname}*);
+    void(*Default)(struct ${fsm._package?_package()}${fsm.fsmClassname}* fsm);
     STATE_MEMBERS
 };
 
@@ -426,16 +426,16 @@ struct ${fsm._package?_package()}${fsm.context}State
             _package = "${fsm._package; format=scoped}_",
             scoped = function (s) return s:gsub("::", "_") end,
             _member_entry = [[
-void(*Entry)(struct ${fsm._package?_package()}${fsm.fsmClassname}*);
+void(*Entry)(struct ${fsm._package?_package()}${fsm.fsmClassname}* fsm);
 ]],
             _member_exit = [[
-void(*Exit)(struct ${fsm._package?_package()}${fsm.fsmClassname}*);
+void(*Exit)(struct ${fsm._package?_package()}${fsm.fsmClassname}* fsm);
 ]],
             _transition_member = "${isntDefault?_transition_member_if()}\n",
             _transition_member_if = [[
-void(*${name})(struct ${fsm._package?_package()}${fsm.fsmClassname}*${parameters/_parameter_proto()});
+void(*${name})(struct ${fsm._package?_package()}${fsm.fsmClassname}* fsm${parameters/_parameter_proto()});
 ]],
-                _parameter_proto = ", ${_type}",
+                _parameter_proto = ", ${_type} ${name}",
         _map = "${states/_state()}\n",
         _state = [[
 extern const struct ${fsm._package?_package()}${fsm.context}State ${fullName; format=scoped};
@@ -449,7 +449,7 @@ struct ${fsm._package?_package()}${fsm.fsmClassname}
 };
 
 #ifdef NO_${generator.targetfileBase; format=guarded}_MACRO
-extern void ${fsm._package?_package()}${fsm.fsmClassname}_Init(struct ${fsm._package?_package()}${fsm.fsmClassname}*, struct ${fsm._package?_package()}${fsm.context} *);
+extern void ${fsm._package?_package()}${fsm.fsmClassname}_Init(struct ${fsm._package?_package()}${fsm.fsmClassname}* fsm, struct ${fsm._package?_package()}${fsm.context}* owner);
 ${fsm.hasEntryActions?_enter_start_proto()}
 ${fsm.transitions/_transition_context_proto()}
 #else
@@ -465,7 +465,7 @@ extern void ${fsm._package?_package()}${fsm.fsmClassname}_EnterStartState(struct
 ]],
             _transition_context_proto = "${isntDefault?_transition_context_proto_if()}\n",
             _transition_context_proto_if = [[
-extern void ${fsm._package?_package()}${fsm.fsmClassname}_${name}(struct ${fsm._package?_package()}${fsm.fsmClassname}*${parameters/_parameter_proto()});
+extern void ${fsm._package?_package()}${fsm.fsmClassname}_${name}(struct ${fsm._package?_package()}${fsm.fsmClassname}* fsm${parameters/_parameter_proto()});
 ]],
             _enter_start = [[
 
