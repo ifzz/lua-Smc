@@ -1,4 +1,5 @@
 
+#include <stdlib.h>
 #include "Sm/TestClass.h"
 
 int main(int argc, char *argv[])
@@ -10,5 +11,6 @@ int main(int argc, char *argv[])
         setDebugFlag(&thisContext._fsm, 1);
     }
     Sm_TestClass_Evt_1(&thisContext);
+    return EXIT_SUCCESS;
 }
 

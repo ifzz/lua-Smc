@@ -1,4 +1,5 @@
 
+#include <stdlib.h>
 #include "Sm/TestClass.h"
 
 int main(int argc, char *argv[])
@@ -16,5 +17,6 @@ int main(int argc, char *argv[])
     Sm_TestClass_Evt2(&thisContext, 2);
     Sm_TestClass_Evt3(&thisContext, 0);
     Sm_TestClass_Evt3(&thisContext, 2);
+    return EXIT_SUCCESS;
 }
 

@@ -49,7 +49,11 @@ sub test_smc_c {
     unlink("t/c/Sm/TestClassContext.h");
     Util::do_fsm('c/Sm', $test);
     system("${Util::smc} -c ${options} -d t/c/Sm t/c/Sm/TestClass.sm");
-    my $out = Util::run('gcc', "-I runtime/c -I . -o t/c/${test} t/c/${test}.c t/c/Sm/TestClass.c t/c/Sm/TestClassContext.c");
+    my @gcc = ('gcc', '--std=c90', '-Wall',  '-Wextra', '-Wno-unused-function',  '-Wno-unused-parameter');
+    my $out = Util::run(@gcc, "-I runtime/c -I . -o t/c/${test} t/c/${test}.c t/c/Sm/TestClass.c t/c/Sm/TestClassContext.c");
+    diag($out) if $out;
+    push @gcc, '-DNO_TESTCLASSCONTEXT_MACRO';
+    $out = Util::run(@gcc, "-I runtime/c -I . -o t/c/${test} t/c/${test}.c t/c/Sm/TestClass.c t/c/Sm/TestClassContext.c");
     diag($out) if $out;
     my $trace = $options =~ /-g0/ && ${Util::smc} !~ /\.jar/ ? 'g0' : '';
     $out = Util::run(catfile('t', 'c', ${test}), $trace);
