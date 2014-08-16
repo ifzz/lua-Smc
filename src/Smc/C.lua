@@ -65,9 +65,9 @@ ${fsm.includeList/_include()}
     ${fsm.transitions/_populate_transition()}
     state##_Default
 
-${fsm.hasEntryActions?_def_entry()!_def_no_entry()}
+${fsm.hasEntryActions?_def_entry()}
 
-${fsm.hasExitActions?_def_exit()!_def_no_exit()}
+${fsm.hasExitActions?_def_exit()}
 ${fsm.transitions/_transition_base_state()}
 
 static void ${fsm._package?_package()}${fsm.context}State_Default(struct ${fsm._package?_package()}${fsm.fsmClassname}* const fsm)
@@ -93,17 +93,11 @@ state##_${name}, \
         (state)->Entry(fsm); \
     }
 ]],
-            _def_no_entry = [[
-#define ENTRY_STATE(state)
-]],
             _def_exit = [[
 #define EXIT_STATE(state) \
     if ((state)->Exit != NULL) { \
         (state)->Exit(fsm); \
     }
-]],
-            _def_no_exit = [[
-#define EXIT_STATE(state)
 ]],
             _transition_base_state = "${isntDefault?_transition_base_state_if()}\n",
             _transition_base_state_if = [[
@@ -244,7 +238,8 @@ ${doesEndPop?_guard_end_pop()}
 const struct ${fsm._package?_package()}${fsm.context}State* endState = getState(fsm);
 
 ]],
-                _guard_exit = [[
+                _guard_exit = "${fsm.hasExitActions?_guard_exit_if()}\n",
+                _guard_exit_if = [[
 ${generator.debugLevel1?_guard_debug_before_exit()}
 EXIT_STATE(getState(fsm));
 ${generator.debugLevel1?_guard_debug_after_exit()}
@@ -292,7 +287,8 @@ pushState(fsm, &${fsm._package?_package()}${pushStateName; format=scoped});
                 _guard_pop = [[
 popState(fsm);
 ]],
-                _guard_entry = [[
+                _guard_entry = "${fsm.hasEntryActions?_guard_entry_if()}\n",
+                _guard_entry_if = [[
 ${generator.debugLevel1?_guard_debug_before_entry()}
 ENTRY_STATE(getState(fsm));
 ${generator.debugLevel1?_guard_debug_after_entry()}
