@@ -377,8 +377,8 @@ function method:_build_template ()
  * from file : ${fsm.filename}
  */
 
-#ifndef _H_${generator.targetfileBase; format=guarded}
-#define _H_${generator.targetfileBase; format=guarded}
+#ifndef _${generator.targetfileBase; format=guarded}_H
+#define _${generator.targetfileBase; format=guarded}_H
 
 ${_preample()}
 ${_base_state()}
