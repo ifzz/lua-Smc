@@ -137,8 +137,8 @@ ${defaultState.transitions/_transition()}
 
 ${fsm.transitions/_transition_def()}
 #define ${fullName; format=scoped}_Default ${map.defaultState?_default_state_name()!_base_state_name()}_Default
-#define ${fullName; format=scoped}_Entry NULL
-#define ${fullName; format=scoped}_Exit NULL
+${fsm.hasEntryActions?_entry_init()}
+${fsm.hasExitActions?_exit_init()}
 ${entryActions?_state_entry()}
 ${exitActions?_state_exit()}
 ${transitions/_transition()}
@@ -146,6 +146,12 @@ ${transitions/_transition()}
 const struct ${fsm._package?_package()}${fsm.context}State ${fullName; format=scoped} = { POPULATE_STATE(${fullName; format=scoped}), ${map.nextStateId}${generator.debugLevel0?_state_init_debug()} };
 ]],
             _state_init_debug = [[, "${fullName}"]],
+            _entry_init = [[
+#define ${fullName; format=scoped}_Entry NULL
+]],
+            _exit_init = [[
+#define ${fullName; format=scoped}_Exit NULL
+]],
             _transition_def = "${isntDefault?_transition_def_if()}\n",
             _transition_def_if = [[
 #define ${fullName; format=scoped}_${name} ${map.defaultState?_default_state_name()!_base_state_name()}_${name}
