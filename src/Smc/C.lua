@@ -97,11 +97,14 @@ if (getDebugFlag(fsm) != 0) {
 }
 ]],
         _map = [[
+
+/* map: ${name} */
 ${defaultState?_map_default_state()}
 ${states/_state()}
 ]],
             _map_default_state = [[
 
+/* default state */
 ${fsm.transitions/_transition_default_def()}
 #define ${fsm._package?_package()}${name}_DefaultState_Default ${fsm._package?_package()}${fsm.context}State_Default
 ${defaultState.transitions/_transition()}
@@ -112,6 +115,7 @@ ${defaultState.transitions/_transition()}
 ]],
         _state = [[
 
+/* state: ${fullName} */
 ${fsm.transitions/_transition_def()}
 #define ${fullName; format=scoped}_Default ${map.defaultState?_default_state_name()!_base_state_name()}_Default
 ${transitions/_transition()}
