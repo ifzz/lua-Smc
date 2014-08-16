@@ -49,8 +49,7 @@ ${fsm.source}
 ${fsm.includeList/_include()}
 #include "${generator.headerDirectory?_headerDirectory()!_srcDirectory()}${generator.targetfileBase}.h"
 
-#define getOwner(fsm) \
-    (fsm)->_owner
+#define getOwner(fsm) (fsm)->_owner
 ]],
             _include = [[
 #include ${it}
@@ -58,12 +57,6 @@ ${fsm.includeList/_include()}
             _srcDirectory = "${generator.srcDirectory}",
             _headerDirectory = "${generator.headerDirectory}",
         _base_state = [[
-
-#define POPULATE_STATE(state) \
-    ${fsm.hasEntryActions?_populate_entry()}
-    ${fsm.hasExitActions?_populate_exit()}
-    ${fsm.transitions/_populate_transition()}
-    state##_Default
 
 ${fsm.hasEntryActions?_def_entry()}
 
@@ -77,16 +70,6 @@ static void ${fsm._package?_package()}${fsm.context}State_Default(struct ${fsm._
 }
 ]],
             _package = "${fsm._package; format=scoped}_",
-            _populate_entry = [[
-state##_Entry, \
-]],
-            _populate_exit = [[
-state##_Exit, \
-]],
-            _populate_transition = "${isntDefault?_populate_transition_if()}\n",
-            _populate_transition_if = [[
-state##_${name}, \
-]],
             _def_entry = [[
 #define ENTRY_STATE(state) \
     if ((state)->Entry != NULL) { \
@@ -137,7 +120,13 @@ ${entryActions?_state_entry()}
 ${exitActions?_state_exit()}
 ${transitions/_transition()}
 
-const struct ${fsm._package?_package()}${fsm.context}State ${fullName; format=scoped} = { POPULATE_STATE(${fullName; format=scoped}), ${map.nextStateId}${generator.debugLevel0?_state_init_debug()} };
+const struct ${fsm._package?_package()}${fsm.context}State ${fullName; format=scoped} = {
+    ${fsm.hasEntryActions?_populate_entry()}
+    ${fsm.hasExitActions?_populate_exit()}
+    ${fsm.transitions/_populate_transition()}
+    ${fullName; format=scoped}_Default,
+    ${map.nextStateId}${generator.debugLevel0?_state_init_debug()}
+};
 ]],
             _state_init_debug = [[, "${fullName}"]],
             _entry_init = [[
@@ -171,6 +160,16 @@ void ${fullName; format=scoped}_Exit(struct ${fsm._package?_package()}${fsm.fsmC
 
     ${exitActions/_action()}
 }
+]],
+            _populate_entry = [[
+${fullName; format=scoped}_Entry,
+]],
+            _populate_exit = [[
+${fullName; format=scoped}_Exit,
+]],
+            _populate_transition = "${isntDefault?_populate_transition_if()}\n",
+            _populate_transition_if = [[
+${fullName; format=scoped}_${name},
 ]],
         _transition = [[
 
