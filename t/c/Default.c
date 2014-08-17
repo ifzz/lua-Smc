@@ -19,4 +19,3 @@ int main(int argc, char *argv[])
     Sm_TestClass_Evt3(&thisContext, 2);
     return EXIT_SUCCESS;
 }
-

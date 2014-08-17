@@ -3,7 +3,7 @@
 #define NDEBUG
 #include "TestClass.h"
 
-const struct Sm_TestClassState* stack[4];
+const struct Sm_TestClassState *stack[4];
 
 void Sm_TestClass_Init(struct Sm_TestClass *this)
 {
@@ -19,14 +19,14 @@ void Sm_TestClass_NoArg(struct Sm_TestClass *this)
     printf("No arg\n");
 }
 
-void Sm_TestClass_Output(struct Sm_TestClass *this, const char* str)
+void Sm_TestClass_Output(struct Sm_TestClass *this, const char *str)
 {
     printf("%s\n", str);
 }
 
-void Sm_TestClass_Output_n(struct Sm_TestClass *this, const char* str1, int n, const char *str2)
+void Sm_TestClass_Output_n(struct Sm_TestClass *this, const char *str1, int n, const char *str2)
 {
-    printf("%s%d%s\n", str1, n , str2);
+    printf("%s%d%s\n", str1, n, str2);
 }
 
 int Sm_TestClass_isOk(struct Sm_TestClass *this)
