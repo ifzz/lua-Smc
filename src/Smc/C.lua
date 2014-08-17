@@ -114,11 +114,9 @@ ${defaultState.transitions/_transition()}
 
 ${fsm.transitions/_transition_def()}
 #define ${fullName; format=scoped}_Default ${map.defaultState?_default_state_name()!_base_state_name()}_Default
-${fsm.hasEntryActions?_entry_init()}
-${fsm.hasExitActions?_exit_init()}
+${transitions/_transition()}
 ${entryActions?_state_entry()}
 ${exitActions?_state_exit()}
-${transitions/_transition()}
 
 const struct ${fsm._package?_package()}${fsm.context}State ${fullName; format=scoped} = {
     ${fsm.hasEntryActions?_populate_entry()}
@@ -129,12 +127,6 @@ const struct ${fsm._package?_package()}${fsm.context}State ${fullName; format=sc
 };
 ]],
             _state_init_debug = [[, "${fullName}"]],
-            _entry_init = [[
-#define ${fullName; format=scoped}_Entry NULL
-]],
-            _exit_init = [[
-#define ${fullName; format=scoped}_Exit NULL
-]],
             _transition_def = "${isntDefault?_transition_def_if()}\n",
             _transition_def_if = [[
 #define ${fullName; format=scoped}_${name} ${map.defaultState?_default_state_name()!_base_state_name()}_${name}
@@ -143,7 +135,6 @@ const struct ${fsm._package?_package()}${fsm.context}State ${fullName; format=sc
                 _base_state_name = "${fsm._package?_package()}${fsm.context}State",
             _state_entry = [[
 
-#undef ${fullName; format=scoped}_Entry
 void  ${fullName; format=scoped}_Entry(struct ${fsm._package?_package()}${fsm.fsmClassname}* const fsm)
 {
     struct ${fsm._package?_package()}${fsm.context}* ctxt = getOwner(fsm);
@@ -153,7 +144,6 @@ void  ${fullName; format=scoped}_Entry(struct ${fsm._package?_package()}${fsm.fs
 ]],
             _state_exit = [[
 
-#undef ${fullName; format=scoped}_Exit
 void ${fullName; format=scoped}_Exit(struct ${fsm._package?_package()}${fsm.fsmClassname}* const fsm)
 {
     struct ${fsm._package?_package()}${fsm.context}* ctxt = getOwner(fsm);
@@ -161,16 +151,14 @@ void ${fullName; format=scoped}_Exit(struct ${fsm._package?_package()}${fsm.fsmC
     ${exitActions/_action()}
 }
 ]],
-            _populate_entry = [[
-${fullName; format=scoped}_Entry,
-]],
-            _populate_exit = [[
-${fullName; format=scoped}_Exit,
-]],
+            _populate_entry = "${entryActions?_populate_fct_entry()!_populate_no_entry()}",
+            _populate_fct_entry = "${fullName; format=scoped}_Entry,",
+            _populate_no_entry = "NULL, /* Entry */",
+            _populate_exit = "${exitActions?_populate_fct_exit()!_populate_no_exit()}",
+            _populate_fct_exit = "${fullName; format=scoped}_Exit,",
+            _populate_no_exit = "NULL, /* Exit */",
             _populate_transition = "${isntDefault?_populate_transition_if()}\n",
-            _populate_transition_if = [[
-${fullName; format=scoped}_${name},
-]],
+            _populate_transition_if = "${fullName; format=scoped}_${name},",
         _transition = [[
 
 #undef ${state.fullName; format=scoped}_${name}
