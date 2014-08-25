@@ -65,13 +65,13 @@ token = lexer:nextToken()
 is( token._type, 'DONE_SUCCESS' )
 
 
-lexer = do_parse " word _word2 scope::word3 $inner$ value:type "
+lexer = do_parse " word _word-2 scope::word3 $inner$ value:type "
 token = lexer:nextToken()
 is( token._type, 'WORD', "words" )
 is( token.value, 'word' )
 token = lexer:nextToken()
 is( token._type, 'WORD')
-is( token.value, '_word2' )
+is( token.value, '_word_2' )
 token = lexer:nextToken()
 is( token._type, 'WORD')
 is( token.value, 'scope::word3' )

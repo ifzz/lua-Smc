@@ -158,6 +158,7 @@ Word
     alpha           nil                 {addToToken();}
     digit           nil                 {addToToken();}
     underscore      nil                 {addToToken();}
+    dash            nil                 {addToToken('_');}
     period          nil                 {addToToken();}
     colon           Scope               {}
 

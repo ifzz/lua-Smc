@@ -92,6 +92,7 @@ function method:_build_transMethod ()
         [')'] = 'right_paren',
         ['*'] = 'asterisk',
         [','] = 'comma',
+        ['-'] = 'dash',
         ['.'] = 'period',
         ['/'] = 'slash',
         [':'] = 'colon',

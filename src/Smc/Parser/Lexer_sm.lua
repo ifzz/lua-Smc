@@ -28,6 +28,7 @@ LexerState.back_slash = _default
 LexerState.colon = _default
 LexerState.comma = _default
 LexerState.commentDone = _default
+LexerState.dash = _default
 LexerState.digit = _default
 LexerState.dollar = _default
 LexerState.double_quote = _default
@@ -869,6 +870,23 @@ function TokenMap.Word:underscore (fsm)
     ctxt:addToToken()
     if fsm.debugFlag then
         fsm.debugStream:write("EXIT TRANSITION : TokenMap::Word.underscore()\n")
+    end
+    fsm:setState(endState)
+end
+
+function TokenMap.Word:dash (fsm)
+    local ctxt = fsm.owner
+    if fsm.debugFlag then
+        fsm.debugStream:write("LEAVING STATE   : TokenMap::Word\n")
+    end
+    local endState = fsm:getState()
+    if fsm.debugFlag then
+        fsm.debugStream:write("ENTER TRANSITION: TokenMap::Word.dash()\n")
+    end
+    fsm:clearState()
+    ctxt:addToToken('_')
+    if fsm.debugFlag then
+        fsm.debugStream:write("EXIT TRANSITION : TokenMap::Word.dash()\n")
     end
     fsm:setState(endState)
 end
@@ -2010,6 +2028,12 @@ end
 function LexerContext:commentDone ()
     self.transition = 'commentDone'
     self:getState():commentDone(self)
+    self.transition = nil
+end
+
+function LexerContext:dash ()
+    self.transition = 'dash'
+    self:getState():dash(self)
     self.transition = nil
 end
 
