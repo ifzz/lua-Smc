@@ -468,18 +468,11 @@ extern void ${fsm._package?_package()}${fsm.fsmClassname}_${name}(struct ${fsm._
 
 #define ${fsm._package?_package()}${fsm.fsmClassname}_${name}(fsm${parameters/_parameter_context_def()}) \
     assert(getState(fsm) != NULL); \
-    ${generator.debugLevel0?_transition_debug_set()}
-    getState(fsm)->${name}((fsm)${parameters/_parameter_context_call()});${generator.debugLevel0?_backslash()}
-    ${generator.debugLevel0?_transition_debug_unset()}
+    setTransition((fsm), "${name}"); \
+    getState(fsm)->${name}((fsm)${parameters/_parameter_context_call()}); \
+    setTransition((fsm), NULL)
 ]],
                 _parameter_context_def = ", ${name}",
                 _parameter_context_call = ", (${name})",
-                _backslash = [[ \]],
-                _transition_debug_set = [[
-setTransition((fsm), "${name}"); \
-]],
-                _transition_debug_unset = [[
-setTransition((fsm), NULL);
-]],
     }
 end
