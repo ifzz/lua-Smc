@@ -446,7 +446,7 @@ ${fsm.transitions/_transition_context_proto()}
 #else
 #define ${fsm._package?_package()}${fsm.fsmClassname}_Init(fsm, owner) \
     FSM_INIT((fsm), &${fsm._package?_package()}${fsm.startState; format=scoped}); \
-    (fsm)->_owner = (owner);
+    (fsm)->_owner = (owner)
 ${fsm.hasEntryActions?_enter_start()}
 ${fsm.transitions/_transition_context()}
 #endif
@@ -461,7 +461,7 @@ extern void ${fsm._package?_package()}${fsm.fsmClassname}_${name}(struct ${fsm._
             _enter_start = [[
 
 #define ${fsm._package?_package()}${fsm.fsmClassname}_EnterStartState(fsm) \
-    ENTRY_STATE(getState(fsm));
+    ENTRY_STATE(getState(fsm))
 ]],
             _transition_context = "${isntDefault?_transition_context_if()}\n",
             _transition_context_if = [[
