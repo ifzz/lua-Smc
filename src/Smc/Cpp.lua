@@ -81,8 +81,6 @@ void ${fsm.context}State::Default(${fsm.fsmClassname}& context)
 {
     ${generator.debugLevel0?_base_state_debug()}
     ${generator.noExceptionFlag?_assert_transition_undefined()!_throw_transition_undefined_exception()}
-
-    return;
 }
 ]],
             _map_base_state = "${states/_state_base_state()}\n",
@@ -126,7 +124,6 @@ if (stateId < MIN_INDEX || stateId > MAX_INDEX)
 void ${fsm.context}State::${name}(${fsm.fsmClassname}& context${parameters/_parameter_proto()})
 {
     Default(context);
-    return;
 }
 ]],
                 _parameter_proto = ", ${_type} ${name}",
@@ -171,7 +168,6 @@ void ${map.name}_${name}::Entry(${fsm.fsmClassname}& context)
     ${fsm.context}& ctxt(context.getOwner());
 
     ${entryActions/_action()}
-    return;
 }
 ]],
             _state_exit = [[
@@ -181,7 +177,6 @@ void ${map.name}_${name}::Exit(${fsm.fsmClassname}& context)
     ${fsm.context}& ctxt(context.getOwner());
 
     ${exitActions/_action()}
-    return;
 }
 ]],
         _transition = [[
@@ -192,8 +187,6 @@ void ${state.map.name}_${state.name}::${name}(${fsm.fsmClassname}& context${para
     ${generator.debugLevel0?_transition_debug()}
     ${guards/_guard()}
     ${needFinalElse?_transition_else()}
-
-    return;
 }
 ]],
             _transition_ctxt = [[
@@ -599,7 +592,6 @@ public:
     virtual void enterStartState()
     {
         getState().Entry(*this);
-        return;
     };
 
     ${fsm.context}& getOwner() const
