@@ -22,9 +22,13 @@ my @opt = (
     '-noc',
     '-noc -g0',
     '-noc -g1',
-#    '-noexcept',
-#    '-nostream',
+    '-nostream',
     '-serial',
+    '-noexcept',
+    '-noexcept -g0',
+    '-noexcept -g1',
+    '-noexcept -nostream',
+    '-noexcept -serial',
     '-cast dynamic_cast',
     '-cast static_cast',
     '-cast reinterpret_cast',
@@ -46,7 +50,7 @@ $Util::config = {
 };
 
 my %re = (
-    TransUndef  => 'statemap::TransitionUndefinedException',
+    TransUndef  => '(statemap::TransitionUndefinedException|Assertion)',
 );
 
 sub test_smc_cpp {

@@ -80,7 +80,7 @@ ${fsm.transitions/_transition_base_state()}
 void ${fsm.context}State::Default(${fsm.fsmClassname}& context)
 {
     ${generator.debugLevel0?_base_state_debug()}
-    ${generator.noExceptionFlag?_assert()!_throw_transition_undefined_exception()}
+    ${generator.noExceptionFlag?_assert_transition_undefined()!_throw_transition_undefined_exception()}
 
     return;
 }
@@ -99,10 +99,7 @@ const int ${fsm.fsmClassname}::MAX_INDEX = sizeof(${fsm.fsmClassname}::_States)/
 
 ${fsm.context}State& ${fsm.fsmClassname}::valueOf(int stateId)
 {
-    if (stateId < MIN_INDEX || stateId > MAX_INDEX)
-    {
-        ${generator.noExceptionFlag?_assert()!_base_state_serial_exception()}
-    }
+    ${generator.noExceptionFlag?_assert_base_state_serial()!_throw_base_state_serial_exception()}
 
     return (static_cast<${fsm.context}State&>(*(_States[stateId])));
 }
@@ -111,13 +108,17 @@ ${fsm.context}State& ${fsm.fsmClassname}::valueOf(int stateId)
                     _state_base_state_serial = [[
 &${map.name}::${name}
 ]],
-                _assert = [[
-assert(1==0);
+                _assert_base_state_serial = [[
+assert(stateId >= MIN_INDEX);
+assert(stateId <= MAX_INDEX);
 ]],
-                _base_state_serial_exception = [[
-throw (
-    IndexOutOfBoundsException(
-        stateId, MIN_INDEX, MAX_INDEX));
+                _throw_base_state_serial_exception = [[
+if (stateId < MIN_INDEX || stateId > MAX_INDEX)
+{
+    throw (
+        IndexOutOfBoundsException(
+            stateId, MIN_INDEX, MAX_INDEX));
+}
 ]],
             _transition_base_state = "${isntDefault?_transition_base_state_if()}\n",
             _transition_base_state_if = [[
@@ -143,6 +144,9 @@ std::ostream& str = context.getDebugStream();
 
 str << "TRANSITION   : Default()"
     << std::endl;
+]],
+            _assert_transition_undefined = [[
+assert(false);
 ]],
             _throw_transition_undefined_exception = [[
 throw (
@@ -605,10 +609,7 @@ public:
 
     ${fsm.context}State& getState() const
     {
-        if (_state == NULL)
-        {
-            ${generator.noExceptionFlag?_assert()!_throw_state_undefined_exception()}
-        }
+        ${generator.noExceptionFlag?_assert_state_undefined()!_throw_state_undefined_exception()}
 
         return (${generator.castType}<${fsm.context}State&>(*_state));
     };
@@ -621,11 +622,14 @@ public:
     ${generator.serialFlag?_context_private_serial()}
 };
 ]],
-            _assert = [[
-assert(1 == 0);
+            _assert_state_undefined = [[
+assert(_state != NULL);
 ]],
             _throw_state_undefined_exception = [[
-throw statemap::StateUndefinedException();
+if (_state == NULL)
+{
+    throw statemap::StateUndefinedException();
+}
 ]],
             _transition_context = "${isntDefault?_transition_context_if()}\n",
             _transition_context_if = [[
