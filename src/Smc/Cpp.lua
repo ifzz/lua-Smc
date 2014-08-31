@@ -131,7 +131,7 @@ void ${fsm.context}State::${name}(${fsm.fsmClassname}& context${parameters/_para
 ]],
                 _parameter_proto = ", ${_type} ${name}",
             _base_state_debug = [[
-if (context.getDebugFlag() == true)
+if (context.getDebugFlag())
 {
     ${generator.noStreamFlag?_base_state_debug_no_stream()!_base_state_debug_stream()}
 }
@@ -201,7 +201,7 @@ ${fsm.context}& ctxt(context.getOwner());
 ]],
             _transition_debug = [[
 
-if (context.getDebugFlag() == true)
+if (context.getDebugFlag())
 {
     ${generator.noStreamFlag?_transition_debug_no_stream()!_transition_debug_stream()}
 }
@@ -267,7 +267,7 @@ ${generator.debugLevel1?_guard_debug_before_exit()}
 ${generator.debugLevel1?_guard_debug_after_exit()}
 ]],
                     _guard_debug_before_exit = [[
-if (context.getDebugFlag() == true)
+if (context.getDebugFlag())
 {
     ${generator.noStreamFlag?_guard_debug_before_exit_no_stream()!_guard_debug_before_exit_stream()}
 }
@@ -282,7 +282,7 @@ str << "BEFORE EXIT     : ${transition.state.fullName}.Exit()"
     << std::endl;
 ]],
                     _guard_debug_after_exit = [[
-if (context.getDebugFlag() == true)
+if (context.getDebugFlag())
 {
     ${generator.noStreamFlag?_guard_debug_after_exit_no_stream()!_guard_debug_after_exit_stream()}
 }
@@ -297,7 +297,7 @@ str << "AFTER EXIT      : ${transition.state.fullName}.Exit()"
     << std::endl;
 ]],
                 _guard_debug_enter = [[
-if (context.getDebugFlag() == true)
+if (context.getDebugFlag())
 {
     ${generator.noStreamFlag?_guard_debug_enter_no_stream()!_guard_debug_enter_stream()}
 }
@@ -349,7 +349,7 @@ ${doesPop?_guard_pop()}
 ${doesEntry?_guard_entry()}
 ]],
                 _guard_debug_exit = [[
-if (context.getDebugFlag() == true)
+if (context.getDebugFlag())
 {
     ${generator.noStreamFlag?_guard_debug_exit_no_stream()!_guard_debug_exit_stream()}
 }
@@ -382,7 +382,7 @@ ${generator.debugLevel1?_guard_debug_before_entry()}
 ${generator.debugLevel1?_guard_debug_after_entry()}
 ]],
                     _guard_debug_before_entry = [[
-if (context.getDebugFlag() == true)
+if (context.getDebugFlag())
 {
     ${generator.noStreamFlag?_guard_debug_before_entry_no_stream()!_guard_debug_before_entry_stream()}
 }
@@ -397,7 +397,7 @@ str << "BEFORE ENTRY    : ${transition.state.fullName}.Entry()"
     << std::endl;
 ]],
                     _guard_debug_after_entry = [[
-if (context.getDebugFlag() == true)
+if (context.getDebugFlag())
 {
     ${generator.noStreamFlag?_guard_debug_after_entry_no_stream()!_guard_debug_after_entry_stream()}
 }
