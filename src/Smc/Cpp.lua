@@ -93,13 +93,13 @@ ${fsm.context}State* ${fsm.fsmClassname}::_States[] =
     ${fsm.maps/_map_base_state_serial(); separator=",\n"}
 };
 const int ${fsm.fsmClassname}::MIN_INDEX = 0;
-const int ${fsm.fsmClassname}::MAX_INDEX = sizeof(${fsm.fsmClassname}::_States)/sizeof(${fsm.context}State*) - 1;
+const int ${fsm.fsmClassname}::MAX_INDEX = (sizeof(${fsm.fsmClassname}::_States) / sizeof(${fsm.context}State*)) - 1;
 
 ${fsm.context}State& ${fsm.fsmClassname}::valueOf(int stateId)
 {
     ${generator.noExceptionFlag?_assert_base_state_serial()!_throw_base_state_serial_exception()}
 
-    return (static_cast<${fsm.context}State&>(*(_States[stateId])));
+    return static_cast<${fsm.context}State&>(*(_States[stateId]));
 }
 ]],
                 _map_base_state_serial = "${states/_state_base_state_serial(); separator=',\\n'}",
@@ -111,7 +111,7 @@ assert(stateId >= MIN_INDEX);
 assert(stateId <= MAX_INDEX);
 ]],
                 _throw_base_state_serial_exception = [[
-if (stateId < MIN_INDEX || stateId > MAX_INDEX)
+if ((stateId < MIN_INDEX) || (stateId > MAX_INDEX))
 {
     throw (
         IndexOutOfBoundsException(
@@ -256,7 +256,7 @@ ${fsm.context}State& endState = context.getState();
 ]],
                 _guard_exit = [[
 ${generator.debugLevel1?_guard_debug_before_exit()}
-(context.getState()).Exit(context);
+context.getState().Exit(context);
 ${generator.debugLevel1?_guard_debug_after_exit()}
 ]],
                     _guard_debug_before_exit = [[
@@ -371,7 +371,7 @@ context.popState();
 ]],
                 _guard_entry = [[
 ${generator.debugLevel1?_guard_debug_before_entry()}
-(context.getState()).Entry(context);
+context.getState().Entry(context);
 ${generator.debugLevel1?_guard_debug_after_entry()}
 ]],
                     _guard_debug_before_entry = [[
@@ -596,14 +596,14 @@ public:
 
     ${fsm.context}& getOwner() const
     {
-        return (_owner);
+        return _owner;
     };
 
     ${fsm.context}State& getState() const
     {
         ${generator.noExceptionFlag?_assert_state_undefined()!_throw_state_undefined_exception()}
 
-        return (${generator.castType}<${fsm.context}State&>(*_state));
+        return ${generator.castType}<${fsm.context}State&>(*_state);
     };
     ${fsm.transitions/_transition_context()}
     ${generator.serialFlag?_context_serial()}
@@ -629,7 +629,7 @@ if (_state == NULL)
 void ${name}(${parameters/_parameter_proto_context(); separator=", "})
 {
     ${generator.debugLevel0?_transition_debug_set()}
-    (getState()).${name}(*this${parameters/_parameter_call_context()});
+    getState().${name}(*this${parameters/_parameter_call_context()});
     ${generator.debugLevel0?_transition_debug_unset()}
 };
 ]],
