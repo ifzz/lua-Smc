@@ -581,12 +581,12 @@ public:
 
     ${fsm.fsmClassname}(${fsm.context}& owner)
     : FSMContext(${fsm.startState}),
-      _owner(owner)
+      _owner(&owner)
     {};
 
     ${fsm.fsmClassname}(${fsm.context}& owner, const statemap::State& state)
     : FSMContext(state),
-      _owner(owner)
+      _owner(&owner)
     {};
 
     virtual void enterStartState()
@@ -596,7 +596,7 @@ public:
 
     inline ${fsm.context}& getOwner() const
     {
-        return _owner;
+        return *_owner;
     };
 
     inline ${fsm.context}State& getState() const
@@ -610,7 +610,7 @@ public:
 
  private:
 
-    ${fsm.context}& _owner;
+    ${fsm.context}* _owner;
     ${generator.serialFlag?_context_private_serial()}
 };
 ]],
