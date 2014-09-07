@@ -594,12 +594,12 @@ public:
         getState().Entry(*this);
     };
 
-    ${fsm.context}& getOwner() const
+    inline ${fsm.context}& getOwner() const
     {
         return _owner;
     };
 
-    ${fsm.context}State& getState() const
+    inline ${fsm.context}State& getState() const
     {
         ${generator.noExceptionFlag?_assert_state_undefined()!_throw_state_undefined_exception()}
 
@@ -626,7 +626,7 @@ if (_state == NULL)
             _transition_context = "${isntDefault?_transition_context_if()}\n",
             _transition_context_if = [[
 
-void ${name}(${parameters/_parameter_proto_context(); separator=", "})
+inline void ${name}(${parameters/_parameter_proto_context(); separator=", "})
 {
     ${generator.debugLevel0?_transition_debug_set()}
     getState().${name}(*this${parameters/_parameter_call_context()});
