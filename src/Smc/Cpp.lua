@@ -498,7 +498,7 @@ class ${fsm.context}State :
 {
 public:
 
-    ${fsm.context}State(const char *name, int stateId)
+    ${fsm.context}State(const char * const name, const int stateId)
     : statemap::State(name, stateId)
     {};
 
@@ -531,7 +531,7 @@ class ${name}_DefaultState :
 {
 public:
 
-    ${name}_DefaultState(const char *name, int stateId)
+    ${name}_DefaultState(const char * const name, const int stateId)
     : ${fsm.context}State(name, stateId)
     {};
 
@@ -554,7 +554,7 @@ class ${map.name}_${name} :
 {
 public:
 
-    ${map.name}_${name}(const char *name, int stateId)
+    ${map.name}_${name}(const char * const name, const int stateId)
     : ${map.name}_DefaultState(name, stateId)
     {};
 
@@ -594,12 +594,12 @@ public:
         getState().Entry(*this);
     };
 
-    inline ${fsm.context}& getOwner() const
+    inline ${fsm.context}& getOwner()
     {
         return *_owner;
     };
 
-    inline ${fsm.context}State& getState() const
+    inline ${fsm.context}State& getState()
     {
         ${generator.noExceptionFlag?_assert_state_undefined()!_throw_state_undefined_exception()}
 
