@@ -440,8 +440,8 @@ function method:_build_template ()
  * from file : ${fsm.filename}
  */
 
-#ifndef _H_${generator.targetfileBase; format=guarded}
-#define _H_${generator.targetfileBase; format=guarded}
+#ifndef ${generator.targetfileBase; format=guarded}_H
+#define ${generator.targetfileBase; format=guarded}_H
 
 ${_preample()}
 ${fsm._package; format=open_pkg}
@@ -451,7 +451,7 @@ ${fsm.maps/_map()}
 ${_context()}
 ${fsm._package; format=close_pkg}
 
-#endif // _H_${generator.targetfileBase; format=guarded}
+#endif // ${generator.targetfileBase; format=guarded}_H
 
 /*
  * Local variables:
