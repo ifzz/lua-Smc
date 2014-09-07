@@ -564,13 +564,13 @@ public:
 };
 ]],
             _state_entry = [[
-void Entry(${fsm.fsmClassname}&);
+virtual void Entry(${fsm.fsmClassname}&);
 ]],
             _state_exit = [[
-void Exit(${fsm.fsmClassname}&);
+virtual void Exit(${fsm.fsmClassname}&);
 ]],
         _transition = [[
-void ${name}(${fsm.fsmClassname}& context${parameters/_parameter_proto()});
+virtual void ${name}(${fsm.fsmClassname}& context${parameters/_parameter_proto()});
 ]],
         _context = [[
 
