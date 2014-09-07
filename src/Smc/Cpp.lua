@@ -579,7 +579,7 @@ class ${fsm.fsmClassname} :
 {
 public:
 
-    ${fsm.fsmClassname}(${fsm.context}& owner)
+    explicit ${fsm.fsmClassname}(${fsm.context}& owner)
     : FSMContext(${fsm.startState}),
       _owner(&owner)
     {};
