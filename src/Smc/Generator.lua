@@ -20,7 +20,7 @@ has.debugLevel      = { is = 'rw', isa = 'number', default = -1 }
 has.serialFlag      = { is = 'rw', isa = 'boolean', default = false }
 has.noExceptionFlag = { is = 'rw', isa = 'boolean', default = false }
 has.noCatchFlag     = { is = 'rw', isa = 'boolean', default = false }
-has.noStreamsFlag   = { is = 'rw', isa = 'boolean', default = false }
+has.noStreamFlag    = { is = 'rw', isa = 'boolean', default = false }
 has.reflectFlag     = { is = 'rw', isa = 'boolean', default = false }
 has.syncFlag        = { is = 'rw', isa = 'boolean', default = false }
 has.genericFlag     = { is = 'rw', isa = 'boolean', default = false }

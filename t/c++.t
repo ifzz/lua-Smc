@@ -22,12 +22,12 @@ my @opt = (
     '-noc',
     '-noc -g0',
     '-noc -g1',
-    '-nostream',
+    '-nostream -g1',
     '-serial',
     '-noexcept',
     '-noexcept -g0',
     '-noexcept -g1',
-    '-noexcept -nostream',
+    '-noexcept -nostream -g0',
     '-noexcept -serial',
     '-cast dynamic_cast',
     '-cast static_cast',
@@ -62,7 +62,7 @@ sub test_smc_cpp {
     unlink("t/c++/Sm/TestClassContext.h");
     Util::do_fsm('c++/Sm', $test);
     system("${Util::smc} -c++ ${options} -d t/c++/Sm t/c++/Sm/TestClass.sm");
-    my @gcc = ('g++', '--std=c++98', '-Wall', '-Wextra', '-Wno-unused-parameter');
+    my @gcc = ('g++', '--std=c++98', '-Wall', '-Wextra', '-Wno-unused-parameter', '-DTRACE=printf');
     my $out = Util::run(@gcc, "-I runtime/c++ -I . -o t/c++/${test} t/c++/${test}.cpp t/c++/Sm/TestClass.cpp t/c++/Sm/TestClassContext.cpp");
     diag($out) if $out;
     my $trace = $options =~ /-g0/ && ${Util::smc} !~ /\.jar/ ? 'g0' : '';
