@@ -38,26 +38,32 @@
 //	C. W. Rapp
 //
 // RCS ID
-// $Id: statemap.h,v 1.15 2009/11/24 20:42:39 cwrapp Exp $
+// $Id: statemap.h,v 1.19 2014/09/06 19:31:28 fperrad Exp $
 //
 // CHANGE LOG
 // (See bottom of file)
 //
 
 #if (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 1))
+#if defined(SMC_USES_IOSTREAMS)
 #include <iostream>
+#endif // SMC_USES_IOSTREAMS
 #if defined(SMC_NO_EXCEPTIONS)
 #include <cassert>
 #endif // SMC_NO_EXCEPTIONS
 #include <cstdio>
 #elif defined(WIN32)
+#if defined(SMC_USES_IOSTREAMS)
 #include <iostream>
-#include <windows.h>
+#endif // SMC_USES_IOSTREAMS
 #if defined(SMC_NO_EXCEPTIONS)
 #include <cassert>
 #endif // SMC_NO_EXCEPTIONS
+#include <windows.h>
 #else
+#if defined(SMC_USES_IOSTREAMS)
 #include <iostream.h>
+#endif // SMC_USES_IOSTREAMS
 #if defined(SMC_NO_EXCEPTIONS)
 #include <assert.h>
 #endif // SMC_NO_EXCEPTIONS
@@ -65,8 +71,8 @@
 #endif
 #if ! defined(SMC_NO_EXCEPTIONS)
 #include <stdexcept>
-#include <cstring>
 #endif
+#include <cstring>
 
 // Limit names to 100 ASCII characters.
 // Why 100? Because it is a round number.
@@ -290,8 +296,8 @@ namespace statemap
     protected:
     private:
 
-		char *_state;
-		char *_transition;
+        char *_state;
+        char *_transition;
     };
 
     // This class is thrown when a state ID is either less than
@@ -379,8 +385,8 @@ namespace statemap
     protected:
     private:
 
-		int _index;
-		int _minIndex;
+        int _index;
+        int _minIndex;
         int _maxIndex;
     };
 #endif // !SMC_NO_EXCEPTIONS
@@ -632,6 +638,15 @@ namespace statemap
         // Sets the current state to the specified state.
         void setState(const State& state)
         {
+            // clearState() is not called when a transition has
+            // no actions, so set _previous_state to _state in
+            // that situation. We know clearState() was not
+            // called when _state is not null.
+            if (_state != NULL)
+            {
+                _previous_state = _state;
+            }
+
             _state = const_cast<State *>(&state);
 
             if (_debug_flag == true)
@@ -682,6 +697,7 @@ namespace statemap
                 _state_stack = new_entry;
             }
 
+            _previous_state = _state;
             _state = const_cast<State *>(&state);
 
             if (_debug_flag == true)
@@ -713,6 +729,7 @@ namespace statemap
             }
 #endif // SMC_NO_EXCEPTIONS
 
+            _previous_state = _state;
             _state = _state_stack->getState();
             entry = _state_stack;
             _state_stack = _state_stack->getNext();
@@ -815,6 +832,18 @@ namespace statemap
 //
 // CHANGE LOG
 // $Log: statemap.h,v $
+// Revision 1.19  2014/09/06 19:31:28  fperrad
+// remove hard tab
+//
+// Revision 1.18  2013/07/14 14:32:36  cwrapp
+// check in for release 6.2.0
+//
+// Revision 1.17  2011/11/20 14:58:32  cwrapp
+// Check in for SMC v. 6.1.0
+//
+// Revision 1.16  2010/09/11 19:09:38  fperrad
+// remove \r from debug message
+//
 // Revision 1.15  2009/11/24 20:42:39  cwrapp
 // v. 6.0.1 update
 //
