@@ -66,6 +66,7 @@ unless (`ruby -v` =~ /^ruby/) {
     plan skip_all => 'no ruby';
 }
 plan tests => scalar(@Util::tests) * scalar(@opt);
+diag($Util::smc);
 
 for my $test (@Util::tests) {
     Util::test_smc_with_options('ruby/Sm', \&test_smc_ruby, $test, \@opt);

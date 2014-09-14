@@ -67,6 +67,7 @@ unless (`perl -version` =~ /^\nThis is perl/) {
     plan skip_all => 'no perl';
 }
 plan tests => scalar(@Util::tests) * scalar(@opt);
+diag($Util::smc);
 
 for my $test (@Util::tests) {
     Util::test_smc_with_options('perl/Sm', \&test_smc_perl, $test, \@opt);

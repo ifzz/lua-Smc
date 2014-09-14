@@ -67,6 +67,7 @@ unless (`python3 -V 2>&1` =~ /^Python/) {
     plan skip_all => 'no python3';
 }
 plan tests => scalar(@Util::tests) * scalar(@opt);
+diag($Util::smc);
 
 $ENV{PYTHONPATH} = './runtime/python:./t/python/Sm';
 

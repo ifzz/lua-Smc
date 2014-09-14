@@ -73,6 +73,7 @@ unless (`scalac -version 2>&1` =~ /^Scala/) {
     plan skip_all => 'no scala';
 }
 plan tests => scalar(@Util::tests) * scalar(@opt);
+diag($Util::smc);
 
 for my $test (@Util::tests) {
     Util::test_smc_with_options('scala/Sm', \&test_smc_scala, $test, \@opt);

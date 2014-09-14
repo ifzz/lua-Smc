@@ -69,6 +69,7 @@ unless (`groovy -v` =~ /^Groovy/) {
     plan skip_all => 'no groovy';
 }
 plan tests => scalar(@Util::tests) * scalar(@opt);
+diag($Util::smc);
 
 for my $test (@Util::tests) {
     Util::test_smc_with_options('groovy/Sm', \&test_smc_groovy, $test, \@opt);

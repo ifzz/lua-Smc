@@ -72,6 +72,7 @@ unless (`gcc --version 2>&1` =~ /^gcc/) {
     plan skip_all => 'no gcc';
 }
 plan tests => scalar(@Util::tests) * scalar(@opt);
+diag($Util::smc);
 
 for my $test (@Util::tests) {
     Util::test_smc_with_options('c/Sm', \&test_smc_c, $test, \@opt);

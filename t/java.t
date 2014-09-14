@@ -86,6 +86,7 @@ unless (`javac -version 2>&1` =~ /^javac/) {
     plan skip_all => 'no javac';
 }
 plan tests => scalar(@Util::tests) * scalar(@opt);
+diag($Util::smc);
 
 for my $test (@Util::tests) {
     Util::test_smc_with_options('java/Sm', \&test_smc_java, $test, \@opt);

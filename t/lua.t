@@ -66,8 +66,9 @@ my $version = qx{${Util::lua} -v 2>&1};
 unless ($version =~ /^Lua/) {
     plan skip_all => 'no lua';
 }
-diag($version);
 plan tests => scalar(@Util::tests) * scalar(@opt);
+diag($Util::smc);
+diag($version);
 
 for my $test (@Util::tests) {
     Util::test_smc_with_options('lua/Sm', \&test_smc_lua, $test, \@opt);

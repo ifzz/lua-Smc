@@ -67,6 +67,7 @@ unless (`php -v` =~ /^PHP/) {
     plan skip_all => 'no php';
 }
 plan tests => scalar(@Util::tests) * scalar(@opt);
+diag($Util::smc);
 
 for my $test (@Util::tests) {
     Util::test_smc_with_options('php/Sm', \&test_smc_php, $test, \@opt);

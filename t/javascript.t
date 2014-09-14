@@ -68,6 +68,7 @@ unless ($version =~ /^v\d\.\d+\.\d+/) {
     plan skip_all => 'no nodejs';
 }
 plan tests => scalar(@Util::tests) * scalar(@opt);
+diag($Util::smc);
 diag($version);
 
 for my $test (@Util::tests) {

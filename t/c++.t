@@ -82,6 +82,7 @@ unless (`g++ --version 2>&1` =~ /^g++/) {
     plan skip_all => 'no g++';
 }
 plan tests => scalar(@Util::tests) * scalar(@opt);
+diag($Util::smc);
 
 for my $test (@Util::tests) {
     Util::test_smc_with_options('c++/Sm', \&test_smc_cpp, $test, \@opt);

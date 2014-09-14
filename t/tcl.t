@@ -71,6 +71,7 @@ unless (`which tclsh` =~ /^\//) {
     plan skip_all => 'no tcl';
 }
 plan tests => scalar(@Util::tests) * scalar(@opt);
+diag($Util::smc);
 
 for my $test (@Util::tests) {
     Util::test_smc_with_options('tcl/Sm', \&test_smc_tcl, $test, \@opt);
