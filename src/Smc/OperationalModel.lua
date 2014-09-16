@@ -124,13 +124,13 @@ function method:_build_reflect ()
 end
 
 local StateId = 0
-function _get_nextStateId ()
+function _get_nextStateId (self)
     StateId = StateId + 1
     return StateId
 end
 
-function _get_index ()
-    return _get_nextStateId() - 1
+function _get_index (self)
+    return self._get_nextStateId() - 1
 end
 
 
