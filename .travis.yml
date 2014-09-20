@@ -1,23 +1,32 @@
 language: c
 
 env:
-  - LUA=lua5.1                  LUAVER=5.1
-  - LUA=lua5.2                  LUAVER=5.2
+  - LUASUFFIX=5.1 LUAVER=5.1
+  - LUASUFFIX=5.2 LUAVER=5.2
+  - LUASUFFIX=jit LUAVER=5.1
 
 # Tool setup.
 install:
-  - sudo apt-get install -qq lua5.1
-  - sudo apt-get install -qq lua5.2
-  - git clone git://github.com/fperrad/lua-TestMore.git
-  - sudo make -C lua-TestMore install LUAVER="$LUAVER"
-  - git clone git://github.com/fperrad/lua-Coat.git
-  - sudo make -C lua-Coat install LUAVER="$LUAVER"
-  - git clone git://github.com/fperrad/lua-CodeGen.git
-  - sudo make -C lua-CodeGen install LUAVER="$LUAVER"
+  - sudo apt-get install -qq lua5.1 liblua5.1-0-dev
+  - sudo apt-get install -qq lua5.2 liblua5.2-dev
+  - sudo apt-get install -qq luajit
+  - sudo ln -s /usr/bin/luajit-2.0.0-beta9 /usr/bin/luajit
+  - sudo rm /usr/bin/lua
+  - sudo ln -s /usr/bin/lua$LUASUFFIX /usr/bin/lua
+  - lua -v
+  - git clone git://github.com/keplerproject/luarocks.git
+  - cd luarocks
+  - ./configure --lua-version=$LUAVER --lua-suffix=$LUASUFFIX
+  - make
+  - sudo make install
+  - cd ..
+  - sudo luarocks install lua-testmore
+  - sudo luarocks install lua-coat
+  - sudo luarocks install lua-codegen
 
 # Build and test.
 script:
-  - make LUA="$LUA" unit_test
+  - make LUA=lua$LUASUFFIX unit_test
   - export LUA_PATH=";;./src/?.lua;./runtime/lua/?.lua;./t/lua/?.lua"
   - prove t/lua.t
   - prove t/c.t t/c++.t t/java.t t/perl.t t/python.t t/ruby.t
