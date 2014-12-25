@@ -9,6 +9,7 @@ our $lua = $ENV{LUA} || 'lua';
 #our $lua = 'luajit';
 our $smc = $ENV{SMC} || $lua . ' ./bin/smc';
 #our $smc = 'java -jar Smc.jar';
+#our $smc = 'src_c/smc';
 our $test_graph = !$ENV{TRAVIS} && 1;
 our $test_table = !$ENV{TRAVIS} && 0;
 our @tests = qw(
