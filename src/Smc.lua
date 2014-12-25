@@ -37,22 +37,22 @@ function method:_build_languages ()
     return {
         require('Smc.C').instance(),
         require('Smc.Cpp').instance(),
-        require('Smc.Csharp').instance(),
+--        require('Smc.Csharp').instance(),
         require('Smc.Graphviz').instance(),
         require('Smc.Groovy').instance(),
         require('Smc.Java').instance(),
         require('Smc.JavaScript').instance(),
         require('Smc.Lua').instance(),
-        require('Smc.ObjC').instance(),
-        require('Smc.Ooc').instance(),
+--        require('Smc.ObjC').instance(),
+--        require('Smc.Ooc').instance(),
         require('Smc.Perl').instance(),
         require('Smc.Php').instance(),
         require('Smc.Python').instance(),
         require('Smc.Ruby').instance(),
         require('Smc.Scala').instance(),
         require('Smc.Table').instance(),
-        require('Smc.Tcl').instance(),
-        require('Smc.Vb').instance(),
+--        require('Smc.Tcl').instance(),
+--        require('Smc.Vb').instance(),
     }
 end
 
@@ -104,7 +104,7 @@ function method:usage ()
 	-verbose  Output more compiler messages.
 	-help     Print this message to standard out and exit
 	-sync     Synchronize access to transition methods
-	          (use with -csharep, -java, -groovy, -scala and -vb only)
+	          (use with -java, -groovy and -scala only)
 	-noex     Do not generate C++ exception throws
 	          (use with -c++ only)
 	-nocatch  Do not generate try/catch/rethrow code (not recommended)
@@ -112,9 +112,9 @@ function method:usage ()
 	-return   Smc.main() returns, not exits
 	          (use this option with ANT)
 	-reflect  Generate reflection code
-	          (use with -csharp, -groovy, -java, -js, -lua, -perl, -php, -python, -ruby, -scala, -tcl and -vb only)
+	          (use with -groovy, -java, -js, -lua, -perl, -php, -python, -ruby and -scala only)
 	-generic  Use generic collections
-	          (use with -csharp, -java or -vb and -reflect only)
+	          (use with -java and -reflect only)
 	-generic7 Use Java 7 generic collections
 	-cast     Use this C++ cast type
 	          (use with -c++ only)
