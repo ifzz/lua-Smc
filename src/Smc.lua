@@ -16,9 +16,9 @@ local tonumber = tonumber
 
 singleton 'Smc'
 
-_VERSION = "0.0.1"
+_VERSION = "0.1.0"
 _DESCRIPTION = "lua-Smc : the State Machine Compiler in lua-Coat"
-_COPYRIGHT = "Copyright (c) 2010 Francois Perrad"
+_COPYRIGHT = "Copyright (c) 2010-2014 Francois Perrad"
 
 require 'Smc.Parser'
 require 'Smc.OperationalModel'
@@ -479,8 +479,7 @@ end
 function method:main (args)
     local function die (msg)
         print(_NAME .. " has experienced a fatal error.")
-        print(_NAME .. " " .. _VERSION .. " (" .. _G._VERSION
-           .. " & lua-Coat " .. require 'Coat'._VERSION .. ")")
+        print(_NAME .. " " .. _VERSION)
         print(msg)
         os.exit(1)
     end -- die
