@@ -33,6 +33,10 @@ after install :
 
     $ smc
 
+### Windows binary
+
+a standalone executable for Windows (LuaJIT based) is available : [smc.exe](https://github.com/fperrad/lua-Smc/blob/master/src_c/win/smc.exe)
+
 ### Command Line Options
 
 - -dump : Ascii output
