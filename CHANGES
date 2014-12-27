@@ -1,4 +1,7 @@
 Revision history for lua-Smc
 
+0.1.0  Sat Dec 27 12:30:00 2014
+	first release (aligned with SMC 6.4.0)
+
 0.0.1
 	initial commit

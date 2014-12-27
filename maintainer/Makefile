@@ -37,7 +37,7 @@ templates: \
     Table_template.png
 
 clean:
-	rm *.dot *.png
+	rm -f *.dot *.png
 
 Model.dot:
 	$(COAT2DOT) --note="Semantic Model" Smc.Model Smc.OperationalModel > $@

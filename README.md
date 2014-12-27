@@ -6,22 +6,14 @@ lua-Smc -- EXPERIMENTAL
 
 a port on [lua-Coat](http://fperrad.github.com/lua-Coat)
 
-Install
--------
-
-    $ sudo apt-get install lua5.1
-    $ sudo apt-get install luarocks
-    $ sudo apt-get install graphviz
-    $ sudo luarocks install luacov
-    $ sudo luarocks install lua-coat
-    $ sudo luarocks install lua-codegen
-    $ sudo apt-get install libtest-harness-perl        # or cpan Test::Harness
-    $ sudo apt-get install libtest-longstring-perl     # or cpan Test::LongString
-
-    $ make install
-
 Delta vs [SMC](http://smc.sourceforge.net/)
 -------------------------------------------
+
+### Install
+
+with [luarocks](http://luarocks.org/)
+
+    $ luarocks install lua-smc
 
 ### Compiler Command
 
@@ -35,7 +27,8 @@ after install :
 
 ### Windows binary
 
-a standalone executable for Windows (LuaJIT based) is available : [smc.exe](https://github.com/fperrad/lua-Smc/blob/master/src_c/win/smc.exe)
+a standalone executable for Windows ([LuaJIT](http://luajit.org/) based) is available :
+[smc.exe](https://github.com/fperrad/lua-Smc/blob/master/src_c/win/smc.exe)
 
 ### Command Line Options
 
