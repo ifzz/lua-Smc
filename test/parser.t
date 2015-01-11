@@ -211,7 +211,7 @@ Default
 is( get_messages(parser), '', "map without transition" )
 ok( fsm.isValid )
 is( #fsm.maps, 1 )
-local map = fsm.maps[1]
+map = fsm.maps[1]
 is( map.name, 'Map1' )
 is( map.fsm, fsm )
 ok( map.defaultState )
@@ -262,11 +262,11 @@ StartState
 is( get_messages(parser), '', "actions with args" )
 ok( fsm.isValid )
 is( #fsm.maps, 1 )
-local map = fsm.maps[1]
+map = fsm.maps[1]
 is( #map.states, 1 )
-local state = map.states[1]
+state = map.states[1]
 is( #state.entryActions, 5 )
-local action = state.entryActions[1]
+action = state.entryActions[1]
 is( action.name, 'action1' )
 is( action.propertyFlag, false )
 is( #action.arguments, 0 )
@@ -332,9 +332,9 @@ is( get_messages(parser), [=[
 ]=], "transitions" )
 nok( fsm.isValid )
 is( #fsm.maps, 1 )
-local map = fsm.maps[1]
+map = fsm.maps[1]
 is( #map.states, 1 )
-local state = map.states[1]
+state = map.states[1]
 is( state.name, 'StartState' )
 is( #state.transitions, 5 )
 local transition = state.transitions[1]
@@ -408,15 +408,15 @@ StartState
 is( get_messages(parser), '', "guards & actions" )
 ok( fsm.isValid )
 is( #fsm.maps, 1 )
-local map = fsm.maps[1]
+map = fsm.maps[1]
 is( #map.states, 1 )
-local state = map.states[1]
+state = map.states[1]
 is( state.name, 'StartState' )
 is( #state.transitions, 2 )
-local transition = state.transitions[1]
+transition = state.transitions[1]
 is( transition.name, 'event' )
 is( #transition.parameters, 1 )
-local param = transition.parameters[1]
+param = transition.parameters[1]
 is( param.name, 'param' )
 is( param._type, 'type' )
 is( #transition.guards, 3 )
@@ -432,7 +432,7 @@ is( guard.transType, 'TRANS_SET' )
 is( guard.condition, 'guard' )
 is( guard.endState, 'nil' )
 is( #guard.actions, 1 )
-local action = guard.actions[1]
+action = guard.actions[1]
 is( action.name, 'action1' )
 guard = transition.guards[3]
 is( guard.transition, transition )
@@ -530,15 +530,15 @@ Start
 is( get_messages(parser), '', "transitions with destination" )
 ok( fsm.isValid )
 is( #fsm.maps, 2 )
-local map = fsm.maps[1]
+map = fsm.maps[1]
 is( map.name, 'Map1' )
 is( #map.states, 2 )
-local state = map.states[1]
+state = map.states[1]
 is( state.name, 'StartState' )
 is( #state.transitions, 6 )
-local transition = state.transitions[1]
+transition = state.transitions[1]
 is( transition.name, 'event1' )
-local guard = transition.guards[1]
+guard = transition.guards[1]
 is( guard.transType, 'TRANS_SET' )
 is( guard.endState, 'nil' )
 is( guard.pushState, nil )
@@ -637,7 +637,7 @@ is( get_messages(parser), [=[
 ]=], "source" )
 ok( fsm.isValid )
 is( #fsm.maps, 2 )
-local map = fsm.maps[1]
+map = fsm.maps[1]
 is( map.name, 'Map1' )
 map = fsm.maps[2]
 is( map.name, 'Map2' )

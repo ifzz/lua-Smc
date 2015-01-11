@@ -133,6 +133,10 @@ test:
 testclean:
 	-rm -f t/lua/*.png t/lua/*.dot t/lua/*.html t/lua/*Context.lua t/lua/*.sm
 
+luacheck:
+	luacheck --no-global --no-unused-args src --ignore tostring
+	luacheck --no-global test/*.t
+
 coverage:
 	rm -f luacov.stats.out luacov.report.out
 	prove --exec="$(LUA) -lluacov" test/*.t

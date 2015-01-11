@@ -213,7 +213,6 @@ function override:generate(fsm, stream)
                 return t
             end  -- pushState
 
-            local defaultState = map.defaultState
             local needEnd = false
             for _, state in ipairs(map.states) do
                 for _, trans in ipairs(state.transitions) do
