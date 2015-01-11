@@ -1,8 +1,6 @@
 
 require 'Coat'
 
-local string = require 'string'
-
 abstract 'Smc.Generator'
 
 has.suffix          = { is = 'ro', isa = 'string', required = true }

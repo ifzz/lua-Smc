@@ -2,8 +2,6 @@
 require 'Coat'
 local CodeGen = require 'CodeGen'
 
-local ipairs = ipairs
-
 singleton 'Smc.Ooc'
 extends 'Smc.Language'
 

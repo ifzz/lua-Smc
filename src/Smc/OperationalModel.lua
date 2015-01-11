@@ -360,7 +360,6 @@ end
 
 function method:_build_pushMapName ()
     local pushStateName = self.pushState
-    local pushMapName;
     local idx = pushStateName:find "::"
     if idx then
         return pushStateName:sub(1, idx-1)

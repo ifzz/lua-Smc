@@ -8,7 +8,6 @@ local table = require 'table'
 local string = require 'string'
 local error = error
 local ipairs = ipairs
-local pairs = pairs
 local pcall = pcall
 local print = print
 local require = require
@@ -190,7 +189,6 @@ function method:parseArgs (args)
         end
         self.targetLanguage = targetLanguage
 
-        local suffix
         local opt = {}
         local i = 1
         while i <= #args do
