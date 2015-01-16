@@ -1,6 +1,6 @@
 
-lua-Smc -- EXPERIMENTAL
-=======================
+lua-Smc
+=======
 
 [![Build Status](https://travis-ci.org/fperrad/lua-Smc.png)](https://travis-ci.org/fperrad/lua-Smc)
 
