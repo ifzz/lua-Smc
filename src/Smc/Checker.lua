@@ -142,7 +142,7 @@ function method:checkGuard (guard)
     end
 
     if transType == 'TRANS_PUSH' then
-        local endState = guard.pushState
+        endState = guard.pushState
         if not findState(endState) then
             self:_error("no such state as \"" .. endState .. "\".", guard.filename, guard.lineno)
         end

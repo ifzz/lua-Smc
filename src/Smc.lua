@@ -517,8 +517,8 @@ function method:main (args)
             if self.verbose then
                 print "[parsing completed]"
             end
-            for _, msg in ipairs(parser.messages) do
-                print(tostring(msg))
+            for _, message in ipairs(parser.messages) do
+                print(tostring(message))
             end
             if not fsm then
                 exit()
@@ -531,8 +531,8 @@ function method:main (args)
                 print("[checking " .. filename .. "]")
             end
             checker:checkFSM(fsm)
-            for _, msg in ipairs(checker.messages) do
-                print(tostring(msg))
+            for _, message in ipairs(checker.messages) do
+                print(tostring(message))
             end
             if self._dump then
                 require 'Smc.Dumper'
@@ -544,7 +544,7 @@ function method:main (args)
                 generator:generate(fsm, io.stdout)
             elseif checker.isValid then
 --                self:generateCode(fsm)
-                local r, msg = pcall(self.generateCode, self, fsm)
+                r, msg = pcall(self.generateCode, self, fsm)
                 if not r then
                     die(msg)
                 end
