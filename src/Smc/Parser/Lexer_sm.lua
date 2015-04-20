@@ -9,7 +9,7 @@ local strformat = require 'string'.format
 
 local statemap = require 'statemap'
 
-_ENV = nil
+local _ENV = nil
 
 local LexerState = statemap.State.class()
 

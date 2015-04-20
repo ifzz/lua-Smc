@@ -134,7 +134,7 @@ testclean:
 	-rm -f t/lua/*.png t/lua/*.dot t/lua/*.html t/lua/*Context.lua t/lua/*.sm
 
 luacheck:
-	luacheck --codes --no-global src --ignore 211/tostring --ignore 212/self --ignore 212/token --ignore 542
+	luacheck --codes --no-global src --ignore 211/_ENV 211/tostring 212/self 212/token 542
 	luacheck --no-global test/*.t
 
 coverage:

@@ -46,7 +46,7 @@ local statemap = require 'statemap'
 ${fsm.source}
 ${fsm.importList/_import()}
 
-_ENV = nil
+local _ENV = nil
 ]],
             _local_pcall = [[
 local pcall = pcall
