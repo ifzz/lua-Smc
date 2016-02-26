@@ -134,7 +134,6 @@ def ${name}(self, fsm${parameters/_parameter_proto()}):
     ${guards/_guard()}
     ${needFinalElse?_transition_else()}
 ]],
-            _parameter_proto = ", ${name}",
             _transition_ctxt = [[
 ctxt = fsm.getOwner()
 ]],
