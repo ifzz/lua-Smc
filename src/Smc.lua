@@ -69,12 +69,15 @@ function method:usage ()
             '-suffix suffix',
             '-g | -g0 | -g1',
             '-nostreams',
+            '-crtp',
             '-version',
             '-verbose',
             '-help',
             '-sync',
             '-noex',
             '-nocatch',
+            '-stack max-stack-depth',
+            '-protocol',
             '-serial',
             '-return',
             '-reflect',
@@ -99,6 +102,8 @@ function method:usage ()
 	          (level 0 output plus state Entry and Exit actions)
 	-nostreams Do not use C++ iostreams
 	          (use with -c++ only)
+	-crtp     Generate state machine using CRTP
+	          (use with -c++ only)
 	-version  Print smc version information to standard out and exit
 	-verbose  Output more compiler messages.
 	-help     Print this message to standard out and exit
@@ -107,6 +112,11 @@ function method:usage ()
 	-noex     Do not generate C++ exception throws
 	          (use with -c++ only)
 	-nocatch  Do not generate try/catch/rethrow code (not recommended)
+	-stack    Specifies a fixed-size state stack
+	          using no dynamic memory allocation.
+	          (use with -c++ only)
+	-protocol FSM context extends a @protocol and referenced via protocol
+	          (use with -objc only)
 	-serial   Generate serialization code
 	-return   Smc.main() returns, not exits
 	          (use this option with ANT)
@@ -226,6 +236,13 @@ function method:parseArgs (args)
                 else
                     error( targetLanguage.name .. " does not support -cast.")
                 end
+            elseif v:match'-crtp' then
+                if targetLanguage.crtpFlag then
+                    opt.crtpFlag = true
+                    consumed = 1
+                else
+                    error( targetLanguage.name .. " does not support -crtp.")
+                end
             elseif v == '-d' then
                 local vv = args[i+1]
                 if vv:match'^-' then
@@ -332,6 +349,24 @@ function method:parseArgs (args)
                 else
                     error( targetLanguage.name .. " does not support -nostream.")
                 end
+            elseif v:match'-stac' then
+                local sz = tonumber(args[i+1])
+                if sz == nil then
+                    error "-stack not followed by integer"
+                end
+                if targetLanguage.stackFlag then
+                    opt.stackSize = sz
+                    consumed = 2
+                else
+                    error( targetLanguage.name .. " does not support -stack.")
+                end
+            elseif v:match'-proto' then
+                if targetLanguage.protocolFlag then
+                    opt.protocolFlag = true
+                    consumed = 1
+                else
+                    error( targetLanguage.name .. " does not support -protocol.")
+                end
             elseif v:match'-ret' then
                 self._return = true
                 consumed = 1
@@ -426,10 +461,13 @@ function method:generateCode (fsm)
         noExceptionFlag = option.noExceptionFlag,
         noCatchFlag     = option.noCatchFlag,
         noStreamFlag    = option.noStreamFlag,
+        crtpFlag        = option.crtpFlag,
+        stateStackSize  = option.stackSize,
         reflectFlag     = option.reflectFlag,
         syncFlag        = option.syncFlag,
         genericFlag     = option.genericFlag,
         java7Flag       = option.java7Flag,
+        useProtocolFlag = option.protocolFlag,
     }
     local dir = dirname(fsm.filename) .. "/"
     local filename = generator:sourceFile(option.srcDirectory or dir, fsm.targetFilename, option.suffix)
@@ -457,9 +495,12 @@ function method:generateCode (fsm)
             noExceptionFlag = option.noExceptionFlag,
             noCatchFlag     = option.noCatchFlag,
             noStreamFlag    = option.noStreamFlag,
+            crtpFlag        = option.crtpFlag,
+            stateStackSize  = option.stackSize,
             reflectFlag     = option.reflectFlag,
             syncFlag        = option.syncFlag,
             genericFlag     = option.genericFlag,
+            useProtocolFlag = option.protocolFlag,
         }
         filename = generator:sourceFile(option.headerDirectory or dir, fsm.targetFilename)
         f, msg = io.open(filename, "w")

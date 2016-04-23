@@ -11,6 +11,7 @@ has.suffix          = { '+', default = '_sm' }
 has.generator       = { '+', isa = 'Smc.ObjC.Generator',
                         default = function () return require 'Smc.ObjC.Generator' end }
 has.headerFlag      = { '+', default = true }
+has.protocolFlag    = { '+', default = true }
 
 class 'Smc.ObjC.Generator'
 extends 'Smc.Generator'

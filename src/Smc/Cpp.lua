@@ -12,10 +12,12 @@ has.suffix          = { '+', default = '_sm' }
 has.generator       = { '+', isa = 'Smc.Cpp.Generator',
                         default = function () return require 'Smc.Cpp.Generator' end }
 has.castFlag        = { '+', default = true }
+has.crtpFlag        = { '+', default = true }
 has.headerFlag      = { '+', default = true }
 has.noExceptionFlag = { '+', default = true }
 has.noStreamFlag    = { '+', default = true }
 has.serialFlag      = { '+', default = true }
+has.stackFlag       = { '+', default = true }
 has.castTypes       = { '+', default = {
                                 dynamic_cast = true,
                                 static_cast = true,

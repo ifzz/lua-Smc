@@ -21,13 +21,16 @@ has.dumpFlag        = { is = 'ro', isa = 'boolean', default = true }
 -- flags not supported by all languages
 has.accessFlag      = { is = 'ro', isa = 'boolean' }
 has.castFlag        = { is = 'ro', isa = 'boolean' }
+has.crtpFlag        = { is = 'ro', isa = 'boolean' }
 has.genericFlag     = { is = 'ro', isa = 'boolean' }
 has.java7Flag       = { is = 'ro', isa = 'boolean' }
 has.glevelFlag      = { is = 'ro', isa = 'boolean' }
 has.headerFlag      = { is = 'ro', isa = 'boolean' }
 has.noExceptionFlag = { is = 'ro', isa = 'boolean' }
 has.noStreamFlag    = { is = 'ro', isa = 'boolean' }
+has.protocolFlag    = { is = 'ro', isa = 'boolean' }
 has.reflectFlag     = { is = 'ro', isa = 'boolean' }
+has.stackFlag       = { is = 'ro', isa = 'boolean' }
 has.serialFlag      = { is = 'ro', isa = 'boolean' }
 has.syncFlag        = { is = 'ro', isa = 'boolean' }
 

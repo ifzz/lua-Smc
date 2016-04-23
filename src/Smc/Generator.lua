@@ -19,10 +19,13 @@ has.serialFlag      = { is = 'rw', isa = 'boolean', default = false }
 has.noExceptionFlag = { is = 'rw', isa = 'boolean', default = false }
 has.noCatchFlag     = { is = 'rw', isa = 'boolean', default = false }
 has.noStreamFlag    = { is = 'rw', isa = 'boolean', default = false }
+has.crtpFlag        = { is = 'rw', isa = 'boolean', default = false }
+has.stateStackSize  = { is = 'rw', isa = 'number', default = -1 }
 has.reflectFlag     = { is = 'rw', isa = 'boolean', default = false }
 has.syncFlag        = { is = 'rw', isa = 'boolean', default = false }
 has.genericFlag     = { is = 'rw', isa = 'boolean', default = false }
 has.java7Flag       = { is = 'rw', isa = 'boolean', default = false }
+has.useProtocolFlag = { is = 'rw', isa = 'boolean', default = false }
 
 has.stream          = { is = 'rw', isa = 'file' }
 has.guardCount      = { is = 'rw', isa = 'number' }
