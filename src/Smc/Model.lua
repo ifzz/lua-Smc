@@ -22,8 +22,7 @@ has.source          = { is = 'rw', isa = 'string' }
 has.startState      = { is = 'rw', isa = 'string' }
 has.context         = { is = 'rw', isa = 'string' }
 has.fsmClassname    = { is = 'rw', isa = 'string', lazy = true,
-                        default = function (self) return self.name .. 'Context' end,
-                        trigger = function (self, value) self.targetFilename = value end }
+                        default = function (self) return self.name .. 'Context' end }
 has._package        = { is = 'rw', isa = 'string' }
 has.accessLevel     = { is = 'rw', isa = 'string' }
 has.header          = { is = 'rw', isa = 'string' }

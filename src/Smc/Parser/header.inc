@@ -22,6 +22,10 @@ Start
         FsmClassName
         {}
 
+    FSM_FILE_NAME(token)
+        FsmFileName
+        {}
+
     HEADER_FILE(token)
         HeaderFile
         {}
@@ -143,6 +147,21 @@ FsmClassName
         }
 }
 
+FsmFileName
+{
+    WORD(token)
+        Start
+        {
+            setFsmFileName(token);
+        }
+
+    Default
+        StartError
+        {
+            _error("Missing name after %FsmFileName.");
+        }
+}
+
 Import
     Entry
     {
@@ -201,6 +220,10 @@ StartError
 
     FSM_CLASS_NAME(token)
         FsmClassName
+        {}
+
+    FSM_FILE_NAME(token)
+        FsmFileName
         {}
 
     HEADER_FILE(token)

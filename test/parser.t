@@ -5,7 +5,7 @@ require 'Smc.Parser'
 require 'Test.More'
 require 'io'
 
-plan(214)
+plan(215)
 
 local function do_parse (text, lang)
     local f = io.tmpfile()
@@ -61,6 +61,7 @@ raw code
 %class          AppClass
 %start          StartMap::StartState
 %fsmclass       AppContext
+%fsmfile        AppFile
 
 %package        net.sf.smc
 %access         private
@@ -84,6 +85,7 @@ is( fsm.source, "\nraw code\n" )
 is( fsm.context, 'AppClass' )
 is( fsm.startState, 'StartMap::StartState' )
 is( fsm.fsmClassname, 'AppContext' )
+is( fsm.targetFilename, 'AppFile' )
 is( fsm._package, 'net.sf.smc' )
 is( fsm.accessLevel, 'private' )
 is( fsm.header, 'AppClass.h' )

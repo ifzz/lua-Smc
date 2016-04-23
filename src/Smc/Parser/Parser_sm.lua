@@ -32,6 +32,7 @@ ParserState.EOD = _default
 ParserState.EQUAL = _default
 ParserState.EXIT = _default
 ParserState.FSM_CLASS_NAME = _default
+ParserState.FSM_FILE_NAME = _default
 ParserState.HEADER_FILE = _default
 ParserState.IMPORT = _default
 ParserState.INCLUDE_FILE = _default
@@ -138,6 +139,21 @@ function HeaderMap.Start:FSM_CLASS_NAME (fsm, token)
         fsm.debugStream:write("EXIT TRANSITION : HeaderMap::Start.FSM_CLASS_NAME(token)\n")
     end
     fsm:setState(HeaderMap.FsmClassName)
+    fsm:getState():Entry(fsm)
+end
+
+function HeaderMap.Start:FSM_FILE_NAME (fsm, token)
+    if fsm.debugFlag then
+        fsm.debugStream:write("LEAVING STATE   : HeaderMap::Start\n")
+    end
+    fsm:getState():Exit(fsm)
+    if fsm.debugFlag then
+        fsm.debugStream:write("ENTER TRANSITION: HeaderMap::Start.FSM_FILE_NAME(token)\n")
+    end
+    if fsm.debugFlag then
+        fsm.debugStream:write("EXIT TRANSITION : HeaderMap::Start.FSM_FILE_NAME(token)\n")
+    end
+    fsm:setState(HeaderMap.FsmFileName)
     fsm:getState():Entry(fsm)
 end
 
@@ -465,7 +481,45 @@ function HeaderMap.FsmClassName:Default (fsm)
     fsm:getState():Entry(fsm)
 end
 
-HeaderMap.Import = HeaderMap.DefaultState:new('HeaderMap::Import', 8)
+HeaderMap.FsmFileName = HeaderMap.DefaultState:new('HeaderMap::FsmFileName', 8)
+
+function HeaderMap.FsmFileName:WORD (fsm, token)
+    local ctxt = fsm.owner
+    if fsm.debugFlag then
+        fsm.debugStream:write("LEAVING STATE   : HeaderMap::FsmFileName\n")
+    end
+    fsm:getState():Exit(fsm)
+    if fsm.debugFlag then
+        fsm.debugStream:write("ENTER TRANSITION: HeaderMap::FsmFileName.WORD(token)\n")
+    end
+    fsm:clearState()
+    ctxt:setFsmFileName(token)
+    if fsm.debugFlag then
+        fsm.debugStream:write("EXIT TRANSITION : HeaderMap::FsmFileName.WORD(token)\n")
+    end
+    fsm:setState(HeaderMap.Start)
+    fsm:getState():Entry(fsm)
+end
+
+function HeaderMap.FsmFileName:Default (fsm)
+    local ctxt = fsm.owner
+    if fsm.debugFlag then
+        fsm.debugStream:write("LEAVING STATE   : HeaderMap::FsmFileName\n")
+    end
+    fsm:getState():Exit(fsm)
+    if fsm.debugFlag then
+        fsm.debugStream:write("ENTER TRANSITION: HeaderMap::FsmFileName.Default()\n")
+    end
+    fsm:clearState()
+    ctxt:_error("Missing name after %FsmFileName.")
+    if fsm.debugFlag then
+        fsm.debugStream:write("EXIT TRANSITION : HeaderMap::FsmFileName.Default()\n")
+    end
+    fsm:setState(HeaderMap.StartError)
+    fsm:getState():Entry(fsm)
+end
+
+HeaderMap.Import = HeaderMap.DefaultState:new('HeaderMap::Import', 9)
 
 function HeaderMap.Import:Entry (fsm)
     local ctxt = fsm.owner
@@ -490,7 +544,7 @@ function HeaderMap.Import:SOURCE (fsm, token)
     fsm:getState():Entry(fsm)
 end
 
-HeaderMap.Declare = HeaderMap.DefaultState:new('HeaderMap::Declare', 9)
+HeaderMap.Declare = HeaderMap.DefaultState:new('HeaderMap::Declare', 10)
 
 function HeaderMap.Declare:Entry (fsm)
     local ctxt = fsm.owner
@@ -515,7 +569,7 @@ function HeaderMap.Declare:SOURCE (fsm, token)
     fsm:getState():Entry(fsm)
 end
 
-HeaderMap.Access = HeaderMap.DefaultState:new('HeaderMap::Access', 10)
+HeaderMap.Access = HeaderMap.DefaultState:new('HeaderMap::Access', 11)
 
 function HeaderMap.Access:Entry (fsm)
     local ctxt = fsm.owner
@@ -540,7 +594,7 @@ function HeaderMap.Access:SOURCE (fsm, token)
     fsm:getState():Entry(fsm)
 end
 
-HeaderMap.StartError = HeaderMap.DefaultState:new('HeaderMap::StartError', 11)
+HeaderMap.StartError = HeaderMap.DefaultState:new('HeaderMap::StartError', 12)
 
 function HeaderMap.StartError:SOURCE (fsm, token)
     local ctxt = fsm.owner
@@ -602,6 +656,21 @@ function HeaderMap.StartError:FSM_CLASS_NAME (fsm, token)
         fsm.debugStream:write("EXIT TRANSITION : HeaderMap::StartError.FSM_CLASS_NAME(token)\n")
     end
     fsm:setState(HeaderMap.FsmClassName)
+    fsm:getState():Entry(fsm)
+end
+
+function HeaderMap.StartError:FSM_FILE_NAME (fsm, token)
+    if fsm.debugFlag then
+        fsm.debugStream:write("LEAVING STATE   : HeaderMap::StartError\n")
+    end
+    fsm:getState():Exit(fsm)
+    if fsm.debugFlag then
+        fsm.debugStream:write("ENTER TRANSITION: HeaderMap::StartError.FSM_FILE_NAME(token)\n")
+    end
+    if fsm.debugFlag then
+        fsm.debugStream:write("EXIT TRANSITION : HeaderMap::StartError.FSM_FILE_NAME(token)\n")
+    end
+    fsm:setState(HeaderMap.FsmFileName)
     fsm:getState():Entry(fsm)
 end
 
@@ -726,7 +795,7 @@ end
 
 MapsMap.DefaultState = ParserState:new('MapsMap::DefaultState', -1)
 
-MapsMap.MapStart = MapsMap.DefaultState:new('MapsMap::MapStart', 12)
+MapsMap.MapStart = MapsMap.DefaultState:new('MapsMap::MapStart', 13)
 
 function MapsMap.MapStart:MAP_NAME (fsm, token)
     if fsm.debugFlag then
@@ -761,7 +830,7 @@ function MapsMap.MapStart:Default (fsm)
     fsm:getState():Entry(fsm)
 end
 
-MapsMap.MapStartError = MapsMap.DefaultState:new('MapsMap::MapStartError', 13)
+MapsMap.MapStartError = MapsMap.DefaultState:new('MapsMap::MapStartError', 14)
 
 function MapsMap.MapStartError:MAP_NAME (fsm, token)
     if fsm.debugFlag then
@@ -790,7 +859,7 @@ function MapsMap.MapStartError:Default (fsm)
     end
 end
 
-MapsMap.MapName = MapsMap.DefaultState:new('MapsMap::MapName', 14)
+MapsMap.MapName = MapsMap.DefaultState:new('MapsMap::MapName', 15)
 
 function MapsMap.MapName:WORD (fsm, token)
     local ctxt = fsm.owner
@@ -846,7 +915,7 @@ function MapsMap.MapName:Default (fsm)
     fsm:setState(endState)
 end
 
-MapsMap.MapStates = MapsMap.DefaultState:new('MapsMap::MapStates', 15)
+MapsMap.MapStates = MapsMap.DefaultState:new('MapsMap::MapStates', 16)
 
 function MapsMap.MapStates:EOD (fsm, token)
     if fsm.debugFlag then
@@ -900,7 +969,7 @@ function MapsMap.MapStates:Default (fsm)
     fsm:getState():Entry(fsm)
 end
 
-MapsMap.MapStatesError = MapsMap.DefaultState:new('MapsMap::MapStatesError', 16)
+MapsMap.MapStatesError = MapsMap.DefaultState:new('MapsMap::MapStatesError', 17)
 
 function MapsMap.MapStatesError:EOD (fsm, token)
     if fsm.debugFlag then
@@ -965,7 +1034,7 @@ function MapsMap.MapStatesError:Default (fsm)
     end
 end
 
-MapsMap.States = MapsMap.DefaultState:new('MapsMap::States', 17)
+MapsMap.States = MapsMap.DefaultState:new('MapsMap::States', 18)
 
 function MapsMap.States:EOD (fsm, token)
     local ctxt = fsm.owner
@@ -1098,7 +1167,7 @@ function MapsMap.States:Default (fsm)
     fsm:setState(endState)
 end
 
-MapsMap.StateStart = MapsMap.DefaultState:new('MapsMap::StateStart', 18)
+MapsMap.StateStart = MapsMap.DefaultState:new('MapsMap::StateStart', 19)
 
 function MapsMap.StateStart:ENTRY (fsm, token)
     if fsm.debugFlag then
@@ -1165,7 +1234,7 @@ function MapsMap.StateStart:Default (fsm)
     fsm:getState():Entry(fsm)
 end
 
-MapsMap.StateStartError = MapsMap.DefaultState:new('MapsMap::StateStartError', 19)
+MapsMap.StateStartError = MapsMap.DefaultState:new('MapsMap::StateStartError', 20)
 
 function MapsMap.StateStartError:ENTRY (fsm, token)
     if fsm.debugFlag then
@@ -1226,7 +1295,7 @@ function MapsMap.StateStartError:Default (fsm)
     end
 end
 
-MapsMap.TransEnd = MapsMap.DefaultState:new('MapsMap::TransEnd', 20)
+MapsMap.TransEnd = MapsMap.DefaultState:new('MapsMap::TransEnd', 21)
 
 function MapsMap.TransEnd:transitionsDone (fsm)
     local ctxt = fsm.owner
@@ -1246,7 +1315,7 @@ function MapsMap.TransEnd:transitionsDone (fsm)
     fsm:getState():Entry(fsm)
 end
 
-MapsMap.EntryStart = MapsMap.DefaultState:new('MapsMap::EntryStart', 21)
+MapsMap.EntryStart = MapsMap.DefaultState:new('MapsMap::EntryStart', 22)
 
 function MapsMap.EntryStart:LEFT_BRACE (fsm, token)
     local ctxt = fsm.owner
@@ -1286,7 +1355,7 @@ function MapsMap.EntryStart:Default (fsm)
     fsm:getState():Entry(fsm)
 end
 
-MapsMap.EntryEnd = MapsMap.DefaultState:new('MapsMap::EntryEnd', 22)
+MapsMap.EntryEnd = MapsMap.DefaultState:new('MapsMap::EntryEnd', 23)
 
 function MapsMap.EntryEnd:actionsDone (fsm)
     local ctxt = fsm.owner
@@ -1321,7 +1390,7 @@ function MapsMap.EntryEnd:actionsError (fsm)
     fsm:getState():Entry(fsm)
 end
 
-MapsMap.ExitStart = MapsMap.DefaultState:new('MapsMap::ExitStart', 23)
+MapsMap.ExitStart = MapsMap.DefaultState:new('MapsMap::ExitStart', 24)
 
 function MapsMap.ExitStart:LEFT_BRACE (fsm, token)
     local ctxt = fsm.owner
@@ -1361,7 +1430,7 @@ function MapsMap.ExitStart:Default (fsm)
     fsm:getState():Entry(fsm)
 end
 
-MapsMap.ExitEnd = MapsMap.DefaultState:new('MapsMap::ExitEnd', 24)
+MapsMap.ExitEnd = MapsMap.DefaultState:new('MapsMap::ExitEnd', 25)
 
 function MapsMap.ExitEnd:actionsDone (fsm)
     local ctxt = fsm.owner
@@ -1398,7 +1467,7 @@ end
 
 TransitionsMap.DefaultState = ParserState:new('TransitionsMap::DefaultState', -1)
 
-TransitionsMap.Start = TransitionsMap.DefaultState:new('TransitionsMap::Start', 25)
+TransitionsMap.Start = TransitionsMap.DefaultState:new('TransitionsMap::Start', 26)
 
 function TransitionsMap.Start:RIGHT_BRACE (fsm, token)
     if fsm.debugFlag then
@@ -1451,7 +1520,7 @@ function TransitionsMap.Start:Default (fsm)
     fsm:getState():Entry(fsm)
 end
 
-TransitionsMap.TransError = TransitionsMap.DefaultState:new('TransitionsMap::TransError', 26)
+TransitionsMap.TransError = TransitionsMap.DefaultState:new('TransitionsMap::TransError', 27)
 
 function TransitionsMap.TransError:RIGHT_BRACE (fsm, token)
     local ctxt = fsm.owner
@@ -1501,7 +1570,7 @@ function TransitionsMap.TransError:Default (fsm)
     end
 end
 
-TransitionsMap.TransStart = TransitionsMap.DefaultState:new('TransitionsMap::TransStart', 27)
+TransitionsMap.TransStart = TransitionsMap.DefaultState:new('TransitionsMap::TransStart', 28)
 
 function TransitionsMap.TransStart:LEFT_PAREN (fsm, token)
     local ctxt = fsm.owner
@@ -1642,7 +1711,7 @@ function TransitionsMap.TransStart:Default (fsm)
     fsm:getState():Entry(fsm)
 end
 
-TransitionsMap.TransStartError = TransitionsMap.DefaultState:new('TransitionsMap::TransStartError', 28)
+TransitionsMap.TransStartError = TransitionsMap.DefaultState:new('TransitionsMap::TransStartError', 29)
 
 function TransitionsMap.TransStartError:LEFT_PAREN (fsm, token)
     local ctxt = fsm.owner
@@ -1792,7 +1861,7 @@ function TransitionsMap.TransStartError:Default (fsm)
     end
 end
 
-TransitionsMap.TransParams = TransitionsMap.DefaultState:new('TransitionsMap::TransParams', 29)
+TransitionsMap.TransParams = TransitionsMap.DefaultState:new('TransitionsMap::TransParams', 30)
 
 function TransitionsMap.TransParams:paramsDone (fsm)
     local ctxt = fsm.owner
@@ -1830,7 +1899,7 @@ function TransitionsMap.TransParams:paramsError (fsm)
     fsm:getState():Entry(fsm)
 end
 
-TransitionsMap.TransNext = TransitionsMap.DefaultState:new('TransitionsMap::TransNext', 30)
+TransitionsMap.TransNext = TransitionsMap.DefaultState:new('TransitionsMap::TransNext', 31)
 
 function TransitionsMap.TransNext:LEFT_BRACKET (fsm, token)
     if fsm.debugFlag then
@@ -1944,7 +2013,7 @@ function TransitionsMap.TransNext:Default (fsm)
     fsm:getState():Entry(fsm)
 end
 
-TransitionsMap.TransNextError = TransitionsMap.DefaultState:new('TransitionsMap::TransNextError', 31)
+TransitionsMap.TransNextError = TransitionsMap.DefaultState:new('TransitionsMap::TransNextError', 32)
 
 function TransitionsMap.TransNextError:LEFT_PAREN (fsm, token)
     if fsm.debugFlag then
@@ -2064,7 +2133,7 @@ function TransitionsMap.TransNextError:Default (fsm)
     end
 end
 
-TransitionsMap.TransGuard = TransitionsMap.DefaultState:new('TransitionsMap::TransGuard', 32)
+TransitionsMap.TransGuard = TransitionsMap.DefaultState:new('TransitionsMap::TransGuard', 33)
 
 function TransitionsMap.TransGuard:Entry (fsm)
     local ctxt = fsm.owner
@@ -2089,7 +2158,7 @@ function TransitionsMap.TransGuard:SOURCE (fsm, token)
     fsm:getState():Entry(fsm)
 end
 
-TransitionsMap.EndState = TransitionsMap.DefaultState:new('TransitionsMap::EndState', 33)
+TransitionsMap.EndState = TransitionsMap.DefaultState:new('TransitionsMap::EndState', 34)
 
 function TransitionsMap.EndState:PUSH (fsm, token)
     local ctxt = fsm.owner
@@ -2184,7 +2253,7 @@ function TransitionsMap.EndState:Default (fsm)
     fsm:getState():Entry(fsm)
 end
 
-TransitionsMap.EndStateError = TransitionsMap.DefaultState:new('TransitionsMap::EndStateError', 34)
+TransitionsMap.EndStateError = TransitionsMap.DefaultState:new('TransitionsMap::EndStateError', 35)
 
 function TransitionsMap.EndStateError:LEFT_BRACE (fsm, token)
     local ctxt = fsm.owner
@@ -2218,7 +2287,7 @@ function TransitionsMap.EndStateError:Default (fsm)
     end
 end
 
-TransitionsMap.SimpleTrans = TransitionsMap.DefaultState:new('TransitionsMap::SimpleTrans', 35)
+TransitionsMap.SimpleTrans = TransitionsMap.DefaultState:new('TransitionsMap::SimpleTrans', 36)
 
 function TransitionsMap.SimpleTrans:SLASH (fsm, token)
     local ctxt = fsm.owner
@@ -2276,7 +2345,7 @@ function TransitionsMap.SimpleTrans:Default (fsm)
     fsm:getState():Entry(fsm)
 end
 
-TransitionsMap.PushTransition = TransitionsMap.DefaultState:new('TransitionsMap::PushTransition', 36)
+TransitionsMap.PushTransition = TransitionsMap.DefaultState:new('TransitionsMap::PushTransition', 37)
 
 function TransitionsMap.PushTransition:PUSH (fsm, token)
     if fsm.debugFlag then
@@ -2311,7 +2380,7 @@ function TransitionsMap.PushTransition:Default (fsm)
     fsm:getState():Entry(fsm)
 end
 
-TransitionsMap.PushStart = TransitionsMap.DefaultState:new('TransitionsMap::PushStart', 37)
+TransitionsMap.PushStart = TransitionsMap.DefaultState:new('TransitionsMap::PushStart', 38)
 
 function TransitionsMap.PushStart:LEFT_PAREN (fsm, token)
     if fsm.debugFlag then
@@ -2346,7 +2415,7 @@ function TransitionsMap.PushStart:Default (fsm)
     fsm:getState():Entry(fsm)
 end
 
-TransitionsMap.PushError = TransitionsMap.DefaultState:new('TransitionsMap::PushError', 38)
+TransitionsMap.PushError = TransitionsMap.DefaultState:new('TransitionsMap::PushError', 39)
 
 function TransitionsMap.PushError:RIGHT_PAREN (fsm, token)
     if fsm.debugFlag then
@@ -2395,7 +2464,7 @@ function TransitionsMap.PushError:Default (fsm)
     end
 end
 
-TransitionsMap.PushMap = TransitionsMap.DefaultState:new('TransitionsMap::PushMap', 39)
+TransitionsMap.PushMap = TransitionsMap.DefaultState:new('TransitionsMap::PushMap', 40)
 
 function TransitionsMap.PushMap:WORD (fsm, token)
     local ctxt = fsm.owner
@@ -2433,7 +2502,7 @@ function TransitionsMap.PushMap:Default (fsm)
     fsm:getState():Entry(fsm)
 end
 
-TransitionsMap.PushEnd = TransitionsMap.DefaultState:new('TransitionsMap::PushEnd', 40)
+TransitionsMap.PushEnd = TransitionsMap.DefaultState:new('TransitionsMap::PushEnd', 41)
 
 function TransitionsMap.PushEnd:RIGHT_PAREN (fsm, token)
     if fsm.debugFlag then
@@ -2468,7 +2537,7 @@ function TransitionsMap.PushEnd:Default (fsm)
     fsm:getState():Entry(fsm)
 end
 
-TransitionsMap.JumpStart = TransitionsMap.DefaultState:new('TransitionsMap::JumpStart', 41)
+TransitionsMap.JumpStart = TransitionsMap.DefaultState:new('TransitionsMap::JumpStart', 42)
 
 function TransitionsMap.JumpStart:LEFT_PAREN (fsm, token)
     if fsm.debugFlag then
@@ -2503,7 +2572,7 @@ function TransitionsMap.JumpStart:Default (fsm)
     fsm:getState():Entry(fsm)
 end
 
-TransitionsMap.JumpError = TransitionsMap.DefaultState:new('TransitionsMap::JumpError', 42)
+TransitionsMap.JumpError = TransitionsMap.DefaultState:new('TransitionsMap::JumpError', 43)
 
 function TransitionsMap.JumpError:RIGHT_PAREN (fsm, token)
     if fsm.debugFlag then
@@ -2552,7 +2621,7 @@ function TransitionsMap.JumpError:Default (fsm)
     end
 end
 
-TransitionsMap.JumpMap = TransitionsMap.DefaultState:new('TransitionsMap::JumpMap', 43)
+TransitionsMap.JumpMap = TransitionsMap.DefaultState:new('TransitionsMap::JumpMap', 44)
 
 function TransitionsMap.JumpMap:WORD (fsm, token)
     local ctxt = fsm.owner
@@ -2590,7 +2659,7 @@ function TransitionsMap.JumpMap:Default (fsm)
     fsm:getState():Entry(fsm)
 end
 
-TransitionsMap.JumpEnd = TransitionsMap.DefaultState:new('TransitionsMap::JumpEnd', 44)
+TransitionsMap.JumpEnd = TransitionsMap.DefaultState:new('TransitionsMap::JumpEnd', 45)
 
 function TransitionsMap.JumpEnd:RIGHT_PAREN (fsm, token)
     if fsm.debugFlag then
@@ -2625,7 +2694,7 @@ function TransitionsMap.JumpEnd:Default (fsm)
     fsm:getState():Entry(fsm)
 end
 
-TransitionsMap.PopStart = TransitionsMap.DefaultState:new('TransitionsMap::PopStart', 45)
+TransitionsMap.PopStart = TransitionsMap.DefaultState:new('TransitionsMap::PopStart', 46)
 
 function TransitionsMap.PopStart:LEFT_PAREN (fsm, token)
     if fsm.debugFlag then
@@ -2680,7 +2749,7 @@ function TransitionsMap.PopStart:Default (fsm)
     fsm:getState():Entry(fsm)
 end
 
-TransitionsMap.PopError = TransitionsMap.DefaultState:new('TransitionsMap::PopError', 46)
+TransitionsMap.PopError = TransitionsMap.DefaultState:new('TransitionsMap::PopError', 47)
 
 function TransitionsMap.PopError:RIGHT_PAREN (fsm, token)
     if fsm.debugFlag then
@@ -2729,7 +2798,7 @@ function TransitionsMap.PopError:Default (fsm)
     end
 end
 
-TransitionsMap.PopAction = TransitionsMap.DefaultState:new('TransitionsMap::PopAction', 47)
+TransitionsMap.PopAction = TransitionsMap.DefaultState:new('TransitionsMap::PopAction', 48)
 
 function TransitionsMap.PopAction:RIGHT_PAREN (fsm, token)
     if fsm.debugFlag then
@@ -2782,7 +2851,7 @@ function TransitionsMap.PopAction:Default (fsm)
     fsm:getState():Entry(fsm)
 end
 
-TransitionsMap.PopArgs = TransitionsMap.DefaultState:new('TransitionsMap::PopArgs', 48)
+TransitionsMap.PopArgs = TransitionsMap.DefaultState:new('TransitionsMap::PopArgs', 49)
 
 function TransitionsMap.PopArgs:RIGHT_PAREN (fsm, token)
     if fsm.debugFlag then
@@ -2837,7 +2906,7 @@ function TransitionsMap.PopArgs:Default (fsm)
     fsm:getState():Entry(fsm)
 end
 
-TransitionsMap.PopArgsEnd = TransitionsMap.DefaultState:new('TransitionsMap::PopArgsEnd', 49)
+TransitionsMap.PopArgsEnd = TransitionsMap.DefaultState:new('TransitionsMap::PopArgsEnd', 50)
 
 function TransitionsMap.PopArgsEnd:argsDone (fsm)
     local ctxt = fsm.owner
@@ -2875,7 +2944,7 @@ function TransitionsMap.PopArgsEnd:argsError (fsm)
     fsm:getState():Entry(fsm)
 end
 
-TransitionsMap.ActionStart = TransitionsMap.DefaultState:new('TransitionsMap::ActionStart', 50)
+TransitionsMap.ActionStart = TransitionsMap.DefaultState:new('TransitionsMap::ActionStart', 51)
 
 function TransitionsMap.ActionStart:LEFT_BRACE (fsm, token)
     local ctxt = fsm.owner
@@ -2915,7 +2984,7 @@ function TransitionsMap.ActionStart:Default (fsm)
     fsm:getState():Entry(fsm)
 end
 
-TransitionsMap.ActionEnd = TransitionsMap.DefaultState:new('TransitionsMap::ActionEnd', 51)
+TransitionsMap.ActionEnd = TransitionsMap.DefaultState:new('TransitionsMap::ActionEnd', 52)
 
 function TransitionsMap.ActionEnd:actionsDone (fsm)
     local ctxt = fsm.owner
@@ -2952,7 +3021,7 @@ function TransitionsMap.ActionEnd:actionsError (fsm)
     fsm:getState():Entry(fsm)
 end
 
-TransitionsMap.ActionStartError = TransitionsMap.DefaultState:new('TransitionsMap::ActionStartError', 52)
+TransitionsMap.ActionStartError = TransitionsMap.DefaultState:new('TransitionsMap::ActionStartError', 53)
 
 function TransitionsMap.ActionStartError:LEFT_BRACE (fsm, token)
     local ctxt = fsm.owner
@@ -2988,7 +3057,7 @@ end
 
 ParamsMap.DefaultState = ParserState:new('ParamsMap::DefaultState', -1)
 
-ParamsMap.Start = ParamsMap.DefaultState:new('ParamsMap::Start', 53)
+ParamsMap.Start = ParamsMap.DefaultState:new('ParamsMap::Start', 54)
 
 function ParamsMap.Start:WORD (fsm, token)
     local ctxt = fsm.owner
@@ -3065,7 +3134,7 @@ function ParamsMap.Start:Default (fsm)
     fsm:getState():Entry(fsm)
 end
 
-ParamsMap.Dollar = ParamsMap.DefaultState:new('ParamsMap::Dollar', 54)
+ParamsMap.Dollar = ParamsMap.DefaultState:new('ParamsMap::Dollar', 55)
 
 function ParamsMap.Dollar:WORD (fsm, token)
     local ctxt = fsm.owner
@@ -3103,7 +3172,7 @@ function ParamsMap.Dollar:Default (fsm)
     fsm:getState():Entry(fsm)
 end
 
-ParamsMap.ParamSeparator = ParamsMap.DefaultState:new('ParamsMap::ParamSeparator', 55)
+ParamsMap.ParamSeparator = ParamsMap.DefaultState:new('ParamsMap::ParamSeparator', 56)
 
 function ParamsMap.ParamSeparator:COLON (fsm, token)
     if fsm.debugFlag then
@@ -3222,7 +3291,7 @@ function ParamsMap.ParamSeparator:Default (fsm)
     fsm:getState():Entry(fsm)
 end
 
-ParamsMap.ParamType = ParamsMap.DefaultState:new('ParamsMap::ParamType', 56)
+ParamsMap.ParamType = ParamsMap.DefaultState:new('ParamsMap::ParamType', 57)
 
 function ParamsMap.ParamType:Entry (fsm)
     local ctxt = fsm.owner
@@ -3247,7 +3316,7 @@ function ParamsMap.ParamType:SOURCE (fsm, token)
     fsm:getState():Entry(fsm)
 end
 
-ParamsMap.NextParam = ParamsMap.DefaultState:new('ParamsMap::NextParam', 57)
+ParamsMap.NextParam = ParamsMap.DefaultState:new('ParamsMap::NextParam', 58)
 
 function ParamsMap.NextParam:COMMA (fsm, token)
     local ctxt = fsm.owner
@@ -3303,7 +3372,7 @@ function ParamsMap.NextParam:Default (fsm)
     fsm:getState():Entry(fsm)
 end
 
-ParamsMap.Error = ParamsMap.DefaultState:new('ParamsMap::Error', 58)
+ParamsMap.Error = ParamsMap.DefaultState:new('ParamsMap::Error', 59)
 
 function ParamsMap.Error:Entry (fsm)
     local ctxt = fsm.owner
@@ -3330,7 +3399,7 @@ end
 
 ActionsMap.DefaultState = ParserState:new('ActionsMap::DefaultState', -1)
 
-ActionsMap.Start = ActionsMap.DefaultState:new('ActionsMap::Start', 59)
+ActionsMap.Start = ActionsMap.DefaultState:new('ActionsMap::Start', 60)
 
 function ActionsMap.Start:WORD (fsm, token)
     local ctxt = fsm.owner
@@ -3384,7 +3453,7 @@ function ActionsMap.Start:Default (fsm)
     fsm:getState():Entry(fsm)
 end
 
-ActionsMap.Name = ActionsMap.DefaultState:new('ActionsMap::Name', 60)
+ActionsMap.Name = ActionsMap.DefaultState:new('ActionsMap::Name', 61)
 
 function ActionsMap.Name:LEFT_PAREN (fsm, token)
     local ctxt = fsm.owner
@@ -3470,7 +3539,7 @@ function ActionsMap.Name:Default (fsm)
     fsm:getState():Entry(fsm)
 end
 
-ActionsMap.Args = ActionsMap.DefaultState:new('ActionsMap::Args', 61)
+ActionsMap.Args = ActionsMap.DefaultState:new('ActionsMap::Args', 62)
 
 function ActionsMap.Args:argsDone (fsm)
     local ctxt = fsm.owner
@@ -3505,7 +3574,7 @@ function ActionsMap.Args:argsError (fsm)
     fsm:getState():Entry(fsm)
 end
 
-ActionsMap.End = ActionsMap.DefaultState:new('ActionsMap::End', 62)
+ActionsMap.End = ActionsMap.DefaultState:new('ActionsMap::End', 63)
 
 function ActionsMap.End:SEMICOLON (fsm, token)
     local ctxt = fsm.owner
@@ -3543,7 +3612,7 @@ function ActionsMap.End:Default (fsm)
     fsm:getState():Entry(fsm)
 end
 
-ActionsMap.PropertyAssignment = ActionsMap.DefaultState:new('ActionsMap::PropertyAssignment', 63)
+ActionsMap.PropertyAssignment = ActionsMap.DefaultState:new('ActionsMap::PropertyAssignment', 64)
 
 function ActionsMap.PropertyAssignment:Entry (fsm)
     local ctxt = fsm.owner
@@ -3571,7 +3640,7 @@ function ActionsMap.PropertyAssignment:SOURCE (fsm, token)
     fsm:getState():Entry(fsm)
 end
 
-ActionsMap.Error = ActionsMap.DefaultState:new('ActionsMap::Error', 64)
+ActionsMap.Error = ActionsMap.DefaultState:new('ActionsMap::Error', 65)
 
 function ActionsMap.Error:RIGHT_BRACE (fsm, token)
     if fsm.debugFlag then
@@ -3602,7 +3671,7 @@ end
 
 ArgsMap.DefaultState = ParserState:new('ArgsMap::DefaultState', -1)
 
-ArgsMap.Start = ArgsMap.DefaultState:new('ArgsMap::Start', 65)
+ArgsMap.Start = ArgsMap.DefaultState:new('ArgsMap::Start', 66)
 
 function ArgsMap.Start:Entry (fsm)
     local ctxt = fsm.owner
@@ -3627,7 +3696,7 @@ function ArgsMap.Start:SOURCE (fsm, token)
     fsm:getState():Entry(fsm)
 end
 
-ArgsMap.NextArg = ArgsMap.DefaultState:new('ArgsMap::NextArg', 66)
+ArgsMap.NextArg = ArgsMap.DefaultState:new('ArgsMap::NextArg', 67)
 
 function ArgsMap.NextArg:COMMA (fsm, token)
     local ctxt = fsm.owner
@@ -3683,7 +3752,7 @@ function ArgsMap.NextArg:Default (fsm)
     fsm:getState():Entry(fsm)
 end
 
-ArgsMap.Error = ArgsMap.DefaultState:new('ArgsMap::Error', 67)
+ArgsMap.Error = ArgsMap.DefaultState:new('ArgsMap::Error', 68)
 
 function ArgsMap.Error:RIGHT_BRACE (fsm, token)
     if fsm.debugFlag then
@@ -3781,6 +3850,12 @@ end
 function ParserContext:FSM_CLASS_NAME (...)
     self.transition = 'FSM_CLASS_NAME'
     self:getState():FSM_CLASS_NAME(self, ...)
+    self.transition = nil
+end
+
+function ParserContext:FSM_FILE_NAME (...)
+    self.transition = 'FSM_FILE_NAME'
+    self:getState():FSM_FILE_NAME(self, ...)
     self.transition = nil
 end
 

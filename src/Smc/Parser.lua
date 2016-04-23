@@ -38,6 +38,7 @@ enum.Smc.TokenType = {
     'CLASS_NAME',
     'DECLARE',
     'FSM_CLASS_NAME',
+    'FSM_FILE_NAME',
     'HEADER_FILE',
     'IMPORT',
     'INCLUDE_FILE',
@@ -130,6 +131,7 @@ function method:_build_percentKeyword ()
         ['%class']      = 'CLASS_NAME',
         ['%declare']    = 'DECLARE',
         ['%fsmclass']   = 'FSM_CLASS_NAME',
+        ['%fsmfile']    = 'FSM_FILE_NAME',
         ['%header']     = 'HEADER_FILE',
         ['%import']     = 'IMPORT',
         ['%include']    = 'INCLUDE_FILE',
@@ -413,6 +415,10 @@ end
 function method:setFsmClassName (token)
     -- lazy default
     self.fsm.fsmClassname = token.value
+end
+
+function method:setFsmFileName (token)
+    self.fsm.targetFilename = token.value
 end
 
 function method:setPackageName (token)
